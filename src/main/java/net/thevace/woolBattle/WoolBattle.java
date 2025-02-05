@@ -6,12 +6,10 @@ public final class WoolBattle extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        WoolBattleQueue queue = new WoolBattleQueue();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
     }
 }
