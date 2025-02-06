@@ -15,10 +15,14 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    implementation 'me.devnatan:inventory-framework-platform-bukkit:3.2.0'
 }
 
 def targetJavaVersion = 21
