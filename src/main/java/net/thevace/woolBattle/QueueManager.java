@@ -12,6 +12,11 @@ public class QueueManager {
     private static final Map<WoolbattlePlayer, WoolBattleQueue> playerQueues = new HashMap<>();
     private static final List<WoolBattleQueue> allQueues = new ArrayList<>();
 
+    private WoolBattlePlayerManager playerManager;
+
+    public QueueManager(WoolBattlePlayerManager playerManager) {
+        this.playerManager = playerManager;
+    }
 
     public void addToQueue(WoolbattlePlayer player, WoolBattleQueue queue) {
         playerQueues.put(player, queue);
@@ -34,17 +39,33 @@ public class QueueManager {
         return playerQueues;
     }
 
+    public void listAllQueues() {
+        for (WoolBattleQueue queue : allQueues) {
+            for (WoolbattlePlayer player : queue.getQueue()) {
+                System.out.println("Queue: " + queue.getQueue() + " Player: " + player);
+            }
+        }
+    }
+
     public void joinAvailableQueue(WoolbattlePlayer player, int teamSize) {
         for (WoolBattleQueue queue : allQueues) {
-            if (queue.getTotalPlayers() < queue.getTeamSize()) {
+            if (queue.getTotalPlayers() < queue.getTeamSize() * 2) {
                 addToQueue(player, queue);
                 return;
             }
         }
 
-        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize);
+        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
         allQueues.add(newQueue);
         addToQueue(player, newQueue);
 
+    }
+
+    public void removeQueue(WoolBattleQueue queue) {
+        allQueues.remove(queue);
+        playerQueues.entrySet().removeIf(entry -> entry.getValue() == queue);
+        for(WoolbattlePlayer player : playerQueues.keySet()) {
+            System.out.println("Queue: " + queue.getQueue() + " Player: " + player.getPlayer().getName());
+        }
     }
 }

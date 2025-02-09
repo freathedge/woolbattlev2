@@ -39,6 +39,10 @@ public class PlayerInteraction implements Listener {
                 queueManager.removeFromQueue(playerManager.getWoolBattlePlayer(player));
                 event.setCancelled(true);
             }
+
+            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Start game")) {
+                queueManager.getQueue(playerManager.getWoolBattlePlayer(player)).startGame();
+            }
         }
 
     }

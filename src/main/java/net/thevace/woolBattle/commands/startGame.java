@@ -26,7 +26,7 @@ public class startGame implements CommandExecutor {
         Player p = (Player) commandSender;
         WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
         WoolBattleQueue queue = queueManager.getQueue(woolbattlePlayer);
-        queue.startQueue();
+        queue.startGame();
 
         p.sendMessage(ChatColor.GOLD + "Starting WoolBattle game...");
         return false;
