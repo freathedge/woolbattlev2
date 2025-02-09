@@ -11,7 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
-public class WoolBattleGame implements Listener {
+public class WoolBattleGame {
 
     private List<WoolbattlePlayer> Team1;
     private List<WoolbattlePlayer> Team2;
@@ -20,22 +20,20 @@ public class WoolBattleGame implements Listener {
     private int Team2Health;
 
     private WoolBattleGameListener listener;
-    private Plugin plugin;
 
 
-    public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2, Plugin plugin) {
-        this.listener = new WoolBattleGameListener(this, plugin);
 
+    public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2) {
+        this.listener = new WoolBattleGameListener(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
 
         this.Team1Health = teamHealth;
         this.Team2Health = teamHealth;
         this.Team1 = Team1;
         this.Team2 = Team2;
-        this.plugin = plugin;
     }
 
     public void startGame() {
-        Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
+        Bukkit.getPluginManager().registerEvents(listener, Bukkit.getPluginManager().getPlugin("WoolBattle"));
 
         for (WoolbattlePlayer wbp : Team1) {
             Player p = wbp.getPlayer();
@@ -44,7 +42,7 @@ public class WoolBattleGame implements Listener {
     }
 
     public void endGame() {
-        PlayerMoveEvent.getHandlerList().unregister(this); // Listener deregistrieren
+        PlayerMoveEvent.getHandlerList().unregister(listener);
         if(Team1Health > Team2Health) {
             System.out.println("Team 1 has won!");
         } else {

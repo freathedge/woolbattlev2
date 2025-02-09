@@ -19,4 +19,5 @@ public class WoolbattlePlayer {
     public Player getPlayer() {
         return player;
     }
+
 }

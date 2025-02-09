@@ -2,6 +2,7 @@ package net.thevace.woolBattle;
 
 import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewFrame;
+import net.thevace.woolBattle.commands.getQueue;
 import net.thevace.woolBattle.commands.joinQueue;
 import net.thevace.woolBattle.commands.startGame;
 import net.thevace.woolBattle.inventorys.TeamSelect;
@@ -15,15 +16,16 @@ public final class WoolBattle extends JavaPlugin {
     public void onEnable() {
 
 
-
-        WoolBattleQueue queue = new WoolBattleQueue(1, this);
+        QueueManager queueManager = new QueueManager();
+        WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
         ViewFrame viewFrame = ViewFrame.create(this)
-                .with(new TeamSelect(queue))
+                .with(new TeamSelect(playerManager, queueManager))
                 .register();
 
-        this.getCommand("joinQueue").setExecutor(new joinQueue(queue, viewFrame));
-        this.getCommand("startGame").setExecutor(new startGame(queue));
-        Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame), this);
+        this.getCommand("joinQueue").setExecutor(new joinQueue(playerManager, queueManager, viewFrame));
+        this.getCommand("startGame").setExecutor(new startGame(playerManager, queueManager));
+        this.getCommand("getQueue").setExecutor(new getQueue(queueManager, playerManager));
+        Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame, playerManager, queueManager), this);
 
 
     }

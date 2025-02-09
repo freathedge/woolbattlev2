@@ -51,3 +51,7 @@ processResources {
         expand props
     }
 }
+
+jar {
+    destinationDirectory.set(file("C:\\Users\\adria\\OneDrive\\Desktop\\server\\plugins"))
+}
