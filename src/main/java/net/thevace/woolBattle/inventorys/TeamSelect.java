@@ -103,17 +103,30 @@ public class TeamSelect extends View {
             if(team1.contains(woolbattlePlayer)) {
                 player.sendMessage("Du bist schon in diesem Team!");
             } else {
-                team2.remove(woolbattlePlayer);
-                team1.add(woolbattlePlayer);
-                player.sendMessage(ChatColor.RED + "Du bist dem roten Team beigetreten");
+                if(team1.size() > queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
+                    team2.remove(woolbattlePlayer);
+                    team1.add(woolbattlePlayer);
+                    woolbattlePlayer.setWoolMaterial(Material.RED_WOOL);
+                    player.sendMessage(ChatColor.RED + "Du bist dem roten Team beigetreten");
+                } else {
+                    player.sendMessage(ChatColor.RED + "Dieses Team ist schon voll");
+                }
+
+
             }
         } else if(targetTeam == team2) {
             if(team2.contains(woolbattlePlayer)) {
                 player.sendMessage("Du bist schon in diesem Team!");
             } else {
-                team1.remove(woolbattlePlayer);
-                team2.add(woolbattlePlayer);
-                player.sendMessage(ChatColor.BLUE + "Du bist dem blauen Team beigetreten");
+                if(team2.size() > queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
+                    team1.remove(woolbattlePlayer);
+                    team2.add(woolbattlePlayer);
+                    woolbattlePlayer.setWoolMaterial(Material.BLUE_WOOL);
+                    player.sendMessage(ChatColor.BLUE + "Du bist dem blauen Team beigetreten");
+                } else {
+                    player.sendMessage(ChatColor.RED + "Dieses Team ist schon voll");
+                }
+
             }
         }
     }

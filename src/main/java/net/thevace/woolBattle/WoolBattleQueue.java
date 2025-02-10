@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 public class WoolBattleQueue {
 
@@ -21,7 +22,7 @@ public class WoolBattleQueue {
     private WoolBattlePlayerManager playerManager;
     private QueueManager queueManager;
 
-    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager) {
+    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager, Plugin plugin) {
         this.teamSize = teamSize;
         this.playerManager = playerManager;
         this.queueManager = queueManager;
@@ -33,12 +34,15 @@ public class WoolBattleQueue {
 
         if(team1.size() < team2.size()) {
             team1.add(player);
+            player.setWoolMaterial(Material.RED_WOOL);
             player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
         } else if(team2.size() < team1.size()) {
             team2.add(player);
+            player.setWoolMaterial(Material.BLUE_WOOL);
             player.getPlayer().sendMessage(ChatColor.BLUE + "Du bist dem Blauen Team beigetreten");
         } else {
             team1.add(player);
+            player.setWoolMaterial(Material.RED_WOOL);
             player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
         }
 

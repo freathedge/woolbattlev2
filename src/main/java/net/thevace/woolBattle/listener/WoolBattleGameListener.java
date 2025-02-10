@@ -3,23 +3,41 @@ package net.thevace.woolBattle.listener;
 import net.thevace.woolBattle.WoolBattleGame;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.inventorys.TeamSelect;
+import net.thevace.woolBattle.perks.Enterhaken;
+import net.thevace.woolBattle.perks.Pod;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
+    WoolBattlePlayerManager playerManager;
 
-    public WoolBattleGameListener(WoolBattleGame game) {
+    private Map<Player, Block> fishingRodTargets = new HashMap<>();
+
+    public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager) {
         this.game = game;
+        this.playerManager = playerManager;
     }
 
     @EventHandler
@@ -39,6 +57,82 @@ public class WoolBattleGameListener implements Listener {
         }
         event.setCancelled(true);
     }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+
+        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta()){
+
+            Action action = event.getAction();
+            Player player = event.getPlayer();
+
+            if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Pod")) {
+                Pod pod = new Pod(playerManager.getWoolBattlePlayer(player));
+                pod.activate();
+                event.setCancelled(true);
+            }
+        }
+
+    }
+
+//    @EventHandler
+//    public void onPlayerFish(PlayerFishEvent event) {
+//        Vector vector3;
+//        Entity entity;
+//        Block block;
+//        Player player;
+//        double d;
+//
+//        float hookThreshold = 0.25f;
+//        float hForceMult = 0.2f;
+//        float hForceMax = 7.5f;
+//        float vForceMult = 0.5f;
+//        float vForceBonus = 0.5f;
+//        float vForceMax = 1.5f;
+//
+//        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT)) {
+//            entity = event.getHook();
+//            block = entity.getWorld().getBlockAt(entity.getLocation().add(0.0, -hookThreshold, 0.0));
+//
+//            if (!block.isEmpty() && !block.isLiquid()) {
+//                player = event.getPlayer();
+//
+//                vector3 = entity.getLocation().subtract(player.getLocation()).toVector();
+//
+//                if (vector3.getY() < 0.0)
+//                    vector3.setY(0.0);
+//
+//                vector3.setX(vector3.getX() * hForceMult);
+//                vector3.setY(vector3.getY() * vForceMult + vForceBonus);
+//                vector3.setZ(vector3.getZ() * hForceMult);
+//
+//                d = hForceMax * hForceMax;
+//                if (vector3.clone().setY(0.0).lengthSquared() > d) {
+//                    d = d / vector3.lengthSquared();
+//                    vector3.setX(vector3.getX() * d);
+//                    vector3.setZ(vector3.getZ() * d);
+//                }
+//
+//                if (vector3.getY() > vForceMax)
+//                    vector3.setY(vForceMax);
+//
+//                player.setVelocity(vector3);
+//            }
+//        }
+//    }
+
+    @EventHandler
+    public void onPlayerFish(PlayerFishEvent event) {
+        Player player = event.getPlayer();
+        if(event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
+            Location location = player.getLocation();
+            Location hookLocation = event.getHook().getLocation();
+            Location change = hookLocation.subtract(location);
+            player.setVelocity(change.toVector().multiply(0.3));
+        }
+    }
+
+
 
     public void unregister() {
         PlayerMoveEvent.getHandlerList().unregister(this);

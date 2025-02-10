@@ -18,7 +18,7 @@ public final class WoolBattle extends JavaPlugin {
 
 
         WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
-        QueueManager queueManager = new QueueManager(playerManager);
+        QueueManager queueManager = new QueueManager(playerManager, this);
         ViewFrame viewFrame = ViewFrame.create(this)
                 .with(new TeamSelect(playerManager, queueManager))
                 .register();

@@ -9,7 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class WoolbattlePlayer {
     private Player player;
-    private int Wool;
+    private int wool;
+    private Material woolMaterial;
 
     ActivePerk activePerk1;
     ActivePerk activePerk2;
@@ -24,19 +25,27 @@ public class WoolbattlePlayer {
     }
 
     public int getWool() {
-        return Wool;
+        return wool;
     }
 
     public void setWool(int wool) {
-        Wool = wool;
+        wool = wool;
     }
 
     public void addWool(int wool, Material material) {
-        Wool += wool;
+        this.wool += wool;
         player.getInventory().addItem(new ItemStack(material));
     }
 
     public void removeWool(int wool) {
-        Wool -= wool;
+       this.wool -= wool;
+    }
+
+    public Material getWoolMaterial() {
+        return woolMaterial;
+    }
+
+    public void setWoolMaterial(Material woolMaterial) {
+        this.woolMaterial = woolMaterial;
     }
 }
