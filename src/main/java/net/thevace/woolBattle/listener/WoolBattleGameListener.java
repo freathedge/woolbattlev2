@@ -6,6 +6,7 @@ import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.inventorys.TeamSelect;
 import net.thevace.woolBattle.perks.Enterhaken;
 import net.thevace.woolBattle.perks.Pod;
+import net.thevace.woolBattle.perks.Tauscher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,10 +15,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -123,14 +127,24 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
-        Player player = event.getPlayer();
-        if(event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
-            Location location = player.getLocation();
-            Location hookLocation = event.getHook().getLocation();
-            Location change = hookLocation.subtract(location);
-            player.setVelocity(change.toVector().multiply(0.3));
+        Enterhaken enterhaken = new Enterhaken(playerManager.getWoolBattlePlayer(event.getPlayer()));
+        enterhaken.activate(event);
+    }
+
+    @EventHandler
+    public void onSnowballHit(ProjectileHitEvent event) {
+        if (event.getEntity() instanceof Snowball) {
+            Snowball snowball = (Snowball) event.getEntity();
+
+            if (snowball.getShooter() instanceof Player) {
+                Player player = (Player) snowball.getShooter();
+                Player target = (Player) event.getHitEntity();
+                Tauscher Tauscher = new Tauscher(playerManager.getWoolBattlePlayer(player));
+                Tauscher.activate(target);
+            }
         }
     }
+
 
 
 

@@ -76,8 +76,5 @@ public class Pod extends ActivePerk {
         }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 2L);
 
         p.setVelocity(new Vector(0, 0, 0));
-
-
-
     }
 }
