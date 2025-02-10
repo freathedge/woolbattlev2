@@ -13,11 +13,10 @@ public class QueueManager {
     private static final List<WoolBattleQueue> allQueues = new ArrayList<>();
 
     private WoolBattlePlayerManager playerManager;
-    Plugin plugin;
 
-    public QueueManager(WoolBattlePlayerManager playerManager, Plugin plugin) {
+
+    public QueueManager(WoolBattlePlayerManager playerManager) {
         this.playerManager = playerManager;
-        this.plugin = plugin;
     }
 
     public void addToQueue(WoolbattlePlayer player, WoolBattleQueue queue) {
@@ -57,7 +56,7 @@ public class QueueManager {
             }
         }
 
-        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this, plugin);
+        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
         allQueues.add(newQueue);
         addToQueue(player, newQueue);
 

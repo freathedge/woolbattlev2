@@ -49,19 +49,14 @@ public class WoolBattleGame {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             p.getInventory().clear();
-            Pod pod = new Pod(wbp);
-            pod.addItem();
-            Enterhaken enterhaken = new Enterhaken(wbp);
-            enterhaken.addItem();
+            wbp.getActivePerk1().addItem();
+            wbp.getActivePerk2().addItem();
         }
         for (WoolbattlePlayer wbp : team2) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             p.getInventory().clear();
         }
-
-
-
     }
 
     public void endGame() {
@@ -110,12 +105,6 @@ public class WoolBattleGame {
 
     public void handleWoolBreak(Player p) {
         WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
-
-        if (team1.contains(player)) {
-            player.addWool(1, Material.RED_WOOL);
-        } else if (team2.contains(player)) {
-            player.addWool(1, Material.BLUE_WOOL);
-        }
-
+        player.addWool(1);
     }
 }

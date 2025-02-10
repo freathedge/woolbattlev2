@@ -1,10 +1,12 @@
 package net.thevace.woolBattle;
 
-import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewFrame;
+import net.thevace.woolBattle.commands.getPlayerWool;
 import net.thevace.woolBattle.commands.getQueue;
 import net.thevace.woolBattle.commands.joinQueue;
 import net.thevace.woolBattle.commands.startGame;
+import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
+import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
 import net.thevace.woolBattle.inventorys.TeamSelect;
 import net.thevace.woolBattle.listener.PlayerInteraction;
 import org.bukkit.Bukkit;
@@ -18,14 +20,17 @@ public final class WoolBattle extends JavaPlugin {
 
 
         WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
-        QueueManager queueManager = new QueueManager(playerManager, this);
+        QueueManager queueManager = new QueueManager(playerManager);
         ViewFrame viewFrame = ViewFrame.create(this)
                 .with(new TeamSelect(playerManager, queueManager))
+                .with(new ActivePerk1Selector(playerManager))
+                .with(new ActivePerk2Selector(playerManager))
                 .register();
 
         this.getCommand("joinQueue").setExecutor(new joinQueue(playerManager, queueManager, viewFrame));
         this.getCommand("startGame").setExecutor(new startGame(playerManager, queueManager));
         this.getCommand("getQueue").setExecutor(new getQueue(queueManager, playerManager));
+        this.getCommand("getPlayerWool").setExecutor(new getPlayerWool(playerManager));
         Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame, playerManager, queueManager), this);
 
 

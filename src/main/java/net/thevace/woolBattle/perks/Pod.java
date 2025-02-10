@@ -18,7 +18,8 @@ public class Pod extends ActivePerk {
         super(15, 10, player, ChatColor.GOLD + "Pod", Material.POTION);
     }
 
-    public void activate() {
+    @Override
+    public void applyEffect() {
         Player p = player.getPlayer();
         Location loc = p.getLocation().getBlock().getLocation();
         Location playerloc = p.getLocation();

@@ -2,6 +2,8 @@ package net.thevace.woolBattle.listener;
 
 import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.*;
+import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
+import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
 import net.thevace.woolBattle.inventorys.TeamSelect;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -42,6 +44,14 @@ public class PlayerInteraction implements Listener {
 
             if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Start game")) {
                 queueManager.getQueue(playerManager.getWoolBattlePlayer(player)).startGame();
+            }
+
+            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Select Perk 1")) {
+                viewFrame.open(ActivePerk1Selector.class, player);
+            }
+
+            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Select Perk 2")) {
+                viewFrame.open(ActivePerk2Selector.class, player);
             }
         }
 

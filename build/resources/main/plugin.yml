@@ -12,5 +12,8 @@ commands:
   getQueue:
     description: get all queues or the queue a player is in
     usage: /getQueue <Player>
+  getPlayerWool:
+    description: get your wool
+    usage: /getPlayerWool
 depend: [InventoryFramework]
 

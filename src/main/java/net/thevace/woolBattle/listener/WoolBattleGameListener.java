@@ -71,10 +71,15 @@ public class WoolBattleGameListener implements Listener {
             Player player = event.getPlayer();
 
             if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Pod")) {
-                Pod pod = new Pod(playerManager.getWoolBattlePlayer(player));
-                pod.activate();
-                event.setCancelled(true);
+                WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+                if (woolbattlePlayer.getActivePerk1() instanceof Pod pod) {
+                    pod.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Pod pod) {
+                    pod.activate();
+                }
+
             }
+
         }
 
     }
@@ -127,8 +132,17 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
-        Enterhaken enterhaken = new Enterhaken(playerManager.getWoolBattlePlayer(event.getPlayer()));
-        enterhaken.activate(event);
+        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
+
+        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
+            if (player.getActivePerk1() instanceof Enterhaken enterhaken) {
+                enterhaken.setEvent(event);
+                enterhaken.activate();
+            } else if (player.getActivePerk2() instanceof Enterhaken enterhaken) {
+                enterhaken.setEvent(event);
+                enterhaken.activate();
+            }
+        }
     }
 
     @EventHandler
@@ -139,8 +153,15 @@ public class WoolBattleGameListener implements Listener {
             if (snowball.getShooter() instanceof Player) {
                 Player player = (Player) snowball.getShooter();
                 Player target = (Player) event.getHitEntity();
-                Tauscher Tauscher = new Tauscher(playerManager.getWoolBattlePlayer(player));
-                Tauscher.activate(target);
+                WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+                if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
+                    tauscher.setTarget(target);
+                    tauscher.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Tauscher tauscher) {
+                    tauscher.setTarget(target);
+                    tauscher.activate();
+                }
+
             }
         }
     }
