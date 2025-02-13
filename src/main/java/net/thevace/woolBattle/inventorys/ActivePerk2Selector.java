@@ -5,10 +5,7 @@ import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.perks.Enterhaken;
-import net.thevace.woolBattle.perks.Pod;
-import net.thevace.woolBattle.perks.Rettungskapsel;
-import net.thevace.woolBattle.perks.Tauscher;
+import net.thevace.woolBattle.perks.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -38,6 +35,9 @@ public class ActivePerk2Selector extends View {
         Enterhaken enterhaken = new Enterhaken(null);
         Tauscher tauscher = new Tauscher(null);
         Rettungskapsel rettungskapsel = new Rettungskapsel(null);
+        Mine mine = new Mine(null);
+        Rettungsplattform rettungsplattform = new Rettungsplattform(null);
+
 
         render.slot(1, 1)
                 .withItem(pod.getItem())
@@ -51,5 +51,11 @@ public class ActivePerk2Selector extends View {
         render.slot(1, 4)
                 .withItem(rettungskapsel.getItem())
                 .onClick(click -> player.setActivePerk2(new Rettungskapsel(player))).closeOnClick();
+        render.slot(1, 5)
+                .withItem(mine.getItem())
+                .onClick(click -> player.setActivePerk2(new Mine(player))).closeOnClick();
+        render.slot(1, 6)
+                .withItem(rettungsplattform.getItem())
+                .onClick(click -> player.setActivePerk2(new Rettungsplattform(player))).closeOnClick();
     }
 }

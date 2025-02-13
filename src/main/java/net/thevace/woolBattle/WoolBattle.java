@@ -1,10 +1,7 @@
 package net.thevace.woolBattle;
 
 import me.devnatan.inventoryframework.ViewFrame;
-import net.thevace.woolBattle.commands.getPlayerWool;
-import net.thevace.woolBattle.commands.getQueue;
-import net.thevace.woolBattle.commands.joinQueue;
-import net.thevace.woolBattle.commands.startGame;
+import net.thevace.woolBattle.commands.*;
 import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
 import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
 import net.thevace.woolBattle.inventorys.TeamSelect;

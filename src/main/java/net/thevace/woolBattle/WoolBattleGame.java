@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
@@ -56,6 +57,8 @@ public class WoolBattleGame {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             p.getInventory().clear();
+            wbp.getActivePerk1().addItem();
+            wbp.getActivePerk2().addItem();
         }
     }
 
@@ -106,5 +109,16 @@ public class WoolBattleGame {
     public void handleWoolBreak(Player p) {
         WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
         player.addWool(1);
+    }
+
+    public boolean handlePlayerHit(Player damager, Player target) {
+        WoolbattlePlayer wbpDamager = playerManager.getWoolBattlePlayer(damager);
+        WoolbattlePlayer wbpTarget = playerManager.getWoolBattlePlayer(target);
+
+        if(team1.contains(wbpDamager) && team2.contains(wbpTarget) || team2.contains(wbpDamager) && team2.contains(wbpTarget)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

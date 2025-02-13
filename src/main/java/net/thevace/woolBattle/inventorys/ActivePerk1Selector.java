@@ -36,6 +36,8 @@ public class ActivePerk1Selector extends View {
         Enterhaken enterhaken = new Enterhaken(null);
         Tauscher tauscher = new Tauscher(null);
         Rettungskapsel rettungskapsel = new Rettungskapsel(null);
+        Mine mine = new Mine(null);
+        Rettungsplattform rettungsplattform = new Rettungsplattform(null);
 
         render.slot(1, 1)
                 .withItem(pod.getItem())
@@ -49,5 +51,12 @@ public class ActivePerk1Selector extends View {
         render.slot(1, 4)
                 .withItem(rettungskapsel.getItem())
                 .onClick(click -> player.setActivePerk1(new Rettungskapsel(player))).closeOnClick();
+        render.slot(1, 5)
+                .withItem(mine.getItem())
+                .onClick(click -> player.setActivePerk1(new Mine(player))).closeOnClick();
+        render.slot(1, 6)
+                .withItem(rettungsplattform.getItem())
+                .onClick(click -> player.setActivePerk1(new Rettungsplattform(player))).closeOnClick();
+
     }
 }

@@ -24,14 +24,21 @@ public class Rettungskapsel extends ActivePerk {
 
 
         int[][] positions = {
-                {0, 2, 0}, // Block über dem Spieler
                 {0, -1, 0}, // Block unter dem Spieler
 
-                {1, 0, 0}, {1, 1, 0}, // Wand rechts (2 Blöcke hoch)
-                {-1, 0, 0}, {-1, 1, 0}, // Wand links (2 Blöcke hoch)
-                {0, 0, 1}, {0, 1, 1}, // Wand vorne (2 Blöcke hoch)
-                {0, 0, -1}, {0, 1, -1} // Wand hinten (2 Blöcke hoch)
+                {1, 0, 0},  // Unterer Block - Wand rechts
+                {-1, 0, 0}, // Unterer Block - Wand links
+                {0, 0, 1},  // Unterer Block - Wand vorne
+                {0, 0, -1}, // Unterer Block - Wand hinten
+
+                {1, 1, 0},  // Oberer Block - Wand rechts
+                {-1, 1, 0}, // Oberer Block - Wand links
+                {0, 1, 1},  // Oberer Block - Wand vorne
+                {0, 1, -1}, // Oberer Block - Wand hinten
+
+                {0, 2, 0} // Block über dem Spieler
         };
+
 
         new BukkitRunnable() {
             int ticks = 0;

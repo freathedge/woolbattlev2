@@ -103,7 +103,7 @@ public class TeamSelect extends View {
             if(team1.contains(woolbattlePlayer)) {
                 player.sendMessage("Du bist schon in diesem Team!");
             } else {
-                if(team1.size() > queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
+                if(team1.size() < queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
                     team2.remove(woolbattlePlayer);
                     team1.add(woolbattlePlayer);
                     woolbattlePlayer.setWoolMaterial(Material.RED_WOOL);
@@ -118,7 +118,7 @@ public class TeamSelect extends View {
             if(team2.contains(woolbattlePlayer)) {
                 player.sendMessage("Du bist schon in diesem Team!");
             } else {
-                if(team2.size() > queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
+                if(team2.size() < queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
                     team1.remove(woolbattlePlayer);
                     team2.add(woolbattlePlayer);
                     woolbattlePlayer.setWoolMaterial(Material.BLUE_WOOL);

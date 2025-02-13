@@ -3,19 +3,14 @@ package net.thevace.woolBattle.perks;
 import net.thevace.woolBattle.WoolbattlePlayer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.swing.text.html.parser.Entity;
+public class Rettungsplattform extends ActivePerk {
 
-public class Pod extends ActivePerk {
-
-
-    public Pod(WoolbattlePlayer player) {
-        super(15, 10, player, ChatColor.GOLD + "Pod", Material.POTION);
+    public Rettungsplattform(WoolbattlePlayer p) {
+        super(20, 32, p, ChatColor.GOLD + "Rettungsplattform", Material.COBWEB);
     }
 
     @Override
@@ -29,12 +24,24 @@ public class Pod extends ActivePerk {
 
 
         int[][] positions = {
-                {0, -1, 0}, //Block unter dem Spieler
-                {1, 0, 0}, //Block rechts vom Spieler
-                {-1, 0, 0}, //Block links vom Spieler
-                {0, 0, 1}, //Block vor dem Spieler
-                {0, 0, -1}, //BLock hinter dem Spieler
+                {0, -1, 0},  // Block unter dem Spieler
+
+                {1, -1, 0},  // Rechts
+                {2, -1, 0},  // Rechts
+                {-1, -1, 0}, // Links
+                {-2, -1, 0}, // Links
+
+                {0, -1, 1},  // Vorne
+                {0, -1, 2},  // Vorne
+                {0, -1, -1}, // Hinten
+                {0, -1, -2}, // Hinten
+
+                {1, -1, 1},  // Ecke vorne rechts
+                {1, -1, -1}, // Ecke hinten rechts
+                {-1, -1, 1}, // Ecke vorne links
+                {-1, -1, -1} // Ecke hinten links
         };
+
 
         new BukkitRunnable() {
             int ticks = 0;
@@ -72,7 +79,7 @@ public class Pod extends ActivePerk {
             }
 
 
-        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 2L);
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
 
         p.setVelocity(new Vector(0, 0, 0));
     }
