@@ -3,19 +3,14 @@ package net.thevace.woolBattle.perks;
 import net.thevace.woolBattle.WoolbattlePlayer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.swing.text.html.parser.Entity;
-
-public class Pod extends ActivePerk {
+public class Rettungskapsel extends ActivePerk {
 
 
-    public Pod(WoolbattlePlayer player) {
-        super(15, 10, player, ChatColor.GOLD + "Pod", Material.POTION);
+    public Rettungskapsel(WoolbattlePlayer player) {
+        super(30, 16, player, ChatColor.GOLD + "Rettungskapsel", Material.WHITE_WOOL);
     }
 
     @Override
@@ -29,12 +24,13 @@ public class Pod extends ActivePerk {
 
 
         int[][] positions = {
-                {0, -1, 0},
+                {0, 2, 0}, // Block über dem Spieler
+                {0, -1, 0}, // Block unter dem Spieler
 
-                {1, 0, 0},
-                {-1, 0, 0},
-                {0, 0, 1},
-                {0, 0, -1},
+                {1, 0, 0}, {1, 1, 0}, // Wand rechts (2 Blöcke hoch)
+                {-1, 0, 0}, {-1, 1, 0}, // Wand links (2 Blöcke hoch)
+                {0, 0, 1}, {0, 1, 1}, // Wand vorne (2 Blöcke hoch)
+                {0, 0, -1}, {0, 1, -1} // Wand hinten (2 Blöcke hoch)
         };
 
         new BukkitRunnable() {
@@ -50,7 +46,7 @@ public class Pod extends ActivePerk {
                 p.setVelocity(new Vector(0, 0, 0));
                 ticks++;
             }
-        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L); // Jede Tick ausführen
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
 
 
         p.teleport(new Location(p.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5, playerloc.getYaw(), playerloc.getPitch()));

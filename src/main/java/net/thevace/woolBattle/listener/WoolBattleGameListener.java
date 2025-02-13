@@ -6,6 +6,7 @@ import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.inventorys.TeamSelect;
 import net.thevace.woolBattle.perks.Enterhaken;
 import net.thevace.woolBattle.perks.Pod;
+import net.thevace.woolBattle.perks.Rettungskapsel;
 import net.thevace.woolBattle.perks.Tauscher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +38,6 @@ public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
     WoolBattlePlayerManager playerManager;
 
-    private Map<Player, Block> fishingRodTargets = new HashMap<>();
 
     public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager) {
         this.game = game;
@@ -69,66 +69,26 @@ public class WoolBattleGameListener implements Listener {
 
             Action action = event.getAction();
             Player player = event.getPlayer();
+            WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
 
             if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Pod")) {
-                WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
                 if (woolbattlePlayer.getActivePerk1() instanceof Pod pod) {
                     pod.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Pod pod) {
                     pod.activate();
                 }
 
+            } else if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Rettungskapsel")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Rettungskapsel rettungskapsel) {
+                    rettungskapsel.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungskapsel rettungskapsel) {
+                    rettungskapsel.activate();
+                }
             }
 
         }
 
     }
-
-//    @EventHandler
-//    public void onPlayerFish(PlayerFishEvent event) {
-//        Vector vector3;
-//        Entity entity;
-//        Block block;
-//        Player player;
-//        double d;
-//
-//        float hookThreshold = 0.25f;
-//        float hForceMult = 0.2f;
-//        float hForceMax = 7.5f;
-//        float vForceMult = 0.5f;
-//        float vForceBonus = 0.5f;
-//        float vForceMax = 1.5f;
-//
-//        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT)) {
-//            entity = event.getHook();
-//            block = entity.getWorld().getBlockAt(entity.getLocation().add(0.0, -hookThreshold, 0.0));
-//
-//            if (!block.isEmpty() && !block.isLiquid()) {
-//                player = event.getPlayer();
-//
-//                vector3 = entity.getLocation().subtract(player.getLocation()).toVector();
-//
-//                if (vector3.getY() < 0.0)
-//                    vector3.setY(0.0);
-//
-//                vector3.setX(vector3.getX() * hForceMult);
-//                vector3.setY(vector3.getY() * vForceMult + vForceBonus);
-//                vector3.setZ(vector3.getZ() * hForceMult);
-//
-//                d = hForceMax * hForceMax;
-//                if (vector3.clone().setY(0.0).lengthSquared() > d) {
-//                    d = d / vector3.lengthSquared();
-//                    vector3.setX(vector3.getX() * d);
-//                    vector3.setZ(vector3.getZ() * d);
-//                }
-//
-//                if (vector3.getY() > vForceMax)
-//                    vector3.setY(vForceMax);
-//
-//                player.setVelocity(vector3);
-//            }
-//        }
-//    }
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
@@ -165,9 +125,6 @@ public class WoolBattleGameListener implements Listener {
             }
         }
     }
-
-
-
 
     public void unregister() {
         PlayerMoveEvent.getHandlerList().unregister(this);
