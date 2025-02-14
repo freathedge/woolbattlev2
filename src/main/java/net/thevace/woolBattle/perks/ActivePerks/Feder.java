@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 
 public class Feder extends ActivePerk {
     public Feder(WoolbattlePlayer p) {
-        super(15, 20, p, ChatColor.GOLD + "Feder", Material.FEATHER);
+        super(15, 20, p, ChatColor.GOLD + "Feder", Material.FEATHER, "Wirft dich in die Richtung die du schaust");
     }
 
     @Override

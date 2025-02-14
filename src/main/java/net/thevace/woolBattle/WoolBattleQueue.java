@@ -21,13 +21,11 @@ public class WoolBattleQueue {
     private int teamSize;
     private WoolBattlePlayerManager playerManager;
     private QueueManager queueManager;
-    private PerkManager perkManager;
 
-    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager, PerkManager perkManager) {
+    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager) {
         this.teamSize = teamSize;
         this.playerManager = playerManager;
         this.queueManager = queueManager;
-        this.perkManager = perkManager;
     }
 
     public void joinQueue(WoolbattlePlayer player) {
@@ -56,8 +54,7 @@ public class WoolBattleQueue {
         addTeamSwitcher(player.getPlayer());
         addLeaveQueue(player.getPlayer());
         addStartGame(player.getPlayer());
-        addPerkSelector1(player);
-        addPerkSelector2(player);
+        addPerkSelector(player);
     }
 
     public void leaveQueue(WoolbattlePlayer player) {
@@ -73,7 +70,7 @@ public class WoolBattleQueue {
     }
 
     public void startGame() {
-        WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager, perkManager);
+        WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager);
         game.startGame();
 
         queueManager.removeQueue(this);
@@ -140,21 +137,30 @@ public class WoolBattleQueue {
         player.getInventory().setItem(0, item);
     }
 
-    public void addPerkSelector1(WoolbattlePlayer player) {
-        ItemStack item = new ItemStack(Material.FEATHER);
+    public void addPerkSelector(WoolbattlePlayer player) {
+        ItemStack item = new ItemStack(Material.CHEST);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Select Perk 1");
+        meta.setDisplayName(ChatColor.GOLD + "Perk selector");
         item.setItemMeta(meta);
 
         player.getPlayer().getInventory().setItem(4, item);
     }
 
-    public void addPerkSelector2(WoolbattlePlayer player) {
-        ItemStack item = new ItemStack(Material.FEATHER);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Select Perk 2");
-        item.setItemMeta(meta);
-
-        player.getPlayer().getInventory().setItem(5, item);
-    }
+//    public void addPerkSelector1(WoolbattlePlayer player) {
+//        ItemStack item = new ItemStack(Material.FEATHER);
+//        ItemMeta meta = item.getItemMeta();
+//        meta.setDisplayName(ChatColor.GOLD + "Select Perk 1");
+//        item.setItemMeta(meta);
+//
+//        player.getPlayer().getInventory().setItem(4, item);
+//    }
+//
+//    public void addPerkSelector2(WoolbattlePlayer player) {
+//        ItemStack item = new ItemStack(Material.FEATHER);
+//        ItemMeta meta = item.getItemMeta();
+//        meta.setDisplayName(ChatColor.GOLD + "Select Perk 2");
+//        item.setItemMeta(meta);
+//
+//        player.getPlayer().getInventory().setItem(5, item);
+//    }
 }

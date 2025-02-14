@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 public class Rettungsplattform extends ActivePerk {
 
     public Rettungsplattform(WoolbattlePlayer p) {
-        super(20, 32, p, ChatColor.GOLD + "Rettungsplattform", Material.BLAZE_ROD);
+        super(20, 32, p, ChatColor.GOLD + "Rettungsplattform", Material.BLAZE_ROD, "Erschafft eine kleine Kreisförmige Plattform unter dir");
     }
 
     @Override

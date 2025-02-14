@@ -26,13 +26,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
     private WoolBattlePlayerManager playerManager;
-    private PerkManager perkManager;
 
 
-    public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager, PerkManager perkManager) {
+    public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager) {
         this.game = game;
         this.playerManager = playerManager;
-        this.perkManager = perkManager;
     }
 
     @EventHandler
@@ -45,7 +43,6 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-
         Block block = event.getBlock();
         Player p = event.getPlayer();
 
@@ -58,7 +55,6 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-
         if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta()){
 
             Action action = event.getAction();
@@ -117,9 +113,10 @@ public class WoolBattleGameListener implements Listener {
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Schutzschild schutzschild) {
                     schutzschild.activate();
                 }
+                cancelEvent = true;
             }
 
-            if(cancelEvent) {
+            if(cancelEvent){
                 event.setCancelled(true);
             }
         }
@@ -155,22 +152,31 @@ public class WoolBattleGameListener implements Listener {
                     tauscher.setTarget(target);
                     tauscher.activate();
                 }
-
             }
-        } else if(event.getEntity() instanceof Arrow) {
-            Player target = (Player) event.getHitEntity();
-            if(playerManager.getWoolBattlePlayer(target).isProtected()) {
-                event.setCancelled(true);
+        } else if (event.getEntity() instanceof Arrow) {
+            if (event.getHitEntity() instanceof Player) {
+                Player target = (Player) event.getHitEntity();
+                if (playerManager.getWoolBattlePlayer(target).isProtected()) {
+                    event.setCancelled(true);
+                }
+            }
+            if (event.getHitBlock() != null) {
+                Block block = event.getHitBlock();
+
+                if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
+                    block.setType(Material.AIR);
+                    event.getEntity().remove();
+                }
             }
         }
     }
+
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if(event.getBlock().getType() == Material.RED_WOOL || event.getBlock().getType() == Material.BLUE_WOOL) {
             WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
             player.handleBlockPlace();
-
         } else if (event.getBlock().getType() == Material.STONE_PRESSURE_PLATE) {
             Location plateLocation = event.getBlock().getLocation();
 
@@ -183,7 +189,6 @@ public class WoolBattleGameListener implements Listener {
                 mine.setPlateLocation(plateLocation);
                 mine.activate();
             }
-
             event.setCancelled(true);
         }
     }
@@ -220,6 +225,9 @@ public class WoolBattleGameListener implements Listener {
         Player p = event.getEntity();
         WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
         game.handlePlayerDeath(woolbattlePlayer);
+        event.setKeepInventory(true);
+        event.getDrops().clear();
+        event.setDeathMessage(null);
     }
 
     public void unregister() {

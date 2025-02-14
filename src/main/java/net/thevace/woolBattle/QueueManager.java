@@ -13,12 +13,10 @@ public class QueueManager {
     private static final List<WoolBattleQueue> allQueues = new ArrayList<>();
 
     private WoolBattlePlayerManager playerManager;
-    private PerkManager perkManager;
 
 
-    public QueueManager(WoolBattlePlayerManager playerManager, PerkManager perkManager) {
+    public QueueManager(WoolBattlePlayerManager playerManager) {
         this.playerManager = playerManager;
-        this.perkManager = perkManager;
     }
 
     public void addToQueue(WoolbattlePlayer player, WoolBattleQueue queue) {
@@ -51,6 +49,11 @@ public class QueueManager {
     }
 
     public void joinAvailableQueue(WoolbattlePlayer player, int teamSize) {
+
+        if (playerQueues.containsKey(player)) {
+            player.getPlayer().sendMessage("Du bist schon in einer Warteschlange");
+            return;
+        }
         for (WoolBattleQueue queue : allQueues) {
             if (queue.getTotalPlayers() < queue.getTeamSize() * 2) {
                 addToQueue(player, queue);
@@ -58,7 +61,7 @@ public class QueueManager {
             }
         }
 
-        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this, perkManager);
+        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
         allQueues.add(newQueue);
         addToQueue(player, newQueue);
 

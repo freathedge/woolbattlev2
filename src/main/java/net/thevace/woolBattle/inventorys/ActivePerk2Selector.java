@@ -8,7 +8,13 @@ import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import net.thevace.woolBattle.perks.ActivePerks.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ActivePerk2Selector extends View {
 
@@ -23,8 +29,8 @@ public class ActivePerk2Selector extends View {
 
     @Override
     public void onInit(ViewConfigBuilder config) {
-        config.title("Perk 2 Selector");
-        config.size(3);
+        config.title(ChatColor.AQUA + "Active Perk 2");
+        config.size(4);
         config.cancelOnClick();
     }
 
@@ -34,19 +40,40 @@ public class ActivePerk2Selector extends View {
         Player p = render.getPlayer();
         WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
-        int perksPerRow = 9;
+        ItemStack arrow = new ItemStack(Material.ARROW);
+        ItemMeta arrowmeta = arrow.getItemMeta();
+        arrowmeta.setDisplayName(ChatColor.GOLD + "Zurück");
+        arrow.setItemMeta(arrowmeta);
 
         for (int i = 0; i < PerkManager.PERKS.size(); i++) {
             Class<? extends ActivePerk> perkClass = PerkManager.PERKS.get(i);
             ActivePerk perkInstance = PerkManager.createPerkInstance(perkClass, null);
 
-            int slotX = i / perksPerRow + 1;
-            int slotY = i % perksPerRow + 1;
+            int slotX = i / 9 + 1;
+            int slotY = i % 9 + 1;
+
+            ItemStack item = perkInstance.getItem();
+
+            if(player.getActivePerk2() != null && player.getActivePerk2().getClass().equals(perkClass)) {
+                ItemMeta meta = item.getItemMeta();
+                meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                item.setItemMeta(meta);
+            }
 
             render.slot(slotX, slotY)
-                    .withItem(perkInstance.getItem())
-                    .onClick(click -> player.setActivePerk2(PerkManager.createPerkInstance(perkClass, player)))
-                    .closeOnClick();
+                    .withItem(item)
+                    .onClick(click -> {
+                        player.setActivePerk2(PerkManager.createPerkInstance(perkClass, player));
+                        click.openForPlayer(ActivePerk2Selector.class);
+                    });
         }
+
+        render.slot(4, 1)
+                .withItem(arrow)
+                .onClick(click -> {
+                    click.openForPlayer(PerkSelector.class);
+                });
     }
 }

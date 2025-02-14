@@ -15,8 +15,8 @@ public abstract class ActivePerk extends Perk {
 
 
 
-    public ActivePerk(long cooldown, int preis, WoolbattlePlayer p, String itemName, Material material) {
-        super(cooldown, preis, p, itemName, material);
+    public ActivePerk(long cooldown, int preis, WoolbattlePlayer p, String itemName, Material material, String description) {
+        super(cooldown, preis, p, itemName, material, description);
     }
 
 
@@ -58,9 +58,6 @@ public abstract class ActivePerk extends Perk {
 
     public void addItem() {
         Player p = player.getPlayer();
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(itemName);
-        item.setItemMeta(meta);
         p.getInventory().addItem(item);
     }
 

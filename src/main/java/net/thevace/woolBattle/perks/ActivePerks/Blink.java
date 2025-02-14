@@ -11,7 +11,7 @@ public class Blink extends ActivePerk {
 
 
     public Blink(WoolbattlePlayer p) {
-        super(15, 30, p, ChatColor.GOLD + "Blink", Material.ENDER_EYE);
+        super(15, 30, p, ChatColor.GOLD + "Blink", Material.ENDER_EYE, "Teleportiert dich 15 Blöcke in die Richtung die du schaust");
     }
 
     @Override

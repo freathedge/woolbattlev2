@@ -68,13 +68,6 @@ public class WoolbattlePlayer {
 
     public void setActivePerk1(ActivePerk activePerk1) {
         this.activePerk1 = activePerk1;
-
-        ItemStack item = activePerk1.getItem();
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Select Perk 1");
-        item.setItemMeta(meta);
-
-        player.getInventory().setItem(4, item);
     }
 
     public ActivePerk getActivePerk2() {
@@ -83,13 +76,6 @@ public class WoolbattlePlayer {
 
     public void setActivePerk2(ActivePerk activePerk2) {
         this.activePerk2 = activePerk2;
-
-        ItemStack item = activePerk2.getItem();
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Select Perk 2");
-        item.setItemMeta(meta);
-
-        player.getInventory().setItem(5, item);
     }
 
     public PassivePerk getPassivePerk() {

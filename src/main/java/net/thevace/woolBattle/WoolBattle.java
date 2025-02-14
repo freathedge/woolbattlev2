@@ -4,8 +4,10 @@ import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.commands.*;
 import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
 import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
+import net.thevace.woolBattle.inventorys.PerkSelector;
 import net.thevace.woolBattle.inventorys.TeamSelect;
 import net.thevace.woolBattle.listener.PlayerInteraction;
+import net.thevace.woolBattle.perks.Perk;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,12 +20,13 @@ public final class WoolBattle extends JavaPlugin {
 
         WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
         PerkManager perkManager = new PerkManager();
-        QueueManager queueManager = new QueueManager(playerManager, perkManager);
+        QueueManager queueManager = new QueueManager(playerManager);
 
         ViewFrame viewFrame = ViewFrame.create(this)
                 .with(new TeamSelect(playerManager, queueManager))
                 .with(new ActivePerk1Selector(playerManager, perkManager))
                 .with(new ActivePerk2Selector(playerManager, perkManager))
+                .with(new PerkSelector())
                 .register();
 
         this.getCommand("joinQueue").setExecutor(new joinQueue(playerManager, queueManager, viewFrame));

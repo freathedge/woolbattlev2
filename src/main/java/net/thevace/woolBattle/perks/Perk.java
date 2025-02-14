@@ -6,6 +6,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Perk {
     protected final int preis;
     protected final long cooldown;
@@ -13,6 +16,7 @@ public class Perk {
 
     protected String itemName;
     protected Material material;
+    protected String itemDescription;
 
 
     ItemStack item;
@@ -20,16 +24,20 @@ public class Perk {
 
     public PlayerInteractEvent event;
 
-    public Perk(long cooldown, int preis, WoolbattlePlayer player, String itemName, Material material) {
+    public Perk(long cooldown, int preis, WoolbattlePlayer player, String itemName, Material material, String itemDescription) {
         this.material = material;
         this.itemName = itemName;
         this.player = player;
         this.cooldown = cooldown;
         this.preis = preis;
+        this.itemDescription = itemDescription;
 
         item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
+        List<String> lore = new ArrayList<String>();
+        lore.add(itemDescription);
+        meta.setLore(lore);
         item.setItemMeta(meta);
     }
 

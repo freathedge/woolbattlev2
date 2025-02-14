@@ -14,7 +14,7 @@ public class Mine extends ActivePerk {
 
 
     public Mine(WoolbattlePlayer p) {
-        super(30, 16, p, ChatColor.GOLD + "Mine", Material.STONE_PRESSURE_PLATE);
+        super(30, 16, p, ChatColor.GOLD + "Mine", Material.STONE_PRESSURE_PLATE, "Platziere eine Druckplatte die jedem Spieler in der Umgebung Rückstoß gibt");
     }
 
     @Override

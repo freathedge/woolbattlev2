@@ -9,7 +9,7 @@ import org.bukkit.util.Vector;
 
 public class Brueckenbauer extends ActivePerk {
     public Brueckenbauer(WoolbattlePlayer p) {
-        super(0, 2, p, ChatColor.GOLD + "Brückenbauer", Material.PISTON);
+        super(0, 2, p, ChatColor.GOLD + "Brückenbauer", Material.PISTON, "Baut eine flache Linie in die Richtung die du schaust");
     }
 
     @Override

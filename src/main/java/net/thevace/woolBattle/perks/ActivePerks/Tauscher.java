@@ -12,7 +12,7 @@ public class Tauscher extends ActivePerk {
     Player target;
 
     public Tauscher(WoolbattlePlayer p) {
-        super(10, 16, p, ChatColor.GOLD + "Tauscher", Material.SNOWBALL);
+        super(10, 16, p, ChatColor.GOLD + "Tauscher", Material.SNOWBALL, "Tausche den Platz mit dem Spieler den du triffst");
     }
 
     public void setTarget(Player target) {

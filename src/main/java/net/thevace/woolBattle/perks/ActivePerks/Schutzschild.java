@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Schutzschild extends ActivePerk {
     public Schutzschild(WoolbattlePlayer p) {
-        super(15, 32, p, ChatColor.GOLD + "Schutzschild", Material.BEACON);
+        super(15, 32, p, ChatColor.GOLD + "Schutzschild", Material.BEACON, "Macht dich für kurze Zeit immun gegen Pfeiltreffer");
     }
 
     @Override
