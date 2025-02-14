@@ -3,8 +3,7 @@ package net.thevace.woolBattle.listener;
 import net.thevace.woolBattle.WoolBattleGame;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.inventorys.TeamSelect;
-import net.thevace.woolBattle.perks.*;
+import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
@@ -16,19 +15,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.util.Vector;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
@@ -54,18 +45,13 @@ public class WoolBattleGameListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
 
         Block block = event.getBlock();
+        Player p = event.getPlayer();
 
-        if (block.getState() instanceof TileState tileState) {
-            PersistentDataContainer data = tileState.getPersistentDataContainer();
-            if (data.has(new org.bukkit.NamespacedKey(Bukkit.getPluginManager().getPlugin("WoolBattle"), "editor_block"), PersistentDataType.STRING)) {
-                Player player = event.getPlayer();
-                game.handleWoolBreak(player);
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "Editor Block Breaked");
-            }
+        if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
+            game.handleWoolBreak(p);
         }
 
-        event.setDropItems(false);
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -96,9 +82,18 @@ public class WoolBattleGameListener implements Listener {
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungsplattform rettungsplattform) {
                     rettungsplattform.activate();
                 }
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Blink")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Blink blink) {
+                    blink.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Blink blink) {
+                    blink.activate();
+                }
             }
 
+            event.setCancelled(true);
+
         }
+
 
     }
 

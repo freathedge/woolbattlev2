@@ -4,19 +4,22 @@ import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 
+import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.perks.*;
+import net.thevace.woolBattle.perks.ActivePerk;
+import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class ActivePerk1Selector extends View {
 
     WoolBattlePlayerManager playerManager;
+    PerkManager perkManager;
     int perkIndex;
 
-    public ActivePerk1Selector(WoolBattlePlayerManager playerManager) {
+    public ActivePerk1Selector(WoolBattlePlayerManager playerManager, PerkManager perkManager) {
         this.playerManager = playerManager;
+        this.perkManager = perkManager;
     }
 
     @Override
@@ -32,31 +35,20 @@ public class ActivePerk1Selector extends View {
         Player p = render.getPlayer();
         WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
-        Pod pod = new Pod(null);
-        Enterhaken enterhaken = new Enterhaken(null);
-        Tauscher tauscher = new Tauscher(null);
-        Rettungskapsel rettungskapsel = new Rettungskapsel(null);
-        Mine mine = new Mine(null);
-        Rettungsplattform rettungsplattform = new Rettungsplattform(null);
 
-        render.slot(1, 1)
-                .withItem(pod.getItem())
-                .onClick(click -> player.setActivePerk1(new Pod(player))).closeOnClick();
-        render.slot(1, 2)
-                .withItem(enterhaken.getItem())
-                .onClick(click -> player.setActivePerk1(new Enterhaken(player))).closeOnClick();
-        render.slot(1, 3)
-                .withItem(tauscher.getItem())
-                .onClick(click -> player.setActivePerk1(new Tauscher(player))).closeOnClick();
-        render.slot(1, 4)
-                .withItem(rettungskapsel.getItem())
-                .onClick(click -> player.setActivePerk1(new Rettungskapsel(player))).closeOnClick();
-        render.slot(1, 5)
-                .withItem(mine.getItem())
-                .onClick(click -> player.setActivePerk1(new Mine(player))).closeOnClick();
-        render.slot(1, 6)
-                .withItem(rettungsplattform.getItem())
-                .onClick(click -> player.setActivePerk1(new Rettungsplattform(player))).closeOnClick();
+        for (int i = 0; i < PerkManager.PERKS.size(); i++) {
+            Class<? extends ActivePerk> perkClass = PerkManager.PERKS.get(i);
+            ActivePerk perkInstance = PerkManager.createPerkInstance(perkClass, null);
 
+            int slotX = i / 9 + 1;
+            int slotY = i % 9 + 1;
+
+            render.slot(slotX, slotY)
+                    .withItem(perkInstance.getItem())
+                    .onClick(click -> player.setActivePerk1(PerkManager.createPerkInstance(perkClass, player)))
+                    .closeOnClick();
+        }
     }
+
+
 }

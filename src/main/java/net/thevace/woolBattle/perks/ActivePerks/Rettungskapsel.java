@@ -1,6 +1,7 @@
-package net.thevace.woolBattle.perks;
+package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

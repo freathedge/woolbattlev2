@@ -1,15 +1,11 @@
-package net.thevace.woolBattle.perks;
+package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import javax.swing.text.html.parser.Entity;
 
 public class Pod extends ActivePerk {
 

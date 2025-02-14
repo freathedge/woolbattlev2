@@ -18,10 +18,11 @@ public final class WoolBattle extends JavaPlugin {
 
         WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
         QueueManager queueManager = new QueueManager(playerManager);
+        PerkManager perkManager = new PerkManager();
         ViewFrame viewFrame = ViewFrame.create(this)
                 .with(new TeamSelect(playerManager, queueManager))
-                .with(new ActivePerk1Selector(playerManager))
-                .with(new ActivePerk2Selector(playerManager))
+                .with(new ActivePerk1Selector(playerManager, perkManager))
+                .with(new ActivePerk2Selector(playerManager, perkManager))
                 .register();
 
         this.getCommand("joinQueue").setExecutor(new joinQueue(playerManager, queueManager, viewFrame));

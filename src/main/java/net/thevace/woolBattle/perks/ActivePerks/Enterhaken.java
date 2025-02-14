@@ -1,6 +1,7 @@
-package net.thevace.woolBattle.perks;
+package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

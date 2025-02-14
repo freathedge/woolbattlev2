@@ -11,28 +11,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public abstract class ActivePerk {
-    protected final int preis;
-    protected final long cooldown;
-    protected final WoolbattlePlayer player;
+public abstract class ActivePerk extends Perk {
 
-    String itemName;
-    Material material;
-
-    ItemStack item;
 
 
     public ActivePerk(long cooldown, int preis, WoolbattlePlayer p, String itemName, Material material) {
-        this.cooldown = cooldown;
-        this.preis = preis;
-        this.player  = p;
-        this.itemName = itemName;
-        this.material = material;
-
-        item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(itemName);
-        item.setItemMeta(meta);
+        super(cooldown, preis, p, itemName, material);
     }
 
 
