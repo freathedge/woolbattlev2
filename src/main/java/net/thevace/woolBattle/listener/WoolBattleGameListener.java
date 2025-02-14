@@ -6,7 +6,6 @@ import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.TileState;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,8 +17,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
@@ -87,6 +84,18 @@ public class WoolBattleGameListener implements Listener {
                     blink.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Blink blink) {
                     blink.activate();
+                }
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Feder")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Feder feder) {
+                    feder.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Feder feder) {
+                    feder.activate();
+                }
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Brückenbauer")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Brueckenbauer brueckenbauer) {
+                    brueckenbauer.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Brueckenbauer brueckenbauer) {
+                    brueckenbauer.activate();
                 }
             }
 
