@@ -23,8 +23,8 @@ public class WoolBattleGame {
 
 
 
-    public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2, WoolBattlePlayerManager playerManager) {
-        this.listener = new WoolBattleGameListener(this, playerManager);
+    public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2, WoolBattlePlayerManager playerManager, PerkManager perkManager) {
+        this.listener = new WoolBattleGameListener(this, playerManager, perkManager);
 
         this.Team1Health = teamHealth;
         this.Team2Health = teamHealth;
@@ -75,21 +75,17 @@ public class WoolBattleGame {
         }
     }
 
-    public void handlePlayerHeight(Player player) {
-        if (team1.stream().anyMatch(wbp -> wbp.getPlayer().equals(player))) {
-            if (Team1Health > 0) {
-                Team1Health--;
-                Bukkit.broadcastMessage("Team 1 hat ein Leben verloren: " + Team1Health);
-            }
-        } else if (team2.stream().anyMatch(wbp -> wbp.getPlayer().equals(player))) {
-            if (Team2Health > 0) {
-                Team2Health--;
-                Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + Team2Health);
-            }
+    public void handlePlayerDeath(WoolbattlePlayer player) {
+        if(team1.contains(player)) {
+            Team1Health--;
+            Bukkit.broadcastMessage("Team 1 hat ein Leben verloren: " + Team1Health);
+        } else if(team2.contains(player)) {
+            Team2Health--;
+            Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + Team2Health);
         }
 
 
-        player.teleport(player.getWorld().getSpawnLocation());
+        player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
 
         if (Team1Health == 0 || Team2Health == 0) {
             endGame();

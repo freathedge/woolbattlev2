@@ -21,11 +21,13 @@ public class WoolBattleQueue {
     private int teamSize;
     private WoolBattlePlayerManager playerManager;
     private QueueManager queueManager;
+    private PerkManager perkManager;
 
-    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager) {
+    public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager, PerkManager perkManager) {
         this.teamSize = teamSize;
         this.playerManager = playerManager;
         this.queueManager = queueManager;
+        this.perkManager = perkManager;
     }
 
     public void joinQueue(WoolbattlePlayer player) {
@@ -47,8 +49,7 @@ public class WoolBattleQueue {
         }
 
         if(team1.size() == teamSize && team2.size() == teamSize) {
-            WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager);
-            game.startGame();
+            startGame();
         }
 
         player.getPlayer().getInventory().clear();
@@ -72,7 +73,7 @@ public class WoolBattleQueue {
     }
 
     public void startGame() {
-        WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager);
+        WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager, perkManager);
         game.startGame();
 
         queueManager.removeQueue(this);

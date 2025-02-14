@@ -1,8 +1,10 @@
 package net.thevace.woolBattle.listener;
 
+import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolBattleGame;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.perks.ActivePerk;
 import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -13,30 +15,33 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
-    WoolBattlePlayerManager playerManager;
+    private WoolBattlePlayerManager playerManager;
+    private PerkManager perkManager;
 
 
-    public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager) {
+    public WoolBattleGameListener(WoolBattleGame game, WoolBattlePlayerManager playerManager, PerkManager perkManager) {
         this.game = game;
         this.playerManager = playerManager;
+        this.perkManager = perkManager;
     }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (event.getTo().getY() < 0) {
-            game.handlePlayerHeight(player);
+            game.handlePlayerDeath(playerManager.getWoolBattlePlayer(player));
         }
     }
-
-
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -60,56 +65,69 @@ public class WoolBattleGameListener implements Listener {
             Player player = event.getPlayer();
             WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
 
-            if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Pod")) {
+            String displayName = event.getItem().getItemMeta().getDisplayName();
+            boolean cancelEvent = false;
+
+
+            if (displayName.equals(ChatColor.GOLD + "Pod")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Pod pod) {
                     pod.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Pod pod) {
                     pod.activate();
                 }
-
-            } else if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Rettungskapsel")) {
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Rettungskapsel")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Rettungskapsel rettungskapsel) {
                     rettungskapsel.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungskapsel rettungskapsel) {
                     rettungskapsel.activate();
                 }
-            } else if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Rettungsplattform")) {
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Rettungsplattform")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Rettungsplattform rettungsplattform) {
                     rettungsplattform.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungsplattform rettungsplattform) {
                     rettungsplattform.activate();
                 }
-            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Blink")) {
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Blink")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Blink blink) {
                     blink.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Blink blink) {
                     blink.activate();
                 }
-            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Feder")) {
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Feder")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Feder feder) {
                     feder.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Feder feder) {
                     feder.activate();
                 }
-            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Brückenbauer")) {
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Brückenbauer")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Brueckenbauer brueckenbauer) {
                     brueckenbauer.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Brueckenbauer brueckenbauer) {
                     brueckenbauer.activate();
                 }
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Schutzschild")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Schutzschild schutzschild) {
+                    schutzschild.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Schutzschild schutzschild) {
+                    schutzschild.activate();
+                }
             }
 
-            event.setCancelled(true);
-
+            if(cancelEvent) {
+                event.setCancelled(true);
+            }
         }
-
-
     }
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
         WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
-
         if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
             if (player.getActivePerk1() instanceof Enterhaken enterhaken) {
                 enterhaken.setEvent(event);
@@ -122,7 +140,7 @@ public class WoolBattleGameListener implements Listener {
     }
 
     @EventHandler
-    public void onSnowballHit(ProjectileHitEvent event) {
+    public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof Snowball) {
             Snowball snowball = (Snowball) event.getEntity();
 
@@ -139,14 +157,20 @@ public class WoolBattleGameListener implements Listener {
                 }
 
             }
+        } else if(event.getEntity() instanceof Arrow) {
+            Player target = (Player) event.getHitEntity();
+            if(playerManager.getWoolBattlePlayer(target).isProtected()) {
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
-    public void onMinePlaced(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         if(event.getBlock().getType() == Material.RED_WOOL || event.getBlock().getType() == Material.BLUE_WOOL) {
             WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
-            player.removeWool(1);
+            player.handleBlockPlace();
+
         } else if (event.getBlock().getType() == Material.STONE_PRESSURE_PLATE) {
             Location plateLocation = event.getBlock().getLocation();
 
@@ -189,6 +213,13 @@ public class WoolBattleGameListener implements Listener {
         if(game.handlePlayerHit(damager, target)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        Player p = event.getEntity();
+        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
+        game.handlePlayerDeath(woolbattlePlayer);
     }
 
     public void unregister() {

@@ -21,6 +21,8 @@ public class WoolbattlePlayer {
     private long activePerk2LastUsed = 0;
     private long passivePerkLastUsed = 0;
 
+    private boolean isProtected = false;
+
 
     public WoolbattlePlayer(Player player) {
         this.player = player;
@@ -46,6 +48,10 @@ public class WoolbattlePlayer {
     public void removeWool(int wool) {
        this.wool -= wool;
        player.getInventory().removeItem(new ItemStack(woolMaterial, wool));
+    }
+
+    public void handleBlockPlace() {
+        this.wool --;
     }
 
     public Material getWoolMaterial() {
@@ -118,4 +124,11 @@ public class WoolbattlePlayer {
         this.passivePerkLastUsed = passivePerkLastUsed;
     }
 
+    public void setProtected(boolean aProtected) {
+        isProtected = aProtected;
+    }
+
+    public boolean isProtected() {
+        return isProtected;
+    }
 }

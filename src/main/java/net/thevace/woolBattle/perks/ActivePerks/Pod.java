@@ -11,7 +11,7 @@ public class Pod extends ActivePerk {
 
 
     public Pod(WoolbattlePlayer player) {
-        super(15, 10, player, ChatColor.GOLD + "Pod", Material.POTION);
+        super(15, 10, player, ChatColor.GOLD + "Pod", Material.FLOWER_POT);
     }
 
     @Override

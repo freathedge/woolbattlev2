@@ -16,7 +16,8 @@ public class PerkManager {
             Rettungsplattform.class,
             Blink.class,
             Feder.class,
-            Brueckenbauer.class
+            Brueckenbauer.class,
+            Schutzschild.class
     );
 
     public static ActivePerk createPerkInstance(Class<? extends ActivePerk> perkClass, WoolbattlePlayer player) {

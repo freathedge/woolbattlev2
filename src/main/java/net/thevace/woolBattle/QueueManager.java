@@ -13,10 +13,12 @@ public class QueueManager {
     private static final List<WoolBattleQueue> allQueues = new ArrayList<>();
 
     private WoolBattlePlayerManager playerManager;
+    private PerkManager perkManager;
 
 
-    public QueueManager(WoolBattlePlayerManager playerManager) {
+    public QueueManager(WoolBattlePlayerManager playerManager, PerkManager perkManager) {
         this.playerManager = playerManager;
+        this.perkManager = perkManager;
     }
 
     public void addToQueue(WoolbattlePlayer player, WoolBattleQueue queue) {
@@ -56,7 +58,7 @@ public class QueueManager {
             }
         }
 
-        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
+        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this, perkManager);
         allQueues.add(newQueue);
         addToQueue(player, newQueue);
 

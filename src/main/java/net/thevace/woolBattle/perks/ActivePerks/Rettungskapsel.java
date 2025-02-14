@@ -11,7 +11,7 @@ public class Rettungskapsel extends ActivePerk {
 
 
     public Rettungskapsel(WoolbattlePlayer player) {
-        super(30, 16, player, ChatColor.GOLD + "Rettungskapsel", Material.WHITE_WOOL);
+        super(30, 16, player, ChatColor.GOLD + "Rettungskapsel", Material.GLASS);
     }
 
     @Override

@@ -8,6 +8,8 @@ import org.bukkit.util.Vector;
 
 public class Mine extends ActivePerk {
 
+
+
     Location plateLocation;
 
 

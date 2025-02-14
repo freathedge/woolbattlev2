@@ -11,7 +11,7 @@ public class Blink extends ActivePerk {
 
 
     public Blink(WoolbattlePlayer p) {
-        super(15, 30, p, ChatColor.GOLD + "Blink", Material.ENDER_PEARL);
+        super(15, 30, p, ChatColor.GOLD + "Blink", Material.ENDER_EYE);
     }
 
     @Override
