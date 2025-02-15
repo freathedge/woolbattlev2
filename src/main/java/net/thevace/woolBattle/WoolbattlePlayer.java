@@ -3,6 +3,7 @@ package net.thevace.woolBattle;
 import net.thevace.woolBattle.perks.ActivePerk;
 import net.thevace.woolBattle.perks.PassivePerk;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,9 @@ public class WoolbattlePlayer {
 
     private boolean isProtected = false;
     private boolean isFreezed = false;
+
+    private Location lastBlockLocation;
+
 
 
     public WoolbattlePlayer(Player player) {
@@ -124,7 +128,14 @@ public class WoolbattlePlayer {
     }
 
     public void setFreezed(boolean freezed) {
-        System.out.println("Player set freezed: " + freezed);
         isFreezed = freezed;
+    }
+
+    public Location getLastBlockLocation() {
+        return lastBlockLocation;
+    }
+
+    public void setLastBlockLocation(Location lastBlockLocation) {
+        this.lastBlockLocation = lastBlockLocation;
     }
 }

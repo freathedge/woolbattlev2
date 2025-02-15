@@ -8,6 +8,7 @@ import net.thevace.woolBattle.perks.ActivePerk;
 import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,8 +36,17 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (playerManager.getWoolBattlePlayer(player).isFreezed()) {
+        Player p = event.getPlayer();
+
+        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        Block block = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+
+        if(block.getType() != Material.AIR) {
+            player.setLastBlockLocation(block.getLocation());
+        }
+
+
+        if (player.isFreezed()) {
             if (event.getFrom().getX() != event.getTo().getX() ||
                     event.getFrom().getZ() != event.getTo().getZ() ||
                     event.getFrom().getY() < event.getTo().getY()) {
@@ -44,7 +54,7 @@ public class WoolBattleGameListener implements Listener {
             }
         }
         if (event.getTo().getY() < 0) {
-            game.handlePlayerDeath(playerManager.getWoolBattlePlayer(player));
+            game.handlePlayerDeath(player);
         }
     }
 
@@ -135,11 +145,17 @@ public class WoolBattleGameListener implements Listener {
                     tauscher.activate();
                 }
                 cancelEvent = true;
-            } else if(displayName.equals(ChatColor.GOLD + "Freeze")) {
+            } else if (displayName.equals(ChatColor.GOLD + "Freeze")) {
                 if (woolbattlePlayer.getActivePerk1() instanceof Freeze freeze) {
                     freeze.activate();
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Freeze freeze) {
                     freeze.activate();
+                }
+            } else if (displayName.equals(ChatColor.GOLD + "Uhr")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Uhr uhr) {
+                    uhr.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Uhr uhr) {
+                    uhr.activate();
                 }
             }
 
