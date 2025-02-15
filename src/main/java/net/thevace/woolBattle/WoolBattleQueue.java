@@ -1,5 +1,6 @@
 package net.thevace.woolBattle;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,10 +11,14 @@ import java.util.List;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class WoolBattleQueue {
 
-    private List<WoolbattlePlayer> Queue = new ArrayList<WoolbattlePlayer>();
+    private List<WoolbattlePlayer> queue = new ArrayList<WoolbattlePlayer>();
 
     private List<WoolbattlePlayer> team1 = new ArrayList<WoolbattlePlayer>();
     private List<WoolbattlePlayer> team2 = new ArrayList<WoolbattlePlayer>();
@@ -29,7 +34,7 @@ public class WoolBattleQueue {
     }
 
     public void joinQueue(WoolbattlePlayer player) {
-        Queue.add(player);
+        queue.add(player);
         player.getPlayer().sendMessage("Du bist einer Queue beigetreten" );
 
         if(team1.size() < team2.size()) {
@@ -55,10 +60,11 @@ public class WoolBattleQueue {
         addLeaveQueue(player.getPlayer());
         addStartGame(player.getPlayer());
         addPerkSelector(player);
+        setQueueScoreboard(player);
     }
 
     public void leaveQueue(WoolbattlePlayer player) {
-        Queue.remove(player);
+        queue.remove(player);
         player.getPlayer().sendMessage("Du wurdest von der Queue entfernt");
         player.getPlayer().getInventory().clear();
 
@@ -70,7 +76,8 @@ public class WoolBattleQueue {
     }
 
     public void startGame() {
-        WoolBattleGame game = new WoolBattleGame(10, team1, team2, playerManager);
+        WoolBattleGame game = new WoolBattleGame(1, team1, team2, playerManager);
+        GameManager.addGame(game);
         game.startGame();
 
         queueManager.removeQueue(this);
@@ -86,11 +93,11 @@ public class WoolBattleQueue {
     }
 
     public List<WoolbattlePlayer> getQueue() {
-        return Queue;
+        return queue;
     }
 
     public void setQueue(List<WoolbattlePlayer> queue) {
-        Queue = queue;
+        queue = queue;
     }
 
     public void setTeam1(List<WoolbattlePlayer> team1) {
@@ -146,21 +153,18 @@ public class WoolBattleQueue {
         player.getPlayer().getInventory().setItem(4, item);
     }
 
-//    public void addPerkSelector1(WoolbattlePlayer player) {
-//        ItemStack item = new ItemStack(Material.FEATHER);
-//        ItemMeta meta = item.getItemMeta();
-//        meta.setDisplayName(ChatColor.GOLD + "Select Perk 1");
-//        item.setItemMeta(meta);
-//
-//        player.getPlayer().getInventory().setItem(4, item);
-//    }
-//
-//    public void addPerkSelector2(WoolbattlePlayer player) {
-//        ItemStack item = new ItemStack(Material.FEATHER);
-//        ItemMeta meta = item.getItemMeta();
-//        meta.setDisplayName(ChatColor.GOLD + "Select Perk 2");
-//        item.setItemMeta(meta);
-//
-//        player.getPlayer().getInventory().setItem(5, item);
-//    }
+    public void setQueueScoreboard(WoolbattlePlayer player) {
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+
+        Objective objective = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        Score score1 = objective.getScore(ChatColor.AQUA + "Online: " + ChatColor.RESET + queue.size());
+        score1.setScore(2);
+
+        Score score2 = objective.getScore(ChatColor.AQUA + "Benötigt: " + ChatColor.RESET + teamSize * 2);
+        score2.setScore(0);
+
+        player.getPlayer().setScoreboard(board);
+    }
 }

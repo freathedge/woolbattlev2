@@ -24,11 +24,16 @@ public class joinQueue implements CommandExecutor  {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         Player p = (Player) commandSender;
         playerManager.registerPlayer(p);
         WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
-        queueManager.joinAvailableQueue(woolbattlePlayer, 1);
+        if (args.length == 0) {
+            queueManager.joinAvailableQueue(woolbattlePlayer, 1);
+        } else if (args.length == 1) {
+            queueManager.joinAvailableQueue(woolbattlePlayer, Integer.parseInt(args[0]));
+        }
+
         return false;
     }
 }

@@ -2,12 +2,17 @@ package net.thevace.woolBattle;
 
 import net.thevace.woolBattle.listener.WoolBattleGameListener;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -20,8 +25,8 @@ public class WoolBattleGame {
 
     private List<WoolbattlePlayer> allPlayers;
 
-    private int Team1Health;
-    private int Team2Health;
+    private int team1Health;
+    private int team2Health;
 
     private WoolBattleGameListener listener;
 
@@ -32,8 +37,8 @@ public class WoolBattleGame {
     public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2, WoolBattlePlayerManager playerManager) {
         this.listener = new WoolBattleGameListener(this, playerManager);
 
-        this.Team1Health = teamHealth;
-        this.Team2Health = teamHealth;
+        this.team1Health = teamHealth;
+        this.team2Health = teamHealth;
         this.team1 = Team1;
         this.team2 = Team2;
         this.playerManager = playerManager;
@@ -47,52 +52,64 @@ public class WoolBattleGame {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
+            setGameScoreboard(wbp);
         }
         for (WoolbattlePlayer wbp : team2) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
+            setGameScoreboard(wbp);
         }
     }
 
     public void endGame() {
-        PlayerMoveEvent.getHandlerList().unregister(listener);
-        if(Team1Health > Team2Health) {
+        listener.unregister();
+        if(team1Health > team2Health) {
             for (WoolbattlePlayer wbp : team1) {
-                Player p = wbp.getPlayer();
-                p.sendMessage("Woolbattle game ended! Team 1 has won!");
+                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 1 has won!");
+                playerManager.removePlayer(wbp.getPlayer());
             }
             for (WoolbattlePlayer wbp : team2) {
-                Player p = wbp.getPlayer();
-                p.sendMessage("Woolbattle game ended! Team 1 has won!");
+                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 1 has won!");
+                playerManager.removePlayer(wbp.getPlayer());
             }
         } else {
             for (WoolbattlePlayer wbp : team1) {
-                Player p = wbp.getPlayer();
-                p.sendMessage("Woolbattle game ended! Team 1 has won!");
+                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 2 has won!");
+                playerManager.removePlayer(wbp.getPlayer());
             }
             for (WoolbattlePlayer wbp : team2) {
-                Player p = wbp.getPlayer();
-                p.sendMessage("Woolbattle game ended! Team 1 has won!");
+                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 2 has won!");
+                playerManager.removePlayer(wbp.getPlayer());
             }
         }
+
+        GameManager.removeGame(this);
     }
 
     public void handlePlayerDeath(WoolbattlePlayer player) {
         if(team1.contains(player)) {
-            Team1Health--;
-            Bukkit.broadcastMessage("Team 1 hat ein Leben verloren: " + Team1Health);
+            team1Health--;
+            Bukkit.broadcastMessage("Team 1 hat ein Leben verloren: " + team1Health);
         } else if(team2.contains(player)) {
-            Team2Health--;
-            Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + Team2Health);
+            team2Health--;
+            Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + team2Health);
         }
 
 
         player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
 
-        if (Team1Health == 0 || Team2Health == 0) {
+        if (team1Health == 0 || team2Health == 0) {
             endGame();
         }
+
+        for (WoolbattlePlayer wbp : team1) {
+            setGameScoreboard(wbp);
+        }
+        for (WoolbattlePlayer wbp : team2) {
+            setGameScoreboard(wbp);
+        }
+
     }
 
     public void handleWoolBreak(Player p) {
@@ -131,4 +148,20 @@ public class WoolBattleGame {
         player.getActivePerk1().addItem();
         player.getActivePerk2().addItem();
     }
+
+    public void setGameScoreboard(WoolbattlePlayer player) {
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+
+        Objective titel = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
+        titel.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        Score team1score = titel.getScore(ChatColor.RED + "Rotes Team leben: " + ChatColor.RESET + team1Health);
+        team1score.setScore(2);
+
+        Score team2score = titel.getScore(ChatColor.BLUE + "Blaues Team leben: " + ChatColor.RESET + team2Health);
+        team2score.setScore(0);
+
+        player.getPlayer().setScoreboard(board);
+    }
+
 }

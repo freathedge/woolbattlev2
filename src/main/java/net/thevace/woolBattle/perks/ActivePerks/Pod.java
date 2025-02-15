@@ -49,6 +49,8 @@ public class Pod extends ActivePerk {
 
 
         p.teleport(new Location(p.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5, playerloc.getYaw(), playerloc.getPitch()));
+        p.setFallDistance(0);
+
 
         new BukkitRunnable() {
             int index = 0;

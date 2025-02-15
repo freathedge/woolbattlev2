@@ -71,8 +71,10 @@ public class ActivePerk1Selector extends View {
             render.slot(slotX, slotY)
                     .withItem(item)
                     .onClick(click -> {
-                        player.setActivePerk1(PerkManager.createPerkInstance(perkClass, player));
-                        click.openForPlayer(ActivePerk1Selector.class);
+                        if (player.getActivePerk2() == null || !player.getActivePerk2().getClass().equals(perkClass)) {
+                            player.setActivePerk1(PerkManager.createPerkInstance(perkClass, player));
+                            click.openForPlayer(ActivePerk1Selector.class);
+                        }
                     });
         }
 
@@ -82,6 +84,4 @@ public class ActivePerk1Selector extends View {
                     click.openForPlayer(PerkSelector.class);
                 });
     }
-
-
 }

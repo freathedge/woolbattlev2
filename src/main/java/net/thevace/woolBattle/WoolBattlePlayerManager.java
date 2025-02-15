@@ -19,6 +19,8 @@ public class WoolBattlePlayerManager {
 
     public void removePlayer(Player player) {
         playerMap.remove(player.getUniqueId());
+
+        player.getInventory().clear();
     }
 
 
