@@ -22,6 +22,7 @@ public class WoolbattlePlayer {
     private long passivePerkLastUsed = 0;
 
     private boolean isProtected = false;
+    private boolean isFreezed = false;
 
 
     public WoolbattlePlayer(Player player) {
@@ -116,5 +117,14 @@ public class WoolbattlePlayer {
 
     public boolean isProtected() {
         return isProtected;
+    }
+
+    public boolean isFreezed() {
+        return isFreezed;
+    }
+
+    public void setFreezed(boolean freezed) {
+        System.out.println("Player set freezed: " + freezed);
+        isFreezed = freezed;
     }
 }

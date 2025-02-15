@@ -96,7 +96,7 @@ public class WoolBattleGame {
             Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + team2Health);
         }
 
-
+        player.setFreezed(false);
         player.getPlayer().teleport(player.getPlayer().getWorld().getSpawnLocation());
 
         if (team1Health == 0 || team2Health == 0) {

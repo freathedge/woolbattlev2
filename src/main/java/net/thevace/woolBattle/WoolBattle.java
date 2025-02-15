@@ -33,6 +33,7 @@ public final class WoolBattle extends JavaPlugin {
         this.getCommand("startGame").setExecutor(new startGame(playerManager, queueManager));
         this.getCommand("getQueue").setExecutor(new getQueue(queueManager, playerManager));
         this.getCommand("getPlayerWool").setExecutor(new getPlayerWool(playerManager));
+        this.getCommand("freeze").setExecutor(new freeze(playerManager));
         Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame, playerManager, queueManager), this);
 
 

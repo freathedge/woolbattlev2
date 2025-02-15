@@ -15,5 +15,8 @@ commands:
   getPlayerWool:
     description: get your wool
     usage: /getPlayerWool
+  freeze:
+    description: freeze
+    usage: /freeze
 depend: [InventoryFramework]
 

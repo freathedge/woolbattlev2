@@ -36,6 +36,13 @@ public class WoolBattleGameListener implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (playerManager.getWoolBattlePlayer(player).isFreezed()) {
+            if (event.getFrom().getX() != event.getTo().getX() ||
+                    event.getFrom().getZ() != event.getTo().getZ() ||
+                    event.getFrom().getY() < event.getTo().getY()) {
+                event.setTo(event.getFrom());
+            }
+        }
         if (event.getTo().getY() < 0) {
             game.handlePlayerDeath(playerManager.getWoolBattlePlayer(player));
         }
@@ -114,6 +121,26 @@ public class WoolBattleGameListener implements Listener {
                     schutzschild.activate();
                 }
                 cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Minigun")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Minigun minigun) {
+                    minigun.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Minigun minigun) {
+                    minigun.activate();
+                }
+                cancelEvent = true;
+            } else if (displayName.equals(ChatColor.GOLD + "Tauscher")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
+                    tauscher.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Tauscher tauscher) {
+                    tauscher.activate();
+                }
+                cancelEvent = true;
+            } else if(displayName.equals(ChatColor.GOLD + "Freeze")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Freeze freeze) {
+                    freeze.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Freeze freeze) {
+                    freeze.activate();
+                }
             }
 
             if(cancelEvent){
@@ -144,30 +171,44 @@ public class WoolBattleGameListener implements Listener {
             if (snowball.getShooter() instanceof Player) {
                 Player player = (Player) snowball.getShooter();
                 Player target = (Player) event.getHitEntity();
-                WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
-                if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
-                    tauscher.setTarget(target);
-                    tauscher.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Tauscher tauscher) {
-                    tauscher.setTarget(target);
-                    tauscher.activate();
+
+                if(player != null && target != null) {
+                    if(!game.handlePlayerHit(player, target)){
+                        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+                        if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
+                            tauscher.setTarget(target);
+                            tauscher.activate();
+                        } else if (woolbattlePlayer.getActivePerk2() instanceof Tauscher tauscher) {
+                            tauscher.setTarget(target);
+                            tauscher.activate();
+                        } else if(woolbattlePlayer.getActivePerk1() instanceof Freeze freeze) {
+                            freeze.setTarget(playerManager.getWoolBattlePlayer(target));
+                            freeze.activate();
+                        } else if (woolbattlePlayer.getActivePerk2() instanceof Freeze freeze) {
+                            freeze.setTarget(playerManager.getWoolBattlePlayer(target));
+                            freeze.activate();
+                        }
+                    }
                 }
             }
-        } else if (event.getEntity() instanceof Arrow) {
+        } else if (event.getEntity() instanceof Arrow arrow) {
             if (event.getHitEntity() instanceof Player) {
+                Player damager = (Player) arrow.getShooter();
                 Player target = (Player) event.getHitEntity();
-                if (playerManager.getWoolBattlePlayer(target).isProtected()) {
-                    event.setCancelled(true);
+                if(!game.handlePlayerHit(damager, target)){
+                    if (playerManager.getWoolBattlePlayer(target).isProtected()) {
+                        event.setCancelled(true);
+                    }
                 }
             }
             if (event.getHitBlock() != null) {
                 Block block = event.getHitBlock();
-
                 if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
                     block.setType(Material.AIR);
-                    event.getEntity().remove();
                 }
             }
+
+            event.getEntity().remove();
         }
     }
 
