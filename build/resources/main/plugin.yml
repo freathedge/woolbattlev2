@@ -18,5 +18,8 @@ commands:
   createQueue:
     description: create a new Queue
     usage: /createQueue <team size>
+  listallplayers:
+    description: list all registered player
+    usage: /listallplayers
 depend: [InventoryFramework]
 

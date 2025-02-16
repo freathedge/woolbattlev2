@@ -27,7 +27,7 @@ public class WoolBattlePlayerManager {
 
 
     public boolean isRegistered(Player player) {
-        return playerMap.containsKey(player);
+        return playerMap.containsKey(player.getUniqueId());
     }
 
     public void listAllPlayers() {

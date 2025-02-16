@@ -33,8 +33,17 @@ public class QueueManager {
         return playerQueues.get(player);
     }
 
-    public Map<WoolBattlePlayer, WoolBattleQueue> getAllQueues() {
-        return playerQueues;
+    public WoolBattleQueue getQueue(String id) {
+        for(WoolBattleQueue queue : allQueues) {
+            if(queue.getId().equals(id)) {
+                return queue;
+            }
+        }
+        return null;
+    }
+
+    public List<WoolBattleQueue> getAllQueues() {
+        return allQueues;
     }
 
     public void listAllQueues() {
@@ -66,17 +75,18 @@ public class QueueManager {
 //    }
 
     public void joinQueue(WoolBattlePlayer player, String ID) {
-        for (WoolBattleQueue queue : allQueues) {
-            if (queue.getId().equals(ID)) {
-                if(!queue.isInQueue(player)) {
-                    addToQueue(player, queue);
-                } else {
-                    player.getPlayer().sendMessage(ChatColor.RED + "Du bist schon in dieser Queue");
-                }
-                return;
-            }
+//        for (WoolBattleQueue queue : allQueues) {
+//            if (queue.getId().equals(ID)) {
+//                addToQueue(player, queue);
+//                return;
+//            }
+//        }
+        WoolBattleQueue queue = getQueue(ID);
+        if (queue != null) {
+            addToQueue(player, queue);
+        } else {
+            player.getPlayer().sendMessage(ChatColor.RED + "Es wurde kein Queue gefunden");
         }
-        player.getPlayer().sendMessage(ChatColor.RED + "Es wurde kein Queue gefunden");
     }
 
     public void createQueue(Player p, int teamSize) {

@@ -70,7 +70,7 @@ public class WoolBattleQueue {
 
     public void leaveQueue(WoolBattlePlayer player) {
         queue.remove(player);
-        player.getPlayer().sendMessage("Du wurdest von der Queue entfernt");
+        player.getPlayer().sendMessage("Du wurdest von der Queue" + ChatColor.GOLD + id + ChatColor.RESET + " entfernt");
         player.getPlayer().getInventory().clear();
 
         team1.remove(player);
@@ -208,17 +208,14 @@ public class WoolBattleQueue {
 
     public void addPlayerToTeam(List<WoolBattlePlayer> team, WoolBattlePlayer player) {
         if(team.contains(player)) {
-            player.getPlayer().sendMessage("Du bist schon in diesem Team!");
         } else {
             if(team.equals(team1)) {
                 team2.remove(player);
                 team1.add(player);
-                player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
                 player.setWoolMaterial(Material.RED_WOOL);
             } else if(team.equals(team2)) {
                 team1.remove(player);
                 team2.add(player);
-                player.getPlayer().sendMessage(ChatColor.BLUE + "Du bist dem Blauen Team beigetreten");
                 player.setWoolMaterial(Material.BLUE_WOOL);
             }
 

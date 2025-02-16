@@ -2,6 +2,7 @@ package net.thevace.woolBattle;
 
 import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.commands.*;
+import net.thevace.woolBattle.commands.tabcompleter.QueueTabCompleter;
 import net.thevace.woolBattle.inventorys.*;
 import net.thevace.woolBattle.listener.PlayerInteraction;
 import net.thevace.woolBattle.perks.Perk;
@@ -34,6 +35,11 @@ public final class WoolBattle extends JavaPlugin {
         this.getCommand("getQueue").setExecutor(new getQueue(queueManager, playerManager));
         this.getCommand("getPlayerWool").setExecutor(new getPlayerWool(playerManager));
         this.getCommand("createQueue").setExecutor(new createQueue(queueManager));
+        this.getCommand("listallplayers").setExecutor(new listallplayer(playerManager));
+
+        this.getCommand("getQueue").setTabCompleter(new QueueTabCompleter(queueManager));
+        this.getCommand("joinQueue").setTabCompleter(new QueueTabCompleter(queueManager));
+
         Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame, playerManager, queueManager), this);
 
 

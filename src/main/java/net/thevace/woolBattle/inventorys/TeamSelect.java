@@ -8,7 +8,9 @@ import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -76,13 +78,33 @@ public class TeamSelect extends View {
         bluemeta.setLore(bluelore);
         blue.setItemMeta(bluemeta);
 
+        if(queueManager.getQueue(player).getTeam1().contains(player)) {
+            ItemMeta meta = red.getItemMeta();
+            meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            red.setItemMeta(meta);
+        } else if(queueManager.getQueue(player).getTeam2().contains(player)) {
+            ItemMeta meta = blue.getItemMeta();
+            meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            blue.setItemMeta(meta);
+        }
+
 
         render.slot(2, 3)
                 .withItem(red)
-                .onClick(click -> changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam1())).closeOnClick();
+                .onClick(click -> {
+                    changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam1());
+                    click.openForPlayer(TeamSelect.class);
+                });
         render.slot(2, 7)
                 .withItem(blue)
-                .onClick(click -> changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam2())).closeOnClick();
+                .onClick(click -> {
+                    changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam2());
+                    click.openForPlayer(TeamSelect.class);
+                });
     }
 
 
@@ -94,34 +116,21 @@ public class TeamSelect extends View {
         List<WoolBattlePlayer> team2 = queueManager.getQueue(woolbattlePlayer).getTeam2();
 
 
-        if(targetTeam == team1) {
-            if(team1.contains(woolbattlePlayer)) {
-                player.sendMessage("Du bist schon in diesem Team!");
-            } else {
+        if(targetTeam.equals(team1)) {
+            if (!team1.contains(woolbattlePlayer)) {
                 if(team1.size() < queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
                     team2.remove(woolbattlePlayer);
                     team1.add(woolbattlePlayer);
                     woolbattlePlayer.setWoolMaterial(Material.RED_WOOL);
-                    player.sendMessage(ChatColor.RED + "Du bist dem roten Team beigetreten");
-                } else {
-                    player.sendMessage(ChatColor.RED + "Dieses Team ist schon voll");
                 }
-
-
             }
-        } else if(targetTeam == team2) {
-            if(team2.contains(woolbattlePlayer)) {
-                player.sendMessage("Du bist schon in diesem Team!");
-            } else {
+        } else if(targetTeam.equals(team2)) {
+            if(!team2.contains(woolbattlePlayer)) {
                 if(team2.size() < queueManager.getQueue(woolbattlePlayer).getTeamSize()) {
                     team1.remove(woolbattlePlayer);
                     team2.add(woolbattlePlayer);
                     woolbattlePlayer.setWoolMaterial(Material.BLUE_WOOL);
-                    player.sendMessage(ChatColor.BLUE + "Du bist dem blauen Team beigetreten");
-                } else {
-                    player.sendMessage(ChatColor.RED + "Dieses Team ist schon voll");
                 }
-
             }
         }
     }
