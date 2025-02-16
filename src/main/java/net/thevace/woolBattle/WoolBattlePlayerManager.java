@@ -1,5 +1,6 @@
 package net.thevace.woolBattle;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class WoolBattlePlayerManager {
         playerMap.remove(player.getUniqueId());
 
         player.getInventory().clear();
+        player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
     }
 
 

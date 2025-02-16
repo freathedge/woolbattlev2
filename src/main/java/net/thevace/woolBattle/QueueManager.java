@@ -49,23 +49,26 @@ public class QueueManager {
     }
 
     public void joinAvailableQueue(WoolbattlePlayer player, int teamSize) {
-
         if (playerQueues.containsKey(player)) {
-            player.getPlayer().sendMessage("Du bist schon in einer Warteschlange");
+            player.getPlayer().sendMessage("Du bist bereits in einer Warteschlange.");
             return;
         }
+
+        // Nach existierender Warteschlange mit demselben TeamSize suchen
         for (WoolBattleQueue queue : allQueues) {
-            if (queue.getTotalPlayers() < queue.getTeamSize() * 2) {
+            if (queue.getTeamSize() == teamSize && queue.getTotalPlayers() < queue.getTeamSize() * 2) {
                 addToQueue(player, queue);
                 return;
             }
         }
 
+        // Falls keine passende Warteschlange existiert, erstelle eine neue
         WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
         allQueues.add(newQueue);
         addToQueue(player, newQueue);
-
     }
+
+
 
     public void removeQueue(WoolBattleQueue queue) {
         allQueues.remove(queue);

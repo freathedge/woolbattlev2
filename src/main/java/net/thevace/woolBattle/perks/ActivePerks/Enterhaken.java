@@ -31,6 +31,7 @@ public class Enterhaken extends ActivePerk {
             Location hookLocation = event.getHook().getLocation();
             Location change = hookLocation.subtract(location);
             player.setVelocity(change.toVector().multiply(0.3));
+            player.setFallDistance(0);
         }
     }
 }

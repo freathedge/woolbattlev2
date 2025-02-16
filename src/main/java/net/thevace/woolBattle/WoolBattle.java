@@ -2,10 +2,7 @@ package net.thevace.woolBattle;
 
 import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.commands.*;
-import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
-import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
-import net.thevace.woolBattle.inventorys.PerkSelector;
-import net.thevace.woolBattle.inventorys.TeamSelect;
+import net.thevace.woolBattle.inventorys.*;
 import net.thevace.woolBattle.listener.PlayerInteraction;
 import net.thevace.woolBattle.perks.Perk;
 import org.bukkit.Bukkit;
@@ -27,6 +24,9 @@ public final class WoolBattle extends JavaPlugin {
                 .with(new ActivePerk1Selector(playerManager, perkManager))
                 .with(new ActivePerk2Selector(playerManager, perkManager))
                 .with(new PerkSelector())
+                .with(new Voting())
+                .with(new LebenVoting(playerManager, queueManager))
+                .with(new MapVoting())
                 .register();
 
         this.getCommand("joinQueue").setExecutor(new joinQueue(playerManager, queueManager, viewFrame));

@@ -6,7 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,6 +28,8 @@ public class WoolBattleQueue {
     private int teamSize;
     private WoolBattlePlayerManager playerManager;
     private QueueManager queueManager;
+
+    private Map<WoolbattlePlayer, Integer> lifeVoting = new HashMap<>();
 
     public WoolBattleQueue(int teamSize, WoolBattlePlayerManager playerManager, QueueManager queueManager) {
         this.teamSize = teamSize;
@@ -51,15 +55,14 @@ public class WoolBattleQueue {
             player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
         }
 
-        if(team1.size() == teamSize && team2.size() == teamSize) {
-            startGame();
-        }
+//        if(team1.size() == teamSize && team2.size() == teamSize) {
+//            startGame();
+//        }
 
         player.getPlayer().getInventory().clear();
-        addTeamSwitcher(player.getPlayer());
-        addLeaveQueue(player.getPlayer());
-        addStartGame(player.getPlayer());
-        addPerkSelector(player);
+
+        addItems(player.getPlayer());
+
         setQueueScoreboard(player);
     }
 
@@ -76,7 +79,24 @@ public class WoolBattleQueue {
     }
 
     public void startGame() {
-        WoolBattleGame game = new WoolBattleGame(1, team1, team2, playerManager);
+
+        Map<Integer, Integer> voteCount = new HashMap<>();
+
+        for (int lifes : lifeVoting.values()) {
+            voteCount.put(lifes, voteCount.getOrDefault(lifes, 0) + 1);
+        }
+
+        int mostVotedLives = -1;
+        int highestVotes = 0;
+
+        for (Map.Entry<Integer, Integer> entry : voteCount.entrySet()) {
+            if (entry.getValue() > highestVotes) {
+                mostVotedLives = entry.getKey();
+                highestVotes = entry.getValue();
+            }
+        }
+
+        WoolBattleGame game = new WoolBattleGame(mostVotedLives, team1, team2, playerManager);
         GameManager.addGame(game);
         game.startGame();
 
@@ -116,42 +136,46 @@ public class WoolBattleQueue {
         return team1.size() + team2.size();
     }
 
-    public void addTeamSwitcher(Player player) {
-        ItemStack item = new ItemStack(Material.RED_BED);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + "Team select");
-        item.setItemMeta(meta);
 
-        player.getInventory().setItem(1, item);
+    public void addItems(Player player) {
+
+        ItemStack startGame = new ItemStack(Material.NETHER_STAR);
+        ItemMeta startGameMeta = startGame.getItemMeta();
+        startGameMeta.setDisplayName(ChatColor.MAGIC + "Start game");
+        startGame.setItemMeta(startGameMeta);
+
+        //player.getInventory().setItem(0, startgame);
+
+        ItemStack teamSelect = new ItemStack(Material.RED_BED);
+        ItemMeta teamSelectMeta = teamSelect.getItemMeta();
+        teamSelectMeta.setDisplayName(ChatColor.RED + "Team select");
+        teamSelect.setItemMeta(teamSelectMeta);
+
+        player.getInventory().setItem(1, teamSelect);
+
+        ItemStack perkSelector = new ItemStack(Material.CHEST);
+        ItemMeta perkSelectorMeta = perkSelector.getItemMeta();
+        perkSelectorMeta.setDisplayName(ChatColor.GOLD + "Perk selector");
+        perkSelector.setItemMeta(perkSelectorMeta);
+
+        player.getPlayer().getInventory().setItem(4, perkSelector);
+
+
+        ItemStack voting = new ItemStack(Material.MAP);
+        ItemMeta votingMeta = voting.getItemMeta();
+        votingMeta.setDisplayName(ChatColor.GOLD + "Voting");
+        voting.setItemMeta(votingMeta);
+
+        player.getPlayer().getInventory().setItem(7, voting);
+
+        ItemStack leaveQueue = new ItemStack(Material.BARRIER);
+        ItemMeta leaveQueueMeta = leaveQueue.getItemMeta();
+        leaveQueueMeta.setDisplayName(ChatColor.RED + "Leave queue");
+        leaveQueue.setItemMeta(leaveQueueMeta);
+
+        player.getInventory().setItem(8, leaveQueue);
     }
 
-    public void addLeaveQueue(Player player) {
-        ItemStack item = new ItemStack(Material.BARRIER);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + "Leave queue");
-        item.setItemMeta(meta);
-
-        player.getInventory().setItem(7, item);
-    }
-
-
-    public void addStartGame(Player player) {
-        ItemStack item = new ItemStack(Material.NETHER_STAR);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.MAGIC + "Start game");
-        item.setItemMeta(meta);
-
-        player.getInventory().setItem(0, item);
-    }
-
-    public void addPerkSelector(WoolbattlePlayer player) {
-        ItemStack item = new ItemStack(Material.CHEST);
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Perk selector");
-        item.setItemMeta(meta);
-
-        player.getPlayer().getInventory().setItem(4, item);
-    }
 
     public void setQueueScoreboard(WoolbattlePlayer player) {
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
@@ -166,5 +190,13 @@ public class WoolBattleQueue {
         score2.setScore(0);
 
         player.getPlayer().setScoreboard(board);
+    }
+
+    public void setLifeVoting(WoolbattlePlayer player, int lives) {
+        lifeVoting.put(player, lives);
+    }
+
+    public Map<WoolbattlePlayer, Integer> getLifeVoting() {
+        return lifeVoting;
     }
 }

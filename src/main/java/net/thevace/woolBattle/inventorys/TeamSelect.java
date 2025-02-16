@@ -85,7 +85,7 @@ public class TeamSelect extends View {
         render.slot(2, 3)
                 .withItem(red)
                 .onClick(click -> changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam1())).closeOnClick();
-        render.slot(2, 7, blue)
+        render.slot(2, 7)
                 .withItem(blue)
                 .onClick(click -> changeTeam(click.getPlayer(), queueManager.getQueue(playerManager.getWoolBattlePlayer(click.getPlayer())).getTeam2())).closeOnClick();
     }

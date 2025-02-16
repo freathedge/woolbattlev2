@@ -5,6 +5,7 @@ import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,6 +41,7 @@ public class Minigun extends ActivePerk {
 
                     Arrow arrow = player.getPlayer().getWorld().spawnArrow(player.getPlayer().getEyeLocation(), direction, 2.0f, 10.0f);
                     arrow.setShooter(player.getPlayer());
+                    player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0f, 1.0f);
                 }
 
                 ticks++;

@@ -21,22 +21,18 @@ public class Freeze extends ActivePerk {
 
     @Override
     protected void applyEffect() {
-        if(target == null) {
-            Snowball snowball = player.getPlayer().launchProjectile(Snowball.class);
-            Vector direction = player.getPlayer().getLocation().getDirection().multiply(1.5);
-            snowball.setVelocity(direction);
-            player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
-        } else {
-            target.setFreezed(true);
+        target.setFreezed(true);
 
-            new BukkitRunnable() {
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
+            target.setFreezed(false);
+        }, 200L);
+    }
 
-                @Override
-                public void run() {
-                    target.setFreezed(false);
-                }
-            }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 200L);
-        }
+    public void throwSnowball() {
+        Snowball snowball = player.getPlayer().launchProjectile(Snowball.class);
+        Vector direction = player.getPlayer().getLocation().getDirection().multiply(1.5);
+        snowball.setVelocity(direction);
+        player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
     }
 
     public void setTarget(WoolbattlePlayer target) {

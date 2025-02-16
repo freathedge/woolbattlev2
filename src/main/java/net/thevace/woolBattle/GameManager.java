@@ -17,4 +17,14 @@ public class GameManager {
     public static Set<WoolBattleGame> getActiveGames() {
         return activeGames;
     }
+
+    public static WoolBattleGame getPlayerGame(WoolbattlePlayer player) {
+        for (WoolBattleGame game : activeGames) {
+            if (game.isPlayerInGame(player)) {
+                return game;
+            }
+        }
+        return null; // Spieler ist in keinem aktiven Spiel
+    }
+
 }

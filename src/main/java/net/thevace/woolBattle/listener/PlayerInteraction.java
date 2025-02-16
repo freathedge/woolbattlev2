@@ -2,10 +2,7 @@ package net.thevace.woolBattle.listener;
 
 import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.*;
-import net.thevace.woolBattle.inventorys.ActivePerk1Selector;
-import net.thevace.woolBattle.inventorys.ActivePerk2Selector;
-import net.thevace.woolBattle.inventorys.PerkSelector;
-import net.thevace.woolBattle.inventorys.TeamSelect;
+import net.thevace.woolBattle.inventorys.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -43,23 +40,19 @@ public class PlayerInteraction implements Listener {
             if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Team select")) {
                 viewFrame.open(TeamSelect.class, player);
                 event.setCancelled(true);
-            }
-
-            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Leave queue")) {
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.RED + "Leave queue")) {
                 queueManager.removeFromQueue(playerManager.getWoolBattlePlayer(player));
                 event.setCancelled(true);
-            }
-
-            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Start game")) {
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Start game")) {
                 queueManager.getQueue(playerManager.getWoolBattlePlayer(player)).startGame();
                 event.setCancelled(true);
-            }
-
-            if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Perk selector")) {
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Perk selector")) {
                 viewFrame.open(PerkSelector.class, player);
                 event.setCancelled(true);
+            } else if(event.getItem().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Voting")) {
+                viewFrame.open(Voting.class, player);
+                event.setCancelled(true);
             }
-
 
 
         }

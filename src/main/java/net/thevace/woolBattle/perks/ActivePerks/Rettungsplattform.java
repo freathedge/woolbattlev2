@@ -1,5 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
+import net.thevace.woolBattle.GameManager;
+import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -71,16 +73,23 @@ public class Rettungsplattform extends ActivePerk {
                     cancel();
                     return;
                 }
+
                 int x = positions[index][0];
                 int y = positions[index][1];
                 int z = positions[index][2];
-                loc.clone().add(x, y, z).getBlock().setType(material);
-                p.playSound(p.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
+                Location location = loc.clone().add(x, y, z);
+
+                // Überprüfen, ob der Block Luft ist
+                if (location.getBlock().getType() == Material.AIR) {
+                    location.getBlock().setType(material);
+                    GameManager.getPlayerGame(player).addToPlayerBlocks(location);
+                    p.playSound(p.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
+                }
+
                 index++;
             }
-
-
         }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
+
 
         p.setVelocity(new Vector(0, 0, 0));
     }

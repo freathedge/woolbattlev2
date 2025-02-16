@@ -24,22 +24,18 @@ public class Tauscher extends ActivePerk {
 
     @Override
     public void applyEffect() {
+        Location playerLoc = player.getPlayer().getLocation();
+        Location targetLoc = target.getLocation();
 
-        if(target == null) {
-            Snowball snowball = player.getPlayer().launchProjectile(Snowball.class);
-            Vector direction = player.getPlayer().getLocation().getDirection().multiply(1.5);
-            snowball.setVelocity(direction);
-            player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
-        } else {
-            Location playerLoc = player.getPlayer().getLocation();
-            Location targetLoc = target.getLocation();
+        player.getPlayer().teleport(targetLoc);
+        target.teleport(playerLoc);
+    }
 
-            player.getPlayer().teleport(targetLoc);
-            target.teleport(playerLoc);
-        }
-
-
-
+    public void throwSnowball() {
+        Snowball snowball = player.getPlayer().launchProjectile(Snowball.class);
+        Vector direction = player.getPlayer().getLocation().getDirection().multiply(1.5);
+        snowball.setVelocity(direction);
+        player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
     }
 
 }

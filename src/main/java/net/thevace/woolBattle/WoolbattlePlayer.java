@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -138,4 +139,5 @@ public class WoolbattlePlayer {
     public void setLastBlockLocation(Location lastBlockLocation) {
         this.lastBlockLocation = lastBlockLocation;
     }
+
 }

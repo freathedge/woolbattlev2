@@ -26,6 +26,7 @@ public class getQueue implements CommandExecutor {
 
         if(args.length == 0) {
             Map<WoolbattlePlayer, WoolBattleQueue> playerQueues = queueManager.getAllQueues();
+            System.out.println(queueManager.getAllQueues().size());
             for(WoolBattleQueue queue : playerQueues.values()) {
                 p.sendMessage("Spieler in der Queue: ");
                 p.sendMessage("Team 1:");

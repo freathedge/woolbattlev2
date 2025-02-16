@@ -37,6 +37,8 @@ public class Perk {
         meta.setDisplayName(itemName);
         List<String> lore = new ArrayList<String>();
         lore.add(itemDescription);
+        lore.add("Preis: " + preis + " Wolle");
+        lore.add("Cooldown: " + cooldown + " Sekunden");
         meta.setLore(lore);
         item.setItemMeta(meta);
     }

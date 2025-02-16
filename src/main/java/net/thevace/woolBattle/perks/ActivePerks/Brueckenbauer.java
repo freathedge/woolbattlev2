@@ -1,5 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
+import net.thevace.woolBattle.GameManager;
+import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolbattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -15,8 +17,8 @@ public class Brueckenbauer extends ActivePerk {
     @Override
     protected void applyEffect() {
         Location playerLoc = player.getPlayer().getLocation();
-        Vector direction = playerLoc.getDirection().setY(0).normalize(); // Nur horizontale Richtung
-        Location startLoc = playerLoc.clone().add(0, -1, 0); // Startpunkt unter dem Spieler
+        Vector direction = playerLoc.getDirection().setY(0).normalize();
+        Location startLoc = playerLoc.clone().add(0, -1, 0);
 
         if (player.getWool() < preis) {
             return;
@@ -27,10 +29,11 @@ public class Brueckenbauer extends ActivePerk {
             Block block = startLoc.getBlock();
 
             if (block.getType() != Material.AIR) {
-                break; // Stoppt, wenn ein Block im Weg ist
+                break;
             }
 
-            block.setType(player.getWoolMaterial()); // Block setzen
+            block.setType(player.getWoolMaterial());
+            GameManager.getPlayerGame(player).addToPlayerBlocks(block.getLocation());
 
             if(player.getWool() < preis) {
                 break;
