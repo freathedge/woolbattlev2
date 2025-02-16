@@ -1,6 +1,8 @@
 package net.thevace.woolBattle;
 
 import net.thevace.woolBattle.perks.ActivePerk;
+import net.thevace.woolBattle.perks.ActivePerks.Enterhaken;
+import net.thevace.woolBattle.perks.ActivePerks.Pod;
 import net.thevace.woolBattle.perks.PassivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,8 +17,8 @@ public class WoolbattlePlayer {
     private int wool;
     private Material woolMaterial;
 
-    ActivePerk activePerk1;
-    ActivePerk activePerk2;
+    ActivePerk activePerk1 = new Pod(this);
+    ActivePerk activePerk2 = new Enterhaken(this);
     PassivePerk passivePerk;
 
     private long activePerk1LastUsed = 0;

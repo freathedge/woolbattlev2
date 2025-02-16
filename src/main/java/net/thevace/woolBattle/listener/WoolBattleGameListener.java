@@ -16,15 +16,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
@@ -160,6 +158,12 @@ public class WoolBattleGameListener implements Listener {
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Uhr uhr) {
                     uhr.activate();
                 }
+            } else if (displayName.equals(ChatColor.GOLD + "Woolbomb")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Woolbomb woolbomb) {
+                    woolbomb.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Woolbomb woolbomb) {
+                    woolbomb.activate();
+                }
             }
 
             if(cancelEvent){
@@ -215,12 +219,9 @@ public class WoolBattleGameListener implements Listener {
                 }
             }
         } else if (event.getEntity() instanceof Arrow arrow) {
-            System.out.println("arrow shot");
             if (event.getHitEntity() instanceof Player) {
                 Player damager = (Player) arrow.getShooter();
                 Player target = (Player) event.getHitEntity();
-                System.out.println("Player: " + damager.getDisplayName());
-                System.out.println("Target: " + target.getDisplayName());
                 if(!game.handlePlayerHit(damager, target)){
                     if (playerManager.getWoolBattlePlayer(target).isProtected()) {
                         event.setCancelled(true);
@@ -230,7 +231,9 @@ public class WoolBattleGameListener implements Listener {
             if (event.getHitBlock() != null) {
                 Block block = event.getHitBlock();
                 if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
-                    block.setType(Material.AIR);
+                    if(game.getPlayerBlocks().contains(block.getLocation())) {
+                        block.setType(Material.AIR);
+                    }
                 }
             }
 
@@ -312,5 +315,19 @@ public class WoolBattleGameListener implements Listener {
 //            }
 //        }
 //    }
+
+    @EventHandler
+    public void onTNTExplosion(EntityExplodeEvent event) {
+        if (event.getEntity() instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) event.getEntity();
+            event.setCancelled(true);
+            Location tntLocation = tnt.getLocation();
+            for (int i = 0; i < 360; i += 15) {
+                Arrow arrow = tnt.getWorld().spawn(tntLocation, Arrow.class);
+                Vector direction = new Vector(Math.sin(Math.toRadians(i)), 0, Math.cos(Math.toRadians(i))); // Berechne die Richtung
+                arrow.setVelocity(direction.multiply(1));
+            }
+        }
+    }
 
 }

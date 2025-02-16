@@ -53,5 +53,5 @@ processResources {
 }
 
 jar {
-    destinationDirectory.set(file("C:\\Users\\adria\\AppData\\Roaming\\.feather\\player-server\\servers\\2ecf2839-092e-4f21-adcf-0838c6196351\\plugins"))
+    destinationDirectory.set(file("C:\\Users\\adria\\Desktop\\server 1.21\\plugins"))
 }

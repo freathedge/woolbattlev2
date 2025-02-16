@@ -186,19 +186,23 @@ public class WoolBattleGame {
         playerInv.addItem(new ItemStack(Material.ARROW, 64));
 
 
-        if(player.getActivePerk1() != null) {
-            player.getActivePerk1().addItem();
-        } else {
-            player.setActivePerk1(PerkManager.createPerkInstance(Pod.class, player));
-            player.getActivePerk1().addItem();
-        }
+        player.getActivePerk1().addItem();
+        player.getActivePerk2().addItem();
 
-        if(player.getActivePerk2() != null) {
-            player.getActivePerk2().addItem();
-        } else {
-            player.setActivePerk2(PerkManager.createPerkInstance(Enterhaken.class, player));
-            player.getActivePerk2().addItem();
-        }
+
+//        if(player.getActivePerk1() != null) {
+//            player.getActivePerk1().addItem();
+//        } else {
+//            player.setActivePerk1(PerkManager.createPerkInstance(Pod.class, player));
+//            player.getActivePerk1().addItem();
+//        }
+//
+//        if(player.getActivePerk2() != null) {
+//            player.getActivePerk2().addItem();
+//        } else {
+//            player.setActivePerk2(PerkManager.createPerkInstance(Enterhaken.class, player));
+//            player.getActivePerk2().addItem();
+//        }
 
 
     }
@@ -230,4 +234,7 @@ public class WoolBattleGame {
         playerBlocks.add(loc);
     }
 
+    public List<Location> getPlayerBlocks() {
+        return playerBlocks;
+    }
 }

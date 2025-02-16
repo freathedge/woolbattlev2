@@ -42,17 +42,20 @@ public class WoolBattleQueue {
         player.getPlayer().sendMessage("Du bist einer Queue beigetreten" );
 
         if(team1.size() < team2.size()) {
-            team1.add(player);
-            player.setWoolMaterial(Material.RED_WOOL);
-            player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
+            addPlayerToTeam(team1, player);
+
         } else if(team2.size() < team1.size()) {
-            team2.add(player);
-            player.setWoolMaterial(Material.BLUE_WOOL);
-            player.getPlayer().sendMessage(ChatColor.BLUE + "Du bist dem Blauen Team beigetreten");
+            addPlayerToTeam(team2, player);
+
         } else {
-            team1.add(player);
-            player.setWoolMaterial(Material.RED_WOOL);
-            player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
+            addPlayerToTeam(team1, player);
+        }
+
+        for(WoolbattlePlayer p : team1) {
+            setQueueScoreboard(p);
+        }
+        for(WoolbattlePlayer p : team2) {
+            setQueueScoreboard(p);
         }
 
 //        if(team1.size() == teamSize && team2.size() == teamSize) {
@@ -76,6 +79,7 @@ public class WoolBattleQueue {
         } else if(team2.contains(player)) {
             team2.remove(player);
         }
+        player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
     }
 
     public void startGame() {
@@ -94,6 +98,10 @@ public class WoolBattleQueue {
                 mostVotedLives = entry.getKey();
                 highestVotes = entry.getValue();
             }
+        }
+
+        if(mostVotedLives == -1) {
+            mostVotedLives = 10;
         }
 
         WoolBattleGame game = new WoolBattleGame(mostVotedLives, team1, team2, playerManager);
@@ -198,5 +206,24 @@ public class WoolBattleQueue {
 
     public Map<WoolbattlePlayer, Integer> getLifeVoting() {
         return lifeVoting;
+    }
+
+    public void addPlayerToTeam(List<WoolbattlePlayer> team, WoolbattlePlayer player) {
+        if(team.contains(player)) {
+            player.getPlayer().sendMessage("Du bist schon in diesem Team!");
+        } else {
+            if(team.equals(team1)) {
+                team2.remove(player);
+                team1.add(player);
+                player.getPlayer().sendMessage(ChatColor.RED + "Du bist dem Roten Team beigetreten");
+                player.setWoolMaterial(Material.RED_WOOL);
+            } else if(team.equals(team2)) {
+                team1.remove(player);
+                team2.add(player);
+                player.getPlayer().sendMessage(ChatColor.BLUE + "Du bist dem Blauen Team beigetreten");
+                player.setWoolMaterial(Material.BLUE_WOOL);
+            }
+
+        }
     }
 }

@@ -103,13 +103,13 @@ public class LebenVoting extends View {
         }
 
 
-        render.slot(2, 3)
+        render.slot(2, 1)
                 .withItem(three)
                 .onClick(click -> {
                     setLives(click.getPlayer(), 3);
                     click.openForPlayer(LebenVoting.class);
                 });
-        render.slot(2, 4)
+        render.slot(2, 3)
                 .withItem(five)
                 .onClick(click -> {
                     setLives(click.getPlayer(), 5);
@@ -121,18 +121,19 @@ public class LebenVoting extends View {
                     setLives(click.getPlayer(), 10);
                     click.openForPlayer(LebenVoting.class);
                 });
-        render.slot(2, 6)
+        render.slot(2, 7)
                 .withItem(twenty)
                 .onClick(click -> {
                     setLives(click.getPlayer(), 20);
                     click.openForPlayer(LebenVoting.class);
                 });
-        render.slot(2, 7)
+        render.slot(2, 9)
                 .withItem(thirty)
                 .onClick(click -> {
                     setLives(click.getPlayer(), 30);
                     click.openForPlayer(LebenVoting.class);
                 });
+
     }
 
     public void setLives(Player p, int lives) {
