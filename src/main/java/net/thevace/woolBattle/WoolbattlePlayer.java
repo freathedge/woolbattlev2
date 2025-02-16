@@ -142,4 +142,9 @@ public class WoolbattlePlayer {
         this.lastBlockLocation = lastBlockLocation;
     }
 
+    public void updatePlayerWool() {
+        player.getInventory().removeItem(new ItemStack(woolMaterial, 192));
+        player.getInventory().addItem(new ItemStack(woolMaterial, wool));
+    }
+
 }

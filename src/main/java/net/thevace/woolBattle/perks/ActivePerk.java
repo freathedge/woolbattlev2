@@ -77,4 +77,14 @@ public abstract class ActivePerk extends Perk {
         player.removeWool(preis);
     }
 
+    public void cancelEvent() {
+        player.addWool(preis);
+        player.updatePlayerWool();
+        if (player.getActivePerk1() == this) {
+            player.setActivePerk1LastUsed(0);
+        } else if (player.getActivePerk2() == this) {
+            player.setActivePerk2LastUsed(0);
+        }
+    }
+
 }

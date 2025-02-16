@@ -164,6 +164,12 @@ public class WoolBattleGameListener implements Listener {
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Woolbomb woolbomb) {
                     woolbomb.activate();
                 }
+            } else if (displayName.equals(ChatColor.GOLD + "Greifer")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Greifer greifer) {
+                    greifer.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Greifer greifer) {
+                    greifer.activate();
+                }
             }
 
             if(cancelEvent){
