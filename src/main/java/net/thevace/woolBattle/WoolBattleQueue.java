@@ -74,11 +74,10 @@ public class WoolBattleQueue {
         player.getPlayer().sendMessage("Du wurdest von der Queue entfernt");
         player.getPlayer().getInventory().clear();
 
-        if(team1.contains(player)) {
-            team1.remove(player);
-        } else if(team2.contains(player)) {
-            team2.remove(player);
-        }
+        team1.remove(player);
+        team2.remove(player);
+
+        playerManager.removePlayer(player.getPlayer());
         player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
     }
 

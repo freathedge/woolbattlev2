@@ -77,29 +77,28 @@ public class WoolBattleGame {
 
     public void endGame() {
         HandlerList.unregisterAll(listener);
+
+        String message;
+
         if(team1Health > team2Health) {
-            for (WoolbattlePlayer wbp : team1) {
-                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 1 has won!");
-                playerManager.removePlayer(wbp.getPlayer());
-            }
-            for (WoolbattlePlayer wbp : team2) {
-                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 1 has won!");
-                playerManager.removePlayer(wbp.getPlayer());
-            }
+            message = "Woolbattle game ended! Team 1 has won!";
         } else {
-            for (WoolbattlePlayer wbp : team1) {
-                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 2 has won!");
-                playerManager.removePlayer(wbp.getPlayer());
-            }
-            for (WoolbattlePlayer wbp : team2) {
-                wbp.getPlayer().sendMessage("Woolbattle game ended! Team 2 has won!");
-                playerManager.removePlayer(wbp.getPlayer());
-            }
+            message = "Woolbattle game ended! Team 2 has won!";
+        }
+
+        for (WoolbattlePlayer wbp : team1) {
+            wbp.getPlayer().sendMessage(message);
+            playerManager.removePlayer(wbp.getPlayer());
+        }
+        for (WoolbattlePlayer wbp : team2) {
+            wbp.getPlayer().sendMessage(message);
+            playerManager.removePlayer(wbp.getPlayer());
         }
 
         for(Location loc : playerBlocks) {
             loc.getBlock().setType(Material.AIR);
         }
+
 
         GameManager.removeGame(this);
     }
