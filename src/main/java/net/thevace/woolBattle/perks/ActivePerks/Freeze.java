@@ -1,21 +1,16 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
-import net.thevace.woolBattle.perks.Perk;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Freeze extends ActivePerk {
 
-    WoolbattlePlayer target = null;
+    WoolBattlePlayer target = null;
 
-    public Freeze(WoolbattlePlayer p) {
+    public Freeze(WoolBattlePlayer p) {
         super(10, 16, p, ChatColor.GOLD + "Freeze", Material.ICE, "Friert den Spieler den du triffst ein");
     }
 
@@ -35,7 +30,7 @@ public class Freeze extends ActivePerk {
         player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
     }
 
-    public void setTarget(WoolbattlePlayer target) {
+    public void setTarget(WoolBattlePlayer target) {
         this.target = target;
     }
 }

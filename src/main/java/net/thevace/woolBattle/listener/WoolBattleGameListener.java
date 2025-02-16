@@ -1,17 +1,14 @@
 package net.thevace.woolBattle.listener;
 
-import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolBattleGame;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.perks.ActivePerk;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,8 +17,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 public class WoolBattleGameListener implements Listener {
@@ -38,7 +33,7 @@ public class WoolBattleGameListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         Player p = event.getPlayer();
 
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
         Block block = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
         if(block.getType() != Material.AIR) {
@@ -65,6 +60,7 @@ public class WoolBattleGameListener implements Listener {
 
         if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
             game.handleWoolBreak(p, block);
+            p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1.0f, 1.0f);
         }
 
         event.setCancelled(true);
@@ -77,7 +73,7 @@ public class WoolBattleGameListener implements Listener {
 
             Action action = event.getAction();
             Player player = event.getPlayer();
-            WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+            WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
 
             String displayName = event.getItem().getItemMeta().getDisplayName();
             boolean cancelEvent = false;
@@ -170,6 +166,12 @@ public class WoolBattleGameListener implements Listener {
                 } else if (woolbattlePlayer.getActivePerk2() instanceof Greifer greifer) {
                     greifer.activate();
                 }
+            } else if (displayName.equals(ChatColor.GOLD + "Türmchenbauer")) {
+                if (woolbattlePlayer.getActivePerk1() instanceof Tuermchenbauer tuermchenbauer) {
+                    tuermchenbauer.activate();
+                } else if (woolbattlePlayer.getActivePerk2() instanceof Tuermchenbauer tuermchenbauer) {
+                    tuermchenbauer.activate();
+                }
             }
 
             if(cancelEvent){
@@ -180,7 +182,7 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
         if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
             if (player.getActivePerk1() instanceof Enterhaken enterhaken) {
                 enterhaken.setEvent(event);
@@ -203,7 +205,7 @@ public class WoolBattleGameListener implements Listener {
 
                 if(player != null && target != null) {
                     if(!game.handlePlayerHit(player, target)) {
-                        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+                        WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
                         if (player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Tauscher")) {
                             if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
                                 tauscher.setTarget(target);
@@ -251,14 +253,14 @@ public class WoolBattleGameListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if(event.getBlock().getType() == Material.RED_WOOL || event.getBlock().getType() == Material.BLUE_WOOL) {
-            WoolbattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
+            WoolBattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
             game.handleWoolPlace(player, event.getBlock());
             event.setCancelled(false);
             return;
         } else if (event.getBlock().getType() == Material.STONE_PRESSURE_PLATE) {
             Location plateLocation = event.getBlock().getLocation();
 
-            WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(event.getPlayer());
+            WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(event.getPlayer());
 
             if (woolbattlePlayer.getActivePerk1() instanceof Mine mine) {
                 mine.setPlateLocation(plateLocation);
@@ -302,7 +304,7 @@ public class WoolBattleGameListener implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player p = event.getEntity();
-        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
         game.handlePlayerDeath(woolbattlePlayer);
         event.setKeepInventory(true);
         event.getDrops().clear();

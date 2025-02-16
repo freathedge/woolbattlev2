@@ -15,8 +15,8 @@ commands:
   getPlayerWool:
     description: get your wool
     usage: /getPlayerWool
-  freeze:
-    description: freeze
-    usage: /freeze
+  createQueue:
+    description: create a new Queue
+    usage: /createQueue <team size>
 depend: [InventoryFramework]
 

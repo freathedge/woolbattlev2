@@ -1,6 +1,6 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +14,7 @@ public class Tauscher extends ActivePerk {
 
     Player target;
 
-    public Tauscher(WoolbattlePlayer p) {
+    public Tauscher(WoolBattlePlayer p) {
         super(10, 16, p, ChatColor.GOLD + "Tauscher", Material.SNOWBALL, "Tausche den Platz mit dem Spieler den du triffst");
     }
 

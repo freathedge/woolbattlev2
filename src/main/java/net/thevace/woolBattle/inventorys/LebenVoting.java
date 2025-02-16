@@ -5,19 +5,14 @@ import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 import net.thevace.woolBattle.QueueManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolBattleQueue;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class LebenVoting extends View {
@@ -65,7 +60,7 @@ public class LebenVoting extends View {
         thirtyMeta.setDisplayName(ChatColor.RED + "30");
         thirty.setItemMeta(thirtyMeta);
 
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(render.getPlayer());
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(render.getPlayer());
         Integer currentVote = queueManager.getQueue(player).getLifeVoting().get(player);
 
         if(currentVote != null) {
@@ -137,7 +132,7 @@ public class LebenVoting extends View {
     }
 
     public void setLives(Player p, int lives) {
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
         queueManager.getQueue(player).setLifeVoting(player, lives);
     }
 }

@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.UUID;
 
 public class WoolBattlePlayerManager {
-    private static final Map<UUID, WoolbattlePlayer> playerMap = new HashMap<>();
+    private static final Map<UUID, WoolBattlePlayer> playerMap = new HashMap<>();
 
     public void registerPlayer(Player player) {
-        playerMap.put(player.getUniqueId(), new WoolbattlePlayer(player));
+        playerMap.put(player.getUniqueId(), new WoolBattlePlayer(player));
     }
 
-    public WoolbattlePlayer getWoolBattlePlayer(Player player) {
+    public WoolBattlePlayer getWoolBattlePlayer(Player player) {
         return playerMap.get(player.getUniqueId());
     }
 
@@ -32,7 +32,7 @@ public class WoolBattlePlayerManager {
 
     public void listAllPlayers() {
         for (UUID uuid : playerMap.keySet()) {
-            WoolbattlePlayer player = playerMap.get(uuid);
+            WoolBattlePlayer player = playerMap.get(uuid);
             System.out.println(player.getPlayer().getUniqueId());
         }
     }

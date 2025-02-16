@@ -2,14 +2,10 @@ package net.thevace.woolBattle.inventorys;
 
 import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewConfigBuilder;
-import me.devnatan.inventoryframework.ViewFrame;
-import me.devnatan.inventoryframework.context.OpenContext;
-import me.devnatan.inventoryframework.state.MutableIntState;
 import me.devnatan.inventoryframework.context.RenderContext;
 import net.thevace.woolBattle.QueueManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolBattleQueue;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,15 +14,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class TeamSelect extends View {
 
     private final WoolBattlePlayerManager playerManager;
     private final QueueManager queueManager;
 
-    List<WoolbattlePlayer> team1;
-    List<WoolbattlePlayer> team2;
+    List<WoolBattlePlayer> team1;
+    List<WoolBattlePlayer> team2;
 
     public TeamSelect(WoolBattlePlayerManager playerManager, QueueManager queueManager) {
         this.playerManager = playerManager;
@@ -43,7 +38,7 @@ public class TeamSelect extends View {
     @Override
     public void onFirstRender(RenderContext render) {
         Player p = render.getPlayer();
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
 
         team1 = queueManager.getQueue(player).getTeam1();
@@ -59,7 +54,7 @@ public class TeamSelect extends View {
             redlore.add(ChatColor.GRAY + "Keine Spieler im Team.");
         } else {
             redlore.add(ChatColor.GRAY + "Spieler im Team:");
-            for (WoolbattlePlayer woolbattlePlayer : team1) {
+            for (WoolBattlePlayer woolbattlePlayer : team1) {
                 redlore.add(ChatColor.GRAY + "> " + ChatColor.YELLOW + woolbattlePlayer.getPlayer().getName());
             }
         }
@@ -74,7 +69,7 @@ public class TeamSelect extends View {
             bluelore.add(ChatColor.GRAY + "Keine Spieler im Team.");
         } else {
             bluelore.add(ChatColor.GRAY + "Spieler im Team:");
-            for (WoolbattlePlayer woolbattlePlayer : team2) {
+            for (WoolBattlePlayer woolbattlePlayer : team2) {
                 bluelore.add(ChatColor.GRAY + "> " + ChatColor.YELLOW + woolbattlePlayer.getPlayer().getName());
             }
         }
@@ -91,12 +86,12 @@ public class TeamSelect extends View {
     }
 
 
-    private void changeTeam(Player player, List<WoolbattlePlayer> targetTeam) {
+    private void changeTeam(Player player, List<WoolBattlePlayer> targetTeam) {
 
-        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+        WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
 
-        List<WoolbattlePlayer> team1 = queueManager.getQueue(woolbattlePlayer).getTeam1();
-        List<WoolbattlePlayer> team2 = queueManager.getQueue(woolbattlePlayer).getTeam2();
+        List<WoolBattlePlayer> team1 = queueManager.getQueue(woolbattlePlayer).getTeam1();
+        List<WoolBattlePlayer> team2 = queueManager.getQueue(woolbattlePlayer).getTeam2();
 
 
         if(targetTeam == team1) {

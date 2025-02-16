@@ -1,21 +1,16 @@
 package net.thevace.woolBattle.perks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 
 public abstract class ActivePerk extends Perk {
 
 
 
-    public ActivePerk(long cooldown, int preis, WoolbattlePlayer p, String itemName, Material material, String description) {
+    public ActivePerk(long cooldown, int preis, WoolBattlePlayer p, String itemName, Material material, String description) {
         super(cooldown, preis, p, itemName, material, description);
     }
 
@@ -35,12 +30,9 @@ public abstract class ActivePerk extends Perk {
                 return false;
             }
             player.setActivePerk2LastUsed(System.currentTimeMillis());
-        } else {
-            player.getPlayer().sendMessage("§cDieses Perk ist nicht aktiv!");
-            return false;
+        } else if (player.getEnderperle() == this) {
+            if(!canUsePerk(player.getEnderperleLastUsed())) return false;
         }
-
-
 
         withdrawWool();
         applyEffect();
@@ -55,15 +47,6 @@ public abstract class ActivePerk extends Perk {
         return true;
     }
 
-
-    public void addItem() {
-        Player p = player.getPlayer();
-        p.getInventory().addItem(item);
-    }
-
-    public ItemStack getItem() {
-        return item;
-    }
 
     protected abstract void applyEffect();
 

@@ -1,8 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.GameManager;
-import net.thevace.woolBattle.PerkManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import org.bukkit.util.Vector;
 public class Rettungskapsel extends ActivePerk {
 
 
-    public Rettungskapsel(WoolbattlePlayer player) {
+    public Rettungskapsel(WoolBattlePlayer player) {
         super(30, 16, player, ChatColor.GOLD + "Rettungskapsel", Material.GLASS, "Erschaffe eine Vollständige Kapsel um dich");
     }
 

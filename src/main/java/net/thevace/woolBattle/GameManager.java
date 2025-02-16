@@ -18,7 +18,7 @@ public class GameManager {
         return activeGames;
     }
 
-    public static WoolBattleGame getPlayerGame(WoolbattlePlayer player) {
+    public static WoolBattleGame getPlayerGame(WoolBattlePlayer player) {
         for (WoolBattleGame game : activeGames) {
             if (game.isPlayerInGame(player)) {
                 return game;

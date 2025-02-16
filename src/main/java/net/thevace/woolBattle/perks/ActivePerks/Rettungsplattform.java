@@ -1,8 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.GameManager;
-import net.thevace.woolBattle.PerkManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -11,7 +10,7 @@ import org.bukkit.util.Vector;
 
 public class Rettungsplattform extends ActivePerk {
 
-    public Rettungsplattform(WoolbattlePlayer p) {
+    public Rettungsplattform(WoolBattlePlayer p) {
         super(20, 32, p, ChatColor.GOLD + "Rettungsplattform", Material.BLAZE_ROD, "Erschafft eine kleine Kreisförmige Plattform unter dir");
     }
 

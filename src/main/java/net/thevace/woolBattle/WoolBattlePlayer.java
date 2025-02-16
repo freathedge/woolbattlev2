@@ -1,26 +1,26 @@
 package net.thevace.woolBattle;
 
 import net.thevace.woolBattle.perks.ActivePerk;
+import net.thevace.woolBattle.perks.ActivePerks.Enderperle;
 import net.thevace.woolBattle.perks.ActivePerks.Enterhaken;
 import net.thevace.woolBattle.perks.ActivePerks.Pod;
 import net.thevace.woolBattle.perks.PassivePerk;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-public class WoolbattlePlayer {
+public class WoolBattlePlayer {
     private Player player;
     private int wool;
     private Material woolMaterial;
 
+    ActivePerk enderperle = new Enderperle(this);
     ActivePerk activePerk1 = new Pod(this);
     ActivePerk activePerk2 = new Enterhaken(this);
     PassivePerk passivePerk;
 
+    private long enderperleLastUsed = 0;
     private long activePerk1LastUsed = 0;
     private long activePerk2LastUsed = 0;
     private long passivePerkLastUsed = 0;
@@ -32,8 +32,25 @@ public class WoolbattlePlayer {
 
 
 
-    public WoolbattlePlayer(Player player) {
+    public WoolBattlePlayer(Player player) {
         this.player = player;
+    }
+
+
+
+    public void addWool(int wool) {
+        this.wool += wool;
+        player.getInventory().addItem(new ItemStack(woolMaterial));
+    }
+
+    public void removeWool(int wool) {
+       this.wool -= wool;
+       player.getInventory().removeItem(new ItemStack(woolMaterial, wool));
+    }
+
+    public void updatePlayerWool() {
+        player.getInventory().removeItem(new ItemStack(woolMaterial, 192));
+        player.getInventory().addItem(new ItemStack(woolMaterial, wool));
     }
 
     public Player getPlayer() {
@@ -46,16 +63,6 @@ public class WoolbattlePlayer {
 
     public void setWool(int wool) {
         wool = wool;
-    }
-
-    public void addWool(int wool) {
-        this.wool += wool;
-        player.getInventory().addItem(new ItemStack(woolMaterial));
-    }
-
-    public void removeWool(int wool) {
-       this.wool -= wool;
-       player.getInventory().removeItem(new ItemStack(woolMaterial, wool));
     }
 
     public void handleBlockPlace() {
@@ -142,9 +149,11 @@ public class WoolbattlePlayer {
         this.lastBlockLocation = lastBlockLocation;
     }
 
-    public void updatePlayerWool() {
-        player.getInventory().removeItem(new ItemStack(woolMaterial, 192));
-        player.getInventory().addItem(new ItemStack(woolMaterial, wool));
+    public ActivePerk getEnderperle() {
+        return enderperle;
     }
 
+    public long getEnderperleLastUsed() {
+        return enderperleLastUsed;
+    }
 }

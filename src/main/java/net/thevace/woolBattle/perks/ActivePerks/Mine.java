@@ -1,6 +1,6 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ public class Mine extends ActivePerk {
     Location plateLocation;
 
 
-    public Mine(WoolbattlePlayer p) {
+    public Mine(WoolBattlePlayer p) {
         super(30, 16, p, ChatColor.GOLD + "Mine", Material.STONE_PRESSURE_PLATE, "Platziere eine Druckplatte die jedem Spieler in der Umgebung Rückstoß gibt");
     }
 

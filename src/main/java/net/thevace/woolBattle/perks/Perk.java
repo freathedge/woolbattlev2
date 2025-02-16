@@ -1,7 +1,9 @@
 package net.thevace.woolBattle.perks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,7 +14,7 @@ import java.util.List;
 public class Perk {
     protected final int preis;
     protected final long cooldown;
-    protected final WoolbattlePlayer player;
+    protected final WoolBattlePlayer player;
 
     protected String itemName;
     protected Material material;
@@ -24,7 +26,7 @@ public class Perk {
 
     public PlayerInteractEvent event;
 
-    public Perk(long cooldown, int preis, WoolbattlePlayer player, String itemName, Material material, String itemDescription) {
+    public Perk(long cooldown, int preis, WoolBattlePlayer player, String itemName, Material material, String itemDescription) {
         this.material = material;
         this.itemName = itemName;
         this.player = player;
@@ -45,6 +47,10 @@ public class Perk {
 
     public String getItemName() {
         return itemName;
+    }
+
+    public ItemStack getItem() {
+        return item;
     }
 
 }

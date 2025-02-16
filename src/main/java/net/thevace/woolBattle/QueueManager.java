@@ -1,15 +1,12 @@
 package net.thevace.woolBattle;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QueueManager {
-    private static final Map<WoolbattlePlayer, WoolBattleQueue> playerQueues = new HashMap<>();
+    private static final Map<WoolBattlePlayer, WoolBattleQueue> playerQueues = new HashMap<>();
     private static final List<WoolBattleQueue> allQueues = new ArrayList<>();
 
     private WoolBattlePlayerManager playerManager;
@@ -19,12 +16,12 @@ public class QueueManager {
         this.playerManager = playerManager;
     }
 
-    public void addToQueue(WoolbattlePlayer player, WoolBattleQueue queue) {
+    public void addToQueue(WoolBattlePlayer player, WoolBattleQueue queue) {
         playerQueues.put(player, queue);
         queue.joinQueue(player);
     }
 
-    public void removeFromQueue(WoolbattlePlayer player) {
+    public void removeFromQueue(WoolBattlePlayer player) {
         WoolBattleQueue queue = getQueue(player);
         if (queue != null) {
             queue.leaveQueue(player);
@@ -32,40 +29,61 @@ public class QueueManager {
         playerQueues.remove(player);
     }
 
-    public WoolBattleQueue getQueue(WoolbattlePlayer player) {
+    public WoolBattleQueue getQueue(WoolBattlePlayer player) {
         return playerQueues.get(player);
     }
 
-    public Map<WoolbattlePlayer, WoolBattleQueue> getAllQueues() {
+    public Map<WoolBattlePlayer, WoolBattleQueue> getAllQueues() {
         return playerQueues;
     }
 
     public void listAllQueues() {
         for (WoolBattleQueue queue : allQueues) {
-            for (WoolbattlePlayer player : queue.getQueue()) {
+            for (WoolBattlePlayer player : queue.getQueue()) {
                 System.out.println("Queue: " + queue.getQueue() + " Player: " + player);
             }
         }
     }
 
-    public void joinAvailableQueue(WoolbattlePlayer player, int teamSize) {
-        if (playerQueues.containsKey(player)) {
-            player.getPlayer().sendMessage("Du bist bereits in einer Warteschlange.");
-            return;
-        }
+//    public void joinAvailableQueue(WoolbattlePlayer player, int teamSize) {
+//        if (playerQueues.containsKey(player)) {
+//            player.getPlayer().sendMessage("Du bist bereits in einer Warteschlange.");
+//            return;
+//        }
+//
+//        // Nach existierender Warteschlange mit demselben TeamSize suchen
+//        for (WoolBattleQueue queue : allQueues) {
+//            if (queue.getTeamSize() == teamSize && queue.getTotalPlayers() < queue.getTeamSize() * 2) {
+//                addToQueue(player, queue);
+//                return;
+//            }
+//        }
+//
+//        // Falls keine passende Warteschlange existiert, erstelle eine neue
+//        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
+//        allQueues.add(newQueue);
+//        addToQueue(player, newQueue);
+//    }
 
-        // Nach existierender Warteschlange mit demselben TeamSize suchen
+    public void joinQueue(WoolBattlePlayer player, String ID) {
         for (WoolBattleQueue queue : allQueues) {
-            if (queue.getTeamSize() == teamSize && queue.getTotalPlayers() < queue.getTeamSize() * 2) {
-                addToQueue(player, queue);
+            if (queue.getId().equals(ID)) {
+                if(!queue.isInQueue(player)) {
+                    addToQueue(player, queue);
+                } else {
+                    player.getPlayer().sendMessage(ChatColor.RED + "Du bist schon in dieser Queue");
+                }
                 return;
             }
         }
+        player.getPlayer().sendMessage(ChatColor.RED + "Es wurde kein Queue gefunden");
+    }
 
-        // Falls keine passende Warteschlange existiert, erstelle eine neue
+    public void createQueue(Player p, int teamSize) {
         WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, playerManager, this);
         allQueues.add(newQueue);
-        addToQueue(player, newQueue);
+        p.sendMessage(ChatColor.GREEN + "Neue Queue erstellt: " + newQueue.getId());
+
     }
 
 
@@ -73,7 +91,7 @@ public class QueueManager {
     public void removeQueue(WoolBattleQueue queue) {
         allQueues.remove(queue);
         playerQueues.entrySet().removeIf(entry -> entry.getValue() == queue);
-        for(WoolbattlePlayer player : playerQueues.keySet()) {
+        for(WoolBattlePlayer player : playerQueues.keySet()) {
             System.out.println("Queue: " + queue.getQueue() + " Player: " + player.getPlayer().getName());
         }
     }

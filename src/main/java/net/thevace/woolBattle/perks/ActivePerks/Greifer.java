@@ -1,8 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
-import net.thevace.woolBattle.perks.Perk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,7 +12,7 @@ import org.bukkit.util.Vector;
 import static org.bukkit.Bukkit.getPlayer;
 
 public class Greifer extends ActivePerk {
-    public Greifer(WoolbattlePlayer p) {
+    public Greifer(WoolBattlePlayer p) {
         super(15, 20, p, ChatColor.GOLD + "Greifer", Material.STICK, "Zieht den anvisierten Gegner zu dir");
     }
 

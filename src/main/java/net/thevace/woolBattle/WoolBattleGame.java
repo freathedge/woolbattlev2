@@ -1,8 +1,7 @@
 package net.thevace.woolBattle;
 
+import io.papermc.paper.datacomponent.item.Unbreakable;
 import net.thevace.woolBattle.listener.WoolBattleGameListener;
-import net.thevace.woolBattle.perks.ActivePerks.Enterhaken;
-import net.thevace.woolBattle.perks.ActivePerks.Pod;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,25 +10,24 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class WoolBattleGame {
 
-    private List<WoolbattlePlayer> team1;
-    private List<WoolbattlePlayer> team2;
+    private List<WoolBattlePlayer> team1;
+    private List<WoolBattlePlayer> team2;
 
-    private List<WoolbattlePlayer> allPlayers;
+    private List<WoolBattlePlayer> allPlayers;
 
     private int team1Health;
     private int team2Health;
@@ -45,7 +43,7 @@ public class WoolBattleGame {
 
 
 
-    public WoolBattleGame(int teamHealth, List<WoolbattlePlayer> Team1, List<WoolbattlePlayer> Team2, WoolBattlePlayerManager playerManager) {
+    public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2, WoolBattlePlayerManager playerManager) {
         this.listener = new WoolBattleGameListener(this, playerManager);
 
         this.team1Health = teamHealth;
@@ -59,14 +57,14 @@ public class WoolBattleGame {
         Bukkit.getPluginManager().registerEvents(listener, Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
 
 
-        for (WoolbattlePlayer wbp : team1) {
+        for (WoolBattlePlayer wbp : team1) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
             setGameScoreboard(wbp);
             p.teleport(Team1Spawn);
         }
-        for (WoolbattlePlayer wbp : team2) {
+        for (WoolBattlePlayer wbp : team2) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
@@ -86,11 +84,11 @@ public class WoolBattleGame {
             message = "Woolbattle game ended! Team 2 has won!";
         }
 
-        for (WoolbattlePlayer wbp : team1) {
+        for (WoolBattlePlayer wbp : team1) {
             wbp.getPlayer().sendMessage(message);
             playerManager.removePlayer(wbp.getPlayer());
         }
-        for (WoolbattlePlayer wbp : team2) {
+        for (WoolBattlePlayer wbp : team2) {
             wbp.getPlayer().sendMessage(message);
             playerManager.removePlayer(wbp.getPlayer());
         }
@@ -103,7 +101,7 @@ public class WoolBattleGame {
         GameManager.removeGame(this);
     }
 
-    public void handlePlayerDeath(WoolbattlePlayer player) {
+    public void handlePlayerDeath(WoolBattlePlayer player) {
 
         player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
 
@@ -128,10 +126,10 @@ public class WoolBattleGame {
             endGame();
         }
 
-        for (WoolbattlePlayer wbp : team1) {
+        for (WoolBattlePlayer wbp : team1) {
             setGameScoreboard(wbp);
         }
-        for (WoolbattlePlayer wbp : team2) {
+        for (WoolBattlePlayer wbp : team2) {
             setGameScoreboard(wbp);
         }
 
@@ -140,13 +138,13 @@ public class WoolBattleGame {
 
     }
 
-    public void handleWoolPlace(WoolbattlePlayer player, Block block) {
+    public void handleWoolPlace(WoolBattlePlayer player, Block block) {
         player.handleBlockPlace();
         playerBlocks.add(block.getLocation());
     }
 
     public void handleWoolBreak(Player p, Block block) {
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
         if(player.getWool() < 192) {
             player.addWool(1);
@@ -159,8 +157,8 @@ public class WoolBattleGame {
     }
 
     public boolean handlePlayerHit(Player damager, Player target) {
-        WoolbattlePlayer wbpDamager = playerManager.getWoolBattlePlayer(damager);
-        WoolbattlePlayer wbpTarget = playerManager.getWoolBattlePlayer(target);
+        WoolBattlePlayer wbpDamager = playerManager.getWoolBattlePlayer(damager);
+        WoolBattlePlayer wbpTarget = playerManager.getWoolBattlePlayer(target);
 
         if(team1.contains(wbpDamager) && team1.contains(wbpTarget) || team2.contains(wbpDamager) && team2.contains(wbpTarget)) {
             return true;
@@ -169,24 +167,39 @@ public class WoolBattleGame {
         }
     }
 
-    public void setPlayerInventory(WoolbattlePlayer player) {
+    public void setPlayerInventory(WoolBattlePlayer player) {
 
         Inventory playerInv = player.getPlayer().getInventory();
         playerInv.clear();
 
         ItemStack bow = new ItemStack(Material.BOW);
         bow.addEnchantment(Enchantment.PUNCH, 2);
+        bow.addEnchantment(Enchantment.INFINITY, 1);
+        bow.addEnchantment(Enchantment.UNBREAKING, 1);
+
+        ItemMeta bowMeta = bow.getItemMeta();
+        bowMeta.setDisplayName(ChatColor.GOLD + "Bow");
+        bowMeta.setUnbreakable(true);
+        bow.setItemMeta(bowMeta);
 
         ItemStack shears = new ItemStack(Material.SHEARS);
         shears.addEnchantment(Enchantment.EFFICIENCY, 5);
+        shears.addEnchantment(Enchantment.UNBREAKING, 1);
 
-        playerInv.addItem(bow);
-        playerInv.addItem(shears);
-        playerInv.addItem(new ItemStack(Material.ARROW, 64));
+        ItemMeta shearsMeta = shears.getItemMeta();
+        shearsMeta.setDisplayName(ChatColor.GOLD + "Shears");
+        shearsMeta.setUnbreakable(true);
+        shears.setItemMeta(shearsMeta);
+
+        playerInv.setItem(0, bow);
+        playerInv.setItem(1, shears);
+        playerInv.setItem(2, player.getActivePerk1().getItem());
+        playerInv.setItem(3, player.getActivePerk2().getItem());
+        playerInv.setItem(4, player.getEnderperle().getItem());
 
 
-        player.getActivePerk1().addItem();
-        player.getActivePerk2().addItem();
+
+        playerInv.setItem(17, new ItemStack(Material.ARROW, 1));
 
 
 //        if(player.getActivePerk1() != null) {
@@ -206,7 +219,7 @@ public class WoolBattleGame {
 
     }
 
-    public void setGameScoreboard(WoolbattlePlayer player) {
+    public void setGameScoreboard(WoolBattlePlayer player) {
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 
         Objective titel = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
@@ -221,7 +234,7 @@ public class WoolBattleGame {
         player.getPlayer().setScoreboard(board);
     }
 
-    public boolean isPlayerInGame(WoolbattlePlayer player) {
+    public boolean isPlayerInGame(WoolBattlePlayer player) {
         if(team1.contains(player) || team2.contains(player)) {
             return true;
         } else {

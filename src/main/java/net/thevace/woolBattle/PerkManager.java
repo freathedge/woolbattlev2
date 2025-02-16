@@ -2,10 +2,7 @@ package net.thevace.woolBattle;
 
 import net.thevace.woolBattle.perks.*;
 import net.thevace.woolBattle.perks.ActivePerks.*;
-import org.bukkit.Location;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PerkManager {
@@ -31,9 +28,9 @@ public class PerkManager {
     );
 
 
-    public static ActivePerk createPerkInstance(Class<? extends ActivePerk> perkClass, WoolbattlePlayer player) {
+    public static ActivePerk createPerkInstance(Class<? extends ActivePerk> perkClass, WoolBattlePlayer player) {
         try {
-            return perkClass.getConstructor(WoolbattlePlayer.class).newInstance(player);
+            return perkClass.getConstructor(WoolBattlePlayer.class).newInstance(player);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

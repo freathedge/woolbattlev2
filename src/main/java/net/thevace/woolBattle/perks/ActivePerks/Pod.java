@@ -1,8 +1,7 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.GameManager;
-import net.thevace.woolBattle.PerkManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -12,7 +11,7 @@ import org.bukkit.util.Vector;
 public class Pod extends ActivePerk {
 
 
-    public Pod(WoolbattlePlayer player) {
+    public Pod(WoolBattlePlayer player) {
         super(15, 10, player, ChatColor.GOLD + "Pod", Material.FLOWER_POT, "Erschaffe ein kleines Pod um dich herum");
     }
 

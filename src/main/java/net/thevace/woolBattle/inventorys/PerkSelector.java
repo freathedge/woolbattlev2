@@ -3,12 +3,8 @@ package net.thevace.woolBattle.inventorys;
 import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
-import net.thevace.woolBattle.PerkManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

@@ -3,7 +3,7 @@ package net.thevace.woolBattle.commands;
 import net.thevace.woolBattle.QueueManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
 import net.thevace.woolBattle.WoolBattleQueue;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +24,7 @@ public class startGame implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         Player p = (Player) commandSender;
-        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
         WoolBattleQueue queue = queueManager.getQueue(woolbattlePlayer);
         queue.startGame();
 

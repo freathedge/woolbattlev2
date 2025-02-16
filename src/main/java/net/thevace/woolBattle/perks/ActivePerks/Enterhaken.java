@@ -1,6 +1,6 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,7 +15,7 @@ public class Enterhaken extends ActivePerk {
 
     PlayerFishEvent event;
 
-    public Enterhaken(WoolbattlePlayer p) {
+    public Enterhaken(WoolBattlePlayer p) {
         super(12, 10, p, ChatColor.GOLD + "Enterhaken", Material.FISHING_ROD, "Ziehe dich dorthin wo die Angel trifft");
     }
 

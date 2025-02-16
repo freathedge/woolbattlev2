@@ -1,6 +1,6 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 public class Blink extends ActivePerk {
 
 
-    public Blink(WoolbattlePlayer p) {
+    public Blink(WoolBattlePlayer p) {
         super(15, 30, p, ChatColor.GOLD + "Blink", Material.ENDER_EYE, "Teleportiert dich 15 Blöcke in die Richtung die du schaust");
     }
 

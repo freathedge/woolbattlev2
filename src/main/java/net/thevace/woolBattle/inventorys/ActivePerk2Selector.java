@@ -5,9 +5,8 @@ import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
-import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -38,7 +37,7 @@ public class ActivePerk2Selector extends View {
     @Override
     public void onFirstRender(RenderContext render) {
         Player p = render.getPlayer();
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
         ItemStack arrow = new ItemStack(Material.ARROW);
         ItemMeta arrowmeta = arrow.getItemMeta();

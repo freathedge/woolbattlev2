@@ -3,9 +3,8 @@ package net.thevace.woolBattle.commands;
 import me.devnatan.inventoryframework.ViewFrame;
 import net.thevace.woolBattle.QueueManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolBattleQueue;
-import net.thevace.woolBattle.WoolbattlePlayer;
-import net.thevace.woolBattle.inventorys.TeamSelect;
+import net.thevace.woolBattle.WoolBattlePlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,12 +25,20 @@ public class joinQueue implements CommandExecutor  {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         Player p = (Player) commandSender;
-        playerManager.registerPlayer(p);
-        WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player;
+
+        if(playerManager.isRegistered(p)) {
+
+            player = playerManager.getWoolBattlePlayer(p);
+        } else {
+            playerManager.registerPlayer(p);
+            player = playerManager.getWoolBattlePlayer(p);
+        }
+
         if (args.length == 0) {
-            queueManager.joinAvailableQueue(woolbattlePlayer, 1);
+            p.sendMessage(ChatColor.RED + "Usage: /joinqueue <ID>");
         } else if (args.length == 1) {
-            queueManager.joinAvailableQueue(woolbattlePlayer, Integer.parseInt(args[0]));
+            queueManager.joinQueue(player, args[0]);
         }
 
         return false;

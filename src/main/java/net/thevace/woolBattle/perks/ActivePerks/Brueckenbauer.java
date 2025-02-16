@@ -1,16 +1,14 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
 import net.thevace.woolBattle.GameManager;
-import net.thevace.woolBattle.PerkManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Brueckenbauer extends ActivePerk {
-    public Brueckenbauer(WoolbattlePlayer p) {
+    public Brueckenbauer(WoolBattlePlayer p) {
         super(0, 2, p, ChatColor.GOLD + "Brückenbauer", Material.PISTON, "Baut eine flache Linie in die Richtung die du schaust");
     }
 

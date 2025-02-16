@@ -4,12 +4,10 @@ import me.devnatan.inventoryframework.View;
 import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 
-import me.devnatan.inventoryframework.state.MutableState;
 import net.thevace.woolBattle.PerkManager;
 import net.thevace.woolBattle.WoolBattlePlayerManager;
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
-import net.thevace.woolBattle.perks.ActivePerks.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 
 public class ActivePerk1Selector extends View {
@@ -43,7 +40,7 @@ public class ActivePerk1Selector extends View {
     @Override
     public void onFirstRender(RenderContext render) {
         Player p = render.getPlayer();
-        WoolbattlePlayer player = playerManager.getWoolBattlePlayer(p);
+        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(p);
 
         ItemStack arrow = new ItemStack(Material.ARROW);
         ItemMeta arrowmeta = arrow.getItemMeta();

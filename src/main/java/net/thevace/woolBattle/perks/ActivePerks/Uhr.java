@@ -1,15 +1,14 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class Uhr extends ActivePerk {
-    public Uhr(WoolbattlePlayer p) {
+    public Uhr(WoolBattlePlayer p) {
         super(20, 30, p, ChatColor.GOLD + "Uhr", Material.CLOCK, "Teleportiere dich zu dem letzten Block auf dem du gestanden bist");
     }
 

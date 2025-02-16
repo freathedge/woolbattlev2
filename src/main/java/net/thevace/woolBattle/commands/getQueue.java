@@ -25,16 +25,16 @@ public class getQueue implements CommandExecutor {
         Player p = (Player) sender;
 
         if(args.length == 0) {
-            Map<WoolbattlePlayer, WoolBattleQueue> playerQueues = queueManager.getAllQueues();
+            Map<WoolBattlePlayer, WoolBattleQueue> playerQueues = queueManager.getAllQueues();
             System.out.println(queueManager.getAllQueues().size());
             for(WoolBattleQueue queue : playerQueues.values()) {
                 p.sendMessage("Spieler in der Queue: ");
                 p.sendMessage("Team 1:");
-                for(WoolbattlePlayer player : queue.getTeam1()) {
+                for(WoolBattlePlayer player : queue.getTeam1()) {
                     p.sendMessage(player.getPlayer().getDisplayName());
                 }
                 p.sendMessage("Team 2:");
-                for(WoolbattlePlayer player : queue.getTeam2()) {
+                for(WoolBattlePlayer player : queue.getTeam2()) {
                     p.sendMessage(player.getPlayer().getDisplayName());
                 }
             }
@@ -42,8 +42,8 @@ public class getQueue implements CommandExecutor {
         } else if(args.length == 1) {
             p.sendMessage("Spieler in der Queue von " + args[0] + ": ");
             Player target = Bukkit.getPlayer(args[0]);
-            WoolbattlePlayer player = playerManager.getWoolBattlePlayer(target);
-            for(WoolbattlePlayer woolbattlePlayer : queueManager.getQueue(player).getQueue()) {
+            WoolBattlePlayer player = playerManager.getWoolBattlePlayer(target);
+            for(WoolBattlePlayer woolbattlePlayer : queueManager.getQueue(player).getQueue()) {
                 p.sendMessage(woolbattlePlayer.getPlayer().getName());
             }
             p.sendMessage(String.valueOf(queueManager.getQueue(player).getQueue().size()));

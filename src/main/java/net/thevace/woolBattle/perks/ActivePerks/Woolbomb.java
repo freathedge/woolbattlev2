@@ -1,6 +1,6 @@
 package net.thevace.woolBattle.perks.ActivePerks;
 
-import net.thevace.woolBattle.WoolbattlePlayer;
+import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,7 +10,7 @@ import org.bukkit.util.Vector;
 
 public class Woolbomb extends ActivePerk {
 
-    public Woolbomb(WoolbattlePlayer p) {
+    public Woolbomb(WoolBattlePlayer p) {
         super(15, 16, p, ChatColor.GOLD + "Woolbomb", Material.WHITE_WOOL, "Wirft ein TNT in die richtung die du schaust und gibt Spielern Rückstoß, die in der Nähe sind");
     }
 
