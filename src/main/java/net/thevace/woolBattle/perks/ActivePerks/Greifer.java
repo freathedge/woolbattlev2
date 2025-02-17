@@ -6,14 +6,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import static org.bukkit.Bukkit.getPlayer;
 
-public class Greifer extends ActivePerk {
+public class Greifer extends ActivePerk implements Listener {
     public Greifer(WoolBattlePlayer p) {
         super(15, 20, p, ChatColor.GOLD + "Greifer", Material.STICK, "Zieht den anvisierten Gegner zu dir");
+        if(p != null) {
+            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
+        }
     }
 
     @Override
@@ -54,7 +61,7 @@ public class Greifer extends ActivePerk {
                     return;
                 }
 
-                direction.normalize().multiply(0.5); // Geschwindigkeit setzen
+                direction.normalize().multiply(2);
                 target.setVelocity(direction);
             }
         }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
@@ -75,6 +82,13 @@ public class Greifer extends ActivePerk {
             }
         }
         return closest;
+    }
+
+    @EventHandler
+    public void onPlayerFish(PlayerFishEvent event) {
+        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
+            activate();
+        }
     }
 
 }

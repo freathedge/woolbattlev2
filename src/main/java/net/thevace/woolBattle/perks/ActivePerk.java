@@ -16,21 +16,24 @@ public abstract class ActivePerk extends Perk {
 
 
     public boolean activate() {
+        System.out.println("Perk activated" + this);
+        System.out.println("Perk aktiviert: " + itemName);
+        System.out.println("Letztes Mal benutzt: " + player.getActivePerk1LastUsed());
+        System.out.println("Cooldown: " + cooldown);
+
+
         if (player.getActivePerk1() == this) {
+            System.out.println("Active perk 1 used");
             if (!canUsePerk(player.getActivePerk1LastUsed())) return false;
-            if (!hasEnoughMoney()) {
-                player.getPlayer().sendMessage("§cDu hast nicht genug Geld für diesen Perk!");
-                return false;
-            }
+            if (!hasEnoughMoney()) return false;
             player.setActivePerk1LastUsed(System.currentTimeMillis());
         } else if (player.getActivePerk2() == this) {
+            System.out.println("Active perk 2 used");
             if (!canUsePerk(player.getActivePerk2LastUsed())) return false;
-            if (!hasEnoughMoney()) {
-                player.getPlayer().sendMessage("§cDu hast nicht genug Geld für diesen Perk!");
-                return false;
-            }
+            if (!hasEnoughMoney()) return false;
             player.setActivePerk2LastUsed(System.currentTimeMillis());
         } else if (player.getEnderperle() == this) {
+            System.out.println("enderpearl used");
             if(!canUsePerk(player.getEnderperleLastUsed())) return false;
         }
 
@@ -52,6 +55,9 @@ public abstract class ActivePerk extends Perk {
 
 
     protected boolean hasEnoughMoney() {
+        if(player.getWool() < preis) {
+            player.getPlayer().sendMessage("§cDu hast nicht genug Geld für diesen Perk!");
+        }
         return player.getWool() >= preis;
     }
 

@@ -18,6 +18,8 @@ commands:
   createQueue:
     description: create a new Queue
     usage: /createQueue <team size>
+    aliases:
+      - cq
   listallplayers:
     description: list all registered player
     usage: /listallplayers

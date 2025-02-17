@@ -21,7 +21,7 @@ public class Perk {
     protected String itemDescription;
 
 
-    ItemStack item;
+    protected ItemStack item;
 
 
     public PlayerInteractEvent event;
@@ -37,11 +37,17 @@ public class Perk {
         item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add(itemDescription);
-        lore.add("Preis: " + preis + " Wolle");
-        lore.add("Cooldown: " + cooldown + " Sekunden");
-        meta.setLore(lore);
+        if(preis > 0) {
+            lore.add("Preis: " + preis + " Wolle");
+        }
+        if(cooldown > 0) {
+            lore.add("Cooldown: " + cooldown + " Sekunden");
+        }
+        if(!lore.isEmpty()) {
+            meta.setLore(lore);
+        }
         item.setItemMeta(meta);
     }
 
@@ -52,5 +58,6 @@ public class Perk {
     public ItemStack getItem() {
         return item;
     }
+
 
 }

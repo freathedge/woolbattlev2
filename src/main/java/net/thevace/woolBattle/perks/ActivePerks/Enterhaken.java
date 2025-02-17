@@ -17,6 +17,7 @@ public class Enterhaken extends ActivePerk {
 
     public Enterhaken(WoolBattlePlayer p) {
         super(12, 10, p, ChatColor.GOLD + "Enterhaken", Material.FISHING_ROD, "Ziehe dich dorthin wo die Angel trifft");
+
     }
 
     public void setEvent(PlayerFishEvent event) {

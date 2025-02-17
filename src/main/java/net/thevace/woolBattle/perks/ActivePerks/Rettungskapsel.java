@@ -5,14 +5,20 @@ import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Rettungskapsel extends ActivePerk {
+public class Rettungskapsel extends ActivePerk implements Listener {
 
 
-    public Rettungskapsel(WoolBattlePlayer player) {
-        super(30, 16, player, ChatColor.GOLD + "Rettungskapsel", Material.GLASS, "Erschaffe eine Vollständige Kapsel um dich");
+    public Rettungskapsel(WoolBattlePlayer p) {
+        super(30, 16, p, ChatColor.GOLD + "Rettungskapsel", Material.GLASS, "Erschaffe eine Vollständige Kapsel um dich");
+        if(p != null) {
+            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
+        }
     }
 
     @Override
@@ -89,5 +95,15 @@ public class Rettungskapsel extends ActivePerk {
 
 
         p.setVelocity(new Vector(0, 0, 0));
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {
+            if (event.getItem().getItemMeta().getDisplayName().equals(itemName)) {
+                activate();
+                event.setCancelled(true);
+            }
+        }
     }
 }

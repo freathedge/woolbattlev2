@@ -70,6 +70,8 @@ public class ActivePerk1Selector extends View {
                     .onClick(click -> {
                         if (player.getActivePerk2() == null || !player.getActivePerk2().getClass().equals(perkClass)) {
                             player.setActivePerk1(PerkManager.createPerkInstance(perkClass, player));
+                            System.out.println("Set active perk1 of " + player.getPlayer().getDisplayName() + " to " + perkClass.getSimpleName());
+                            System.out.println("active perk1: " + player.getActivePerk1().getClass().getSimpleName());
                             click.openForPlayer(ActivePerk1Selector.class);
                         }
                     });

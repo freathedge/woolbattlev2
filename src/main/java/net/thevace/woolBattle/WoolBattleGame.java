@@ -56,7 +56,6 @@ public class WoolBattleGame {
     public void startGame() {
         Bukkit.getPluginManager().registerEvents(listener, Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
 
-
         for (WoolBattlePlayer wbp : team1) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
@@ -190,6 +189,12 @@ public class WoolBattleGame {
         shearsMeta.setDisplayName(ChatColor.GOLD + "Shears");
         shearsMeta.setUnbreakable(true);
         shears.setItemMeta(shearsMeta);
+
+        System.out.println("Setting players inventory");
+        System.out.println("Active perk 1 : " + player.getActivePerk1().getClass().getSimpleName());
+        System.out.println("Active perk 2 : " + player.getActivePerk2().getClass().getSimpleName());
+        System.out.println("Active perk : " + player.getActivePerk1().getItem().getItemMeta().getDisplayName());
+        System.out.println("Active perk : " + player.getActivePerk2().getItem().getItemMeta().getDisplayName());
 
         playerInv.setItem(0, bow);
         playerInv.setItem(1, shears);

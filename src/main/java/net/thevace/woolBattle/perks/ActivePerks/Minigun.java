@@ -7,13 +7,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Minigun extends ActivePerk {
+public class Minigun extends ActivePerk implements Listener {
 
     public Minigun(WoolBattlePlayer p) {
         super(20, 1, p, ChatColor.GOLD + "Minigun", Material.BOW, "Schießt eine große Menge an Pfeilen in die Richtung die du schaust");
+        if(p != null) {
+            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
+        }
     }
 
     @Override
@@ -46,5 +52,15 @@ public class Minigun extends ActivePerk {
                 ticks++;
             }
         }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {
+            if (event.getItem().getItemMeta().getDisplayName().equals(itemName)) {
+                activate();
+                event.setCancelled(true);
+            }
+        }
     }
 }

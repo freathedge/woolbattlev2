@@ -67,132 +67,27 @@ public class WoolBattleGameListener implements Listener {
 
     }
 
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta()){
+//    @EventHandler
+//    public void onPlayerInteract(PlayerInteractEvent event) {
+//        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta()){
+//
+//            Action action = event.getAction();
+//            Player player = event.getPlayer();
+//            WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
+//
+//            String displayName = event.getItem().getItemMeta().getDisplayName();
+//            boolean cancelEvent = false;
+//
+//
+//
+//
+//            if(cancelEvent){
+//                event.setCancelled(true);
+//            }
+//        }
+//    }
 
-            Action action = event.getAction();
-            Player player = event.getPlayer();
-            WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(player);
 
-            String displayName = event.getItem().getItemMeta().getDisplayName();
-            boolean cancelEvent = false;
-
-
-            if (displayName.equals(ChatColor.GOLD + "Pod")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Pod pod) {
-                    pod.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Pod pod) {
-                    pod.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Rettungskapsel")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Rettungskapsel rettungskapsel) {
-                    rettungskapsel.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungskapsel rettungskapsel) {
-                    rettungskapsel.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Rettungsplattform")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Rettungsplattform rettungsplattform) {
-                    rettungsplattform.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Rettungsplattform rettungsplattform) {
-                    rettungsplattform.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Blink")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Blink blink) {
-                    blink.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Blink blink) {
-                    blink.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Feder")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Feder feder) {
-                    feder.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Feder feder) {
-                    feder.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Brückenbauer")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Brueckenbauer brueckenbauer) {
-                    brueckenbauer.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Brueckenbauer brueckenbauer) {
-                    brueckenbauer.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Schutzschild")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Schutzschild schutzschild) {
-                    schutzschild.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Schutzschild schutzschild) {
-                    schutzschild.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Minigun")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Minigun minigun) {
-                    minigun.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Minigun minigun) {
-                    minigun.activate();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Tauscher")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Tauscher tauscher) {
-                    tauscher.throwSnowball();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Tauscher tauscher) {
-                    tauscher.throwSnowball();
-                }
-                cancelEvent = true;
-            } else if (displayName.equals(ChatColor.GOLD + "Freeze")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Freeze freeze) {
-                    freeze.throwSnowball();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Freeze freeze) {
-                    freeze.throwSnowball();
-                }
-            } else if (displayName.equals(ChatColor.GOLD + "Uhr")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Uhr uhr) {
-                    uhr.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Uhr uhr) {
-                    uhr.activate();
-                }
-            } else if (displayName.equals(ChatColor.GOLD + "Woolbomb")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Woolbomb woolbomb) {
-                    woolbomb.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Woolbomb woolbomb) {
-                    woolbomb.activate();
-                }
-            } else if (displayName.equals(ChatColor.GOLD + "Greifer")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Greifer greifer) {
-                    greifer.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Greifer greifer) {
-                    greifer.activate();
-                }
-            } else if (displayName.equals(ChatColor.GOLD + "Türmchenbauer")) {
-                if (woolbattlePlayer.getActivePerk1() instanceof Tuermchenbauer tuermchenbauer) {
-                    tuermchenbauer.activate();
-                } else if (woolbattlePlayer.getActivePerk2() instanceof Tuermchenbauer tuermchenbauer) {
-                    tuermchenbauer.activate();
-                }
-            }
-
-            if(cancelEvent){
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerFish(PlayerFishEvent event) {
-        WoolBattlePlayer player = playerManager.getWoolBattlePlayer(event.getPlayer());
-        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
-            if (player.getActivePerk1() instanceof Enterhaken enterhaken) {
-                enterhaken.setEvent(event);
-                enterhaken.activate();
-            } else if (player.getActivePerk2() instanceof Enterhaken enterhaken) {
-                enterhaken.setEvent(event);
-                enterhaken.activate();
-            }
-        }
-    }
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
@@ -230,11 +125,20 @@ public class WoolBattleGameListener implements Listener {
             if (event.getHitEntity() instanceof Player) {
                 Player damager = (Player) arrow.getShooter();
                 Player target = (Player) event.getHitEntity();
-                if(!game.handlePlayerHit(damager, target)){
-                    if (playerManager.getWoolBattlePlayer(target).isProtected()) {
+                if(target != null && damager != null) {
+                    System.out.println("damager: " + damager);
+                    if(target == damager) {
                         event.setCancelled(true);
+                        event.getEntity().remove();
+                    }
+                    if(!game.handlePlayerHit(damager, target)){
+                        if (playerManager.getWoolBattlePlayer(target).isProtected()) {
+                            event.setCancelled(true);
+                            event.getEntity().remove();
+                        }
                     }
                 }
+
             }
             if (event.getHitBlock() != null) {
                 Block block = event.getHitBlock();
@@ -299,43 +203,15 @@ public class WoolBattleGameListener implements Listener {
         if(game.handlePlayerHit(damager, target)) {
             event.setCancelled(true);
         }
+
+        event.setDamage(0.000001);
     }
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        Player p = event.getEntity();
-        WoolBattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
-        game.handlePlayerDeath(woolbattlePlayer);
-        event.setKeepInventory(true);
-        event.getDrops().clear();
-        event.setDeathMessage(null);
-    }
-
-//    @EventHandler
-//    public void onFallDamage(EntityDamageEvent event) {
-//        System.out.println("damage event called");
-//        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-//            Player p = (Player) event.getEntity();
-//            WoolbattlePlayer woolbattlePlayer = playerManager.getWoolBattlePlayer(p);
-//            if(!woolbattlePlayer.hasFalldamage()) {
-//                System.out.println("falldamage event canceled");
-//                event.setCancelled(true);
-//            }
-//        }
-//    }
-
-    @EventHandler
-    public void onTNTExplosion(EntityExplodeEvent event) {
-        if (event.getEntity() instanceof TNTPrimed) {
-            TNTPrimed tnt = (TNTPrimed) event.getEntity();
+    public void onEntityDamage(EntityDamageEvent event) {
+        if(event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            event.setDamage(0.000001);
             event.setCancelled(true);
-            Location tntLocation = tnt.getLocation();
-            for (int i = 0; i < 360; i += 15) {
-                Arrow arrow = tnt.getWorld().spawn(tntLocation, Arrow.class);
-                Vector direction = new Vector(Math.sin(Math.toRadians(i)), 0, Math.cos(Math.toRadians(i))); // Berechne die Richtung
-                arrow.setVelocity(direction.multiply(1));
-            }
         }
     }
-
 }

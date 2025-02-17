@@ -5,14 +5,20 @@ import net.thevace.woolBattle.WoolBattlePlayer;
 import net.thevace.woolBattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class Pod extends ActivePerk {
+public class Pod extends ActivePerk implements Listener {
 
 
-    public Pod(WoolBattlePlayer player) {
-        super(15, 10, player, ChatColor.GOLD + "Pod", Material.FLOWER_POT, "Erschaffe ein kleines Pod um dich herum");
+    public Pod(WoolBattlePlayer p) {
+        super(15, 10, p, ChatColor.GOLD + "Pod", Material.FLOWER_POT, "Erschaffe ein kleines Pod um dich herum");
+        if(p != null) {
+            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
+        }
     }
 
     @Override
@@ -80,5 +86,15 @@ public class Pod extends ActivePerk {
 
 
         p.setVelocity(new Vector(0, 0, 0));
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {
+            if (event.getItem().getItemMeta().getDisplayName().equals(itemName)) {
+                activate();
+                event.setCancelled(true);
+            }
+        }
     }
 }
