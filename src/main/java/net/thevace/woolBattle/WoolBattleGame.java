@@ -18,6 +18,8 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +40,8 @@ public class WoolBattleGame {
 
     private List<Location> playerBlocks = new ArrayList<>();
 
-    private Location Team1Spawn = new Location(Bukkit.getWorlds().get(0), 19.5, 78, 36.5, 0, 0);
-    private Location Team2Spawn = new Location(Bukkit.getWorlds().get(0), 10.5, 21, 7.5, -180, 0);
+    private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, -20.5, 0, 0);
+    private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, 7.5, -180, 0);
 
 
 
@@ -61,14 +63,14 @@ public class WoolBattleGame {
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
             setGameScoreboard(wbp);
-            p.teleport(Team1Spawn);
+            p.teleport(team1Spawn);
         }
         for (WoolBattlePlayer wbp : team2) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
             setPlayerInventory(wbp);
             setGameScoreboard(wbp);
-            p.teleport(Team2Spawn);
+            p.teleport(team2Spawn);
         }
     }
 
@@ -77,7 +79,7 @@ public class WoolBattleGame {
 
         String message;
 
-        if(team1Health > team2Health) {
+        if(team1.size() > team2.size()) {
             message = "Woolbattle game ended! Team 1 has won!";
         } else {
             message = "Woolbattle game ended! Team 2 has won!";
@@ -96,7 +98,7 @@ public class WoolBattleGame {
             loc.getBlock().setType(Material.AIR);
         }
 
-
+        HandlerList.unregisterAll(listener);
         GameManager.removeGame(this);
     }
 
@@ -108,20 +110,36 @@ public class WoolBattleGame {
             player.getPlayer().setNoDamageTicks(0);
         }, 100L);
 
+        if(player.getLastHit() != null) {
+            if(Duration.between(player.getLastHit().toInstant(), Instant.now()).getSeconds() < 10) {
+                if(team1.contains(player)) {
+                    team1Health--;
+                } else if(team2.contains(player)) {
+                    team2Health--;
+                }
+            }
+        }
 
         if(team1.contains(player)) {
-            team1Health--;
-            Bukkit.broadcastMessage("Team 1 hat ein Leben verloren: " + team1Health);
-            player.getPlayer().teleport(Team1Spawn);
+            if(team1Health == 0) {
+                team1.remove(player);
+                setSpectator(player);
+            } else {
+                player.getPlayer().teleport(team1Spawn);
+            }
+
         } else if(team2.contains(player)) {
-            team2Health--;
-            Bukkit.broadcastMessage("Team 2 hat ein Leben verloren: " + team2Health);
-            player.getPlayer().teleport(Team2Spawn);
+            if(team2Health == 0) {
+                team2.remove(player);
+                setSpectator(player);
+            } else {
+                player.getPlayer().teleport(team2Spawn);
+            }
         }
 
         player.setFreezed(false);
 
-        if (team1Health == 0 || team2Health == 0) {
+        if(team1.size() == 0 && team2.size() == 0) {
             endGame();
         }
 
@@ -230,5 +248,9 @@ public class WoolBattleGame {
 
     public List<Location> getPlayerBlocks() {
         return playerBlocks;
+    }
+
+    public void setSpectator(WoolBattlePlayer player) {
+
     }
 }

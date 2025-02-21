@@ -19,6 +19,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 public class WoolBattleGameListener implements Listener {
     private WoolBattleGame game;
     private WoolBattlePlayerManager playerManager;
@@ -202,7 +206,10 @@ public class WoolBattleGameListener implements Listener {
 
         if(game.handlePlayerHit(damager, target)) {
             event.setCancelled(true);
+            return;
         }
+
+        playerManager.getWoolBattlePlayer(target).setLastHit(Timestamp.valueOf(LocalDateTime.now()));
 
         event.setDamage(0.000001);
     }

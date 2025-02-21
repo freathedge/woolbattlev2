@@ -32,6 +32,8 @@ public class WoolBattlePlayer {
 
     private Location lastBlockLocation;
 
+    private Timestamp lastHit;
+
 
 
     public WoolBattlePlayer(Player player) {
@@ -157,5 +159,13 @@ public class WoolBattlePlayer {
 
     public Timestamp getEnderpearlLastUsed() {
         return enderpearlLastUsed;
+    }
+
+    public Timestamp getLastHit() {
+        return lastHit;
+    }
+
+    public void setLastHit(Timestamp lastHit) {
+        this.lastHit = lastHit;
     }
 }
