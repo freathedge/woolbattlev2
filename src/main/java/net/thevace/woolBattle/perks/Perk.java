@@ -2,6 +2,7 @@ package net.thevace.woolBattle.perks;
 
 import net.thevace.woolBattle.WoolBattlePlayer;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -48,6 +49,10 @@ public class Perk {
         if(!lore.isEmpty()) {
             meta.setLore(lore);
         }
+
+        meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
+        meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
+
         item.setItemMeta(meta);
     }
 

@@ -38,7 +38,7 @@ public class WoolBattleGame {
 
     private List<Location> playerBlocks = new ArrayList<>();
 
-    private Location Team1Spawn = new Location(Bukkit.getWorlds().get(0), 10.5, 21, -20.5, 0, 0);
+    private Location Team1Spawn = new Location(Bukkit.getWorlds().get(0), 19.5, 78, 36.5, 0, 0);
     private Location Team2Spawn = new Location(Bukkit.getWorlds().get(0), 10.5, 21, 7.5, -180, 0);
 
 
@@ -132,8 +132,8 @@ public class WoolBattleGame {
             setGameScoreboard(wbp);
         }
 
-        player.setActivePerk1LastUsed(0);
-        player.setActivePerk2LastUsed(0);
+        //player.setActivePerk1LastUsed(0);
+        //player.setActivePerk2LastUsed(0);
 
     }
 
@@ -189,12 +189,6 @@ public class WoolBattleGame {
         shearsMeta.setDisplayName(ChatColor.GOLD + "Shears");
         shearsMeta.setUnbreakable(true);
         shears.setItemMeta(shearsMeta);
-
-        System.out.println("Setting players inventory");
-        System.out.println("Active perk 1 : " + player.getActivePerk1().getClass().getSimpleName());
-        System.out.println("Active perk 2 : " + player.getActivePerk2().getClass().getSimpleName());
-        System.out.println("Active perk : " + player.getActivePerk1().getItem().getItemMeta().getDisplayName());
-        System.out.println("Active perk : " + player.getActivePerk2().getItem().getItemMeta().getDisplayName());
 
         playerInv.setItem(0, bow);
         playerInv.setItem(1, shears);

@@ -10,6 +10,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.Timestamp;
+
 public class WoolBattlePlayer {
     private Player player;
     private int wool;
@@ -20,10 +22,10 @@ public class WoolBattlePlayer {
     ActivePerk activePerk2 = new Enterhaken(this);
     PassivePerk passivePerk;
 
-    private long enderperleLastUsed = 0;
-    private long activePerk1LastUsed = 0;
-    private long activePerk2LastUsed = 0;
-    private long passivePerkLastUsed = 0;
+    private Timestamp enderpearlLastUsed;
+    private Timestamp activePerk1LastUsed;
+    private Timestamp activePerk2LastUsed;
+    private Timestamp passivePerkLastUsed;
 
     private boolean isProtected = false;
     private boolean isFreezed = false;
@@ -101,27 +103,27 @@ public class WoolBattlePlayer {
         this.passivePerk = passivePerk;
     }
 
-    public long getActivePerk1LastUsed() {
+    public Timestamp getActivePerk1LastUsed() {
         return activePerk1LastUsed;
     }
 
-    public void setActivePerk1LastUsed(long activePerk1LastUsed) {
+    public void setActivePerk1LastUsed(Timestamp activePerk1LastUsed) {
         this.activePerk1LastUsed = activePerk1LastUsed;
     }
 
-    public long getActivePerk2LastUsed() {
+    public Timestamp getActivePerk2LastUsed() {
         return activePerk2LastUsed;
     }
 
-    public void setActivePerk2LastUsed(long activePerk2LastUsed) {
+    public void setActivePerk2LastUsed(Timestamp activePerk2LastUsed) {
         this.activePerk2LastUsed = activePerk2LastUsed;
     }
 
-    public long getPassivePerkLastUsed() {
+    public Timestamp getPassivePerkLastUsed() {
         return passivePerkLastUsed;
     }
 
-    public void setPassivePerkLastUsed(long passivePerkLastUsed) {
+    public void setPassivePerkLastUsed(Timestamp passivePerkLastUsed) {
         this.passivePerkLastUsed = passivePerkLastUsed;
     }
 
@@ -153,7 +155,7 @@ public class WoolBattlePlayer {
         return enderperle;
     }
 
-    public long getEnderperleLastUsed() {
-        return enderperleLastUsed;
+    public Timestamp getEnderpearlLastUsed() {
+        return enderpearlLastUsed;
     }
 }

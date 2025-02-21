@@ -53,5 +53,5 @@ processResources {
 }
 
 jar {
-    destinationDirectory.set(file("C:\\Users\\adria\\Desktop\\server 1.21\\plugins"))
+    destinationDirectory.set(file("C:\\Users\\adria\\OneDrive\\Desktop\\server\\plugins"))
 }
