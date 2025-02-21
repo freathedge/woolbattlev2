@@ -192,30 +192,13 @@ public class WoolBattleGame {
 
         playerInv.setItem(0, bow);
         playerInv.setItem(1, shears);
-        playerInv.setItem(2, player.getActivePerk1().getItem());
-        playerInv.setItem(3, player.getActivePerk2().getItem());
+        playerInv.setItem(2, player.getActivePerk1().addEnchantment(player.getActivePerk1().getItem()));
+        playerInv.setItem(3, player.getActivePerk2().addEnchantment(player.getActivePerk2().getItem()));
         playerInv.setItem(4, player.getEnderperle().getItem());
 
 
 
         playerInv.setItem(17, new ItemStack(Material.ARROW, 1));
-
-
-//        if(player.getActivePerk1() != null) {
-//            player.getActivePerk1().addItem();
-//        } else {
-//            player.setActivePerk1(PerkManager.createPerkInstance(Pod.class, player));
-//            player.getActivePerk1().addItem();
-//        }
-//
-//        if(player.getActivePerk2() != null) {
-//            player.getActivePerk2().addItem();
-//        } else {
-//            player.setActivePerk2(PerkManager.createPerkInstance(Enterhaken.class, player));
-//            player.getActivePerk2().addItem();
-//        }
-
-
     }
 
     public void setGameScoreboard(WoolBattlePlayer player) {

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -74,11 +75,11 @@ public abstract class ActivePerk extends Perk {
     public void cancelEvent() {
         player.addWool(preis);
         player.updatePlayerWool();
-//        if (player.getActivePerk1() == this) {
-//            player.setActivePerk1LastUsed(0);
-//        } else if (player.getActivePerk2() == this) {
-//            player.setActivePerk2LastUsed(0);
-//        }
+        if (player.getActivePerk1() == this) {
+            player.setActivePerk1LastUsed(Timestamp.valueOf(LocalDateTime.now().minusSeconds(cooldown)));
+        } else if (player.getActivePerk2() == this) {
+            player.setActivePerk2LastUsed(Timestamp.valueOf(LocalDateTime.now().minusSeconds(cooldown)));
+        }
     }
 
     private void startShowCooldown() {
@@ -116,6 +117,17 @@ public abstract class ActivePerk extends Perk {
                 player.getPlayer().getInventory().setItem(3, perkItem);
             }
         }
+    }
+
+    public ItemStack addEnchantment(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     private ItemStack removeEnchantment(ItemStack item) {

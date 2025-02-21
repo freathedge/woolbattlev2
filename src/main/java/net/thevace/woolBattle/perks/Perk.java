@@ -50,9 +50,6 @@ public class Perk {
             meta.setLore(lore);
         }
 
-        meta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
-        meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
-
         item.setItemMeta(meta);
     }
 
