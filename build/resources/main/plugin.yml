@@ -1,6 +1,6 @@
 name: WoolBattle
 version: '1.0-SNAPSHOT'
-main: net.thevace.woolBattle.WoolBattle
+main: net.thevace.woolbattle.WoolBattle
 api-version: '1.21'
 commands:
   joinQueue:
