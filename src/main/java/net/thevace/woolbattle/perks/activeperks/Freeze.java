@@ -75,23 +75,12 @@ public class Freeze extends ActivePerk implements Listener {
                 if (player != null && target != null) {
                     if (!game.handlePlayerHit(player, target)) {
 
-                        WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(player);
+                        WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
                         wbpTarget.setFreezed(true);
 
                         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
                             wbpTarget.setFreezed(false);
                         }, 200L);
-
-
-//                        else if (player.getItemInHand().getItemMeta().getDisplayName().equals(ChatColor.GOLD + "Freeze")) {
-//                            if(woolbattlePlayer.getActivePerk1() instanceof Freeze freeze) {
-//                                freeze.setTarget(playerManager.getWoolBattlePlayer(target));
-//                                freeze.activate();
-//                            } else if (woolbattlePlayer.getActivePerk2() instanceof Freeze freeze) {
-//                                freeze.setTarget(playerManager.getWoolBattlePlayer(target));
-//                                freeze.activate();
-//                            }
-//                        }
                     }
                 }
             }

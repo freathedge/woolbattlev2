@@ -35,6 +35,12 @@ public class WoolBattlePlayer {
 
     private Timestamp lastHit;
 
+    private double doubleJumpVerticalPower = 1.0;
+    private double doubleJumpHorizontalPower = 1.0;
+
+    private int arrowsShot = 0;
+
+
 
 
     public WoolBattlePlayer(Player player) {
@@ -168,5 +174,29 @@ public class WoolBattlePlayer {
 
     public void setLastHit(Timestamp lastHit) {
         this.lastHit = lastHit;
+    }
+
+    public double getDoubleJumpVerticalPower() {
+        return doubleJumpVerticalPower;
+    }
+
+    public void setDoubleJumpVerticalPower(double doubleJumpVerticalPower) {
+        this.doubleJumpVerticalPower = doubleJumpVerticalPower;
+    }
+
+    public double getDoubleJumpHorizontalPower() {
+        return doubleJumpHorizontalPower;
+    }
+
+    public void setDoubleJumpHorizontalPower(double doubleJumpHorizontalPower) {
+        this.doubleJumpHorizontalPower = doubleJumpHorizontalPower;
+    }
+
+    public int getArrowsShot() {
+        return arrowsShot;
+    }
+
+    public void setArrowsShot(int arrowsShot) {
+        this.arrowsShot = arrowsShot;
     }
 }

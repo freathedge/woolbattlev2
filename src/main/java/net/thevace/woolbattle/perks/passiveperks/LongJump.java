@@ -10,4 +10,9 @@ public class LongJump extends PassivePerk {
     public LongJump(WoolBattlePlayer p) {
         super(p, ChatColor.GOLD + "Long Jump", Material.GOLDEN_BOOTS, "Ermöglicht es dir bei einem Doppelsprung mehr horizontale Distanz zu überbrücken");
     }
+
+    @Override
+    protected void applyEffect() {
+        player.setDoubleJumpHorizontalPower(2.0);
+    }
 }

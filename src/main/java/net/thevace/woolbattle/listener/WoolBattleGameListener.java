@@ -166,11 +166,16 @@ public class WoolBattleGameListener implements Listener {
             return;
         }
 
+        WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
+
         if(!p.isFlying()) {
             event.setCancelled(true);
 
             p.setAllowFlight(false);
-            p.setVelocity(p.getLocation().getDirection().setY(1));
+            Vector direction = p.getLocation().getDirection().normalize().multiply(player.getDoubleJumpHorizontalPower());
+            direction.setY(player.getDoubleJumpVerticalPower());
+
+            p.setVelocity(direction);
         }
 
     }
