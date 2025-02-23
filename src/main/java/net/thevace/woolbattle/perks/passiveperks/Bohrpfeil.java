@@ -10,4 +10,9 @@ public class Bohrpfeil extends PassivePerk {
     public Bohrpfeil(WoolBattlePlayer p) {
         super(p, ChatColor.GOLD + "Bohrpfeil", Material.DIAMOND_PICKAXE, "Zerstöre leichter Wollblöcke mit Pfeilen");
     }
+
+    @Override
+    public void applyEffect() {
+
+    }
 }

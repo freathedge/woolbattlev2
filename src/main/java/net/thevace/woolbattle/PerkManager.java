@@ -33,20 +33,12 @@ public class PerkManager {
             FreezeArrow.class,
             Naehkasten.class,
             Schurke.class,
-            Stampfer.class,
             LongJump.class,
-            TNTPfeil.class,
             RocketJump.class,
-            Bohrpfeil.class,
             Pfeilregen.class,
-            Harpune.class,
-            PassiveEnterhaken.class,
-            Aufzug.class,
-            Spinne.class,
-            Berserker.class,
-            Reflektor.class,
-            RueckstoßPfeil.class,
-            FastArrow.class
+            RueckstossPfeil.class,
+            FastArrow.class,
+            Reflektor.class
     );
 
 

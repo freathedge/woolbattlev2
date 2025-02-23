@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
@@ -17,9 +19,6 @@ import static org.bukkit.Bukkit.getPlayer;
 public class Greifer extends ActivePerk implements Listener {
     public Greifer(WoolBattlePlayer p) {
         super(15, 20, p, ChatColor.GOLD + "Greifer", Material.STICK, "Zieht den anvisierten Gegner zu dir");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override
@@ -38,9 +37,9 @@ public class Greifer extends ActivePerk implements Listener {
         Vector playerDirection = player.getLocation().getDirection().normalize();
         Vector targetDirection = target.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
 
-        double dotProduct = playerDirection.dot(targetDirection); // Berechnung des Winkels
+        double dotProduct = playerDirection.dot(targetDirection);
 
-        return dotProduct > 0.97; // Ca. 15 Grad Blickwinkel-Toleranz
+        return dotProduct > 0.97;
     }
 
     private void pullPlayerToPlayer(Player player, Player target) {
@@ -81,13 +80,6 @@ public class Greifer extends ActivePerk implements Listener {
             }
         }
         return closest;
-    }
-
-    @EventHandler
-    public void onPlayerFish(PlayerFishEvent event) {
-        if (event.getState().equals(PlayerFishEvent.State.IN_GROUND) || event.getState().equals(PlayerFishEvent.State.FAILED_ATTEMPT) || event.getState().equals(PlayerFishEvent.State.REEL_IN)) {
-            activate();
-        }
     }
 
 }

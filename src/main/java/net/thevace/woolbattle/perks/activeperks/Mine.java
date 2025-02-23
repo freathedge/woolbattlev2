@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.ActivePerk;
@@ -22,27 +24,20 @@ public class Mine extends ActivePerk implements Listener {
 
     public Mine(WoolBattlePlayer p) {
         super(30, 16, p, ChatColor.GOLD + "Mine", Material.STONE_PRESSURE_PLATE, "Platziere eine Druckplatte die jedem Spieler in der Umgebung Rückstoß gibt");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override
     protected void applyEffect() {
-        player.getPlayer().sendMessage("Applied effect, placed pressure plate");
-        plateLocation.getWorld().getBlockAt(plateLocation).setType(Material.STONE_PRESSURE_PLATE);
     }
 
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlock().getType() == Material.STONE_PRESSURE_PLATE) {
+        if (event.getBlockPlaced().getType() == Material.STONE_PRESSURE_PLATE) {
 
-            WoolBattlePlayer woolbattlePlayer = WoolBattlePlayerManager.getWoolBattlePlayer(event.getPlayer());
-
-            if(woolbattlePlayer.equals(player)) {
-                plateLocation = event.getBlock().getLocation();
-                event.setCancelled(true);
+            Player p = event.getPlayer();
+            if(p.equals(player.getPlayer())) {
+                plateLocation = event.getBlockPlaced().getLocation();
                 activate();
             }
         }
@@ -52,15 +47,14 @@ public class Mine extends ActivePerk implements Listener {
     public void onPlayerStepOnPressurePlate(PlayerInteractEvent event) {
         if (event.getAction() == Action.PHYSICAL) {
             Block block = event.getClickedBlock();
-
             if (block != null && block.getType() == Material.STONE_PRESSURE_PLATE) {
-
-                for (Player player : plateLocation.getWorld().getPlayers()) {
+                Location loc = block.getLocation();
+                for (Player player : loc.getWorld().getPlayers()) {
                     Location playerLoc = player.getLocation();
-                    double distance = playerLoc.distance(plateLocation);
+                    double distance = playerLoc.distance(loc);
 
                     if (distance <= 5) {
-                        Vector knockback = playerLoc.toVector().subtract(plateLocation.toVector()).normalize();
+                        Vector knockback = playerLoc.toVector().subtract(loc.toVector()).normalize();
                         knockback.multiply(1.5);
                         knockback.setY(0.5);
                         player.setVelocity(knockback);
@@ -68,12 +62,12 @@ public class Mine extends ActivePerk implements Listener {
                     }
                 }
 
-                for (Player player : plateLocation.getWorld().getPlayers()) {
-                    player.spawnParticle(Particle.EXPLOSION_EMITTER, plateLocation, 1);
+                for (Player player : loc.getWorld().getPlayers()) {
+                    player.spawnParticle(Particle.EXPLOSION_EMITTER, loc, 1);
                     player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
                 }
 
-                block.setType(Material.AIR);
+                event.getClickedBlock().setType(Material.AIR);
             }
         }
     }

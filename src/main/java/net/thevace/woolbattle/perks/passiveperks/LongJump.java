@@ -12,7 +12,7 @@ public class LongJump extends PassivePerk {
     }
 
     @Override
-    protected void applyEffect() {
-        player.setDoubleJumpHorizontalPower(2.0);
+    public void applyEffect() {
+        player.setDoubleJumpHorizontalPower(1.5);
     }
 }

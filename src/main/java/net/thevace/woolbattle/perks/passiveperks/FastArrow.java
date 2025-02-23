@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.PassivePerk;
 import org.bukkit.Bukkit;
@@ -15,14 +17,12 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 public class FastArrow extends PassivePerk implements Listener {
 
     public FastArrow(WoolBattlePlayer p) {
-        super(3, p, ChatColor.GOLD + "Rückstoß-Pfeil", Material.ARROW, "Geschossene Pfeile fliegen um 20% schneller");
+        super(3, p, ChatColor.GOLD + "Fast-Arrow", Material.ARROW, "Geschossene Pfeile fliegen um 20% schneller");
     }
 
     @Override
-    protected void applyEffect() {
-        if(player != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
+    public void applyEffect() {
+
     }
 
     @EventHandler
@@ -34,7 +34,6 @@ public class FastArrow extends PassivePerk implements Listener {
             if(shooter.equals(player.getPlayer())) {
                 if (projectile instanceof Arrow) {
                     Arrow arrow = (Arrow) projectile;
-
                     arrow.setVelocity(arrow.getVelocity().multiply(1.2));
                 }
             }

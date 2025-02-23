@@ -1,6 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
 import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -15,9 +16,6 @@ public class Rettungsplattform extends ActivePerk implements Listener {
 
     public Rettungsplattform(WoolBattlePlayer p) {
         super(20, 32, p, ChatColor.GOLD + "Rettungsplattform", Material.BLAZE_ROD, "Erschafft eine kleine Kreisförmige Plattform unter dir");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

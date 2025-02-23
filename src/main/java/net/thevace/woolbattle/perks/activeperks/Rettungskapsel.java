@@ -1,6 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
 import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -16,9 +17,6 @@ public class Rettungskapsel extends ActivePerk implements Listener {
 
     public Rettungskapsel(WoolBattlePlayer p) {
         super(30, 16, p, ChatColor.GOLD + "Rettungskapsel", Material.GLASS, "Erschaffe eine Vollständige Kapsel um dich");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

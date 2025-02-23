@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -17,9 +19,6 @@ public class Woolbomb extends ActivePerk implements Listener {
 
     public Woolbomb(WoolBattlePlayer p) {
         super(15, 16, p, ChatColor.GOLD + "Woolbomb", Material.WHITE_WOOL, "Wirft ein TNT in die richtung die du schaust und gibt Spielern Rückstoß, die in der Nähe sind");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

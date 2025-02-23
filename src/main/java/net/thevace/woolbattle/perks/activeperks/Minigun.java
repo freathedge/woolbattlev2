@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
@@ -17,9 +19,6 @@ public class Minigun extends ActivePerk implements Listener {
 
     public Minigun(WoolBattlePlayer p) {
         super(20, 1, p, ChatColor.GOLD + "Minigun", Material.BOW, "Schießt eine große Menge an Pfeilen in die Richtung die du schaust");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

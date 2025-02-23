@@ -23,5 +23,8 @@ commands:
   listallplayers:
     description: list all registered player
     usage: /listallplayers
+  getAllListeners:
+    description: get a list of all registered Listeners
+    usage: /getAllListeners
 depend: [InventoryFramework]
 

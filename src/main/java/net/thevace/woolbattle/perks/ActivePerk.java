@@ -23,7 +23,6 @@ public abstract class ActivePerk extends Perk {
 
     }
 
-
     public boolean activate() {
         if (player.getActivePerk1() == this) {
             if (!canUsePerk(player.getActivePerk1LastUsed())) return false;
@@ -34,10 +33,11 @@ public abstract class ActivePerk extends Perk {
             if (!canUsePerk(player.getActivePerk2LastUsed())) return false;
             if (!hasEnoughMoney()) return false;
             player.setActivePerk2LastUsed(Timestamp.valueOf(LocalDateTime.now()));
-        }/* else if (player.getEnderperle() == this) {
+        } else if (player.getEnderperle() == this) {
             System.out.println("enderpearl used");
-            if(!canUsePerk(player.getEnderperleLastUsed())) return false;
-        }*/
+            if(!canUsePerk(player.getEnderpearlLastUsed())) return false;
+            player.setEnderpearlLastUsed(Timestamp.valueOf(LocalDateTime.now()));
+        }
 
         withdrawWool();
         applyEffect();
@@ -45,7 +45,7 @@ public abstract class ActivePerk extends Perk {
         return true;
     }
 
-    private boolean canUsePerk(Timestamp lastUsed) {
+    protected boolean canUsePerk(Timestamp lastUsed) {
         if (lastUsed == null) return true;
         if (Duration.between(lastUsed.toInstant(), Instant.now()).getSeconds() < cooldown) {
             player.getPlayer().sendMessage("§cDieses Perk ist noch im Cooldown!");
@@ -107,12 +107,16 @@ public abstract class ActivePerk extends Perk {
                 player.getPlayer().getInventory().setItem(2, item);
             } else if (player.getActivePerk2() == this) {
                 player.getPlayer().getInventory().setItem(3, item);
+            } else if (player.getEnderperle() == this) {
+                player.getPlayer().getInventory().setItem(4, item);
             }
         } else {
             if(player.getActivePerk1() == this) {
                 player.getPlayer().getInventory().setItem(2, perkItem);
             } else if (player.getActivePerk2() == this) {
                 player.getPlayer().getInventory().setItem(3, perkItem);
+            } else if (player.getEnderperle() == this) {
+                player.getPlayer().getInventory().setItem(4, perkItem);
             }
         }
     }

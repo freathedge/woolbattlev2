@@ -10,4 +10,9 @@ public class Aufzug extends PassivePerk {
     public Aufzug(WoolBattlePlayer p) {
         super(15, 1, p, ChatColor.GOLD + "Aufzug", Material.PISTON, "Teleportiert dich auf den höchten Block über dir wenn du shiftest");
     }
+
+    @Override
+    public void applyEffect() {
+
+    }
 }

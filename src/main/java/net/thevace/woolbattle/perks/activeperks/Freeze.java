@@ -1,9 +1,6 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.WoolBattleGame;
-import net.thevace.woolbattle.WoolBattlePlayer;
-import net.thevace.woolbattle.WoolBattlePlayerManager;
+import net.thevace.woolbattle.*;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -21,9 +18,6 @@ public class Freeze extends ActivePerk implements Listener {
 
     public Freeze(WoolBattlePlayer p) {
         super(10, 16, p, ChatColor.GOLD + "Freeze", Material.ICE, "Friert den Spieler den du triffst ein");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
@@ -13,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.sql.Timestamp;
+
 public class Enterhaken extends ActivePerk implements Listener {
 
     Block targetBlock;
@@ -21,9 +25,6 @@ public class Enterhaken extends ActivePerk implements Listener {
 
     public Enterhaken(WoolBattlePlayer p) {
         super(12, 10, p, ChatColor.GOLD + "Enterhaken", Material.FISHING_ROD, "Ziehe dich dorthin wo die Angel trifft");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     public void setEvent(PlayerFishEvent event) {
@@ -42,12 +43,23 @@ public class Enterhaken extends ActivePerk implements Listener {
 
     @EventHandler
     public void onFish(PlayerFishEvent event) {
+
         setEvent(event);
 
-        Player player = event.getPlayer();
-        ItemStack fishingItem = player.getInventory().getItemInMainHand();
+        Player p = event.getPlayer();
+        ItemStack fishingItem = p.getInventory().getItemInMainHand();
         if(fishingItem.getItemMeta().getDisplayName().equals(itemName)) {
-            if(event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND )) {
+            if(event.getState().equals(PlayerFishEvent.State.FISHING)) {
+                Timestamp lastUsed = null;
+                if(player.getActivePerk1().equals(this)) {
+                    lastUsed = player.getActivePerk1LastUsed();
+                } else if(player.getActivePerk2().equals(this)) {
+                    lastUsed = player.getActivePerk2LastUsed();
+                }
+                if(!canUsePerk(lastUsed) || !hasEnoughMoney()) {
+                    event.setCancelled(true);
+                }
+            } else if(event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND )) {
                 activate();
             }
         }

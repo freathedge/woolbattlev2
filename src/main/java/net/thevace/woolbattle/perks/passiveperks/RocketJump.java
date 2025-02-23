@@ -10,9 +10,8 @@ public class RocketJump extends PassivePerk {
         super(p, ChatColor.GOLD + "Rocket Jump", Material.FIREWORK_ROCKET, "Ermöglicht es dir bei einem Doppelsprung mehr vertikale höhe zu erreichen");
     }
 
-
     @Override
-    protected void applyEffect() {
-        player.setDoubleJumpVerticalPower(2.0);
+    public void applyEffect() {
+        player.setDoubleJumpVerticalPower(1.5);
     }
 }

@@ -5,29 +5,24 @@ import net.thevace.woolbattle.perks.PassivePerk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.persistence.PersistentDataType;
 
-public class FreezeArrow extends PassivePerk implements Listener {
+public class RueckstossPfeil extends PassivePerk implements Listener {
 
-    public FreezeArrow(WoolBattlePlayer p) {
-        super(4, p, ChatColor.GOLD + "Freeze-Arrow", Material.BLUE_ICE, "Schießt alle 10 Pfeile einen Eis Pfeil, welcher den Spieler temporär einfrieren lässt");
-
+    public RueckstossPfeil(WoolBattlePlayer p) {
+        super(3, p, ChatColor.GOLD + "Rückstoß-Pfeil", Material.ARROW, "Alle 10 Pfeile wird ein Pfeil geschossen, welcher 15% mehr Rückstoß erteilt");
     }
 
     @Override
     public void applyEffect() {
-        if(player != null) {
-            PerkListenerManager.registerPerkListener(GameManager.getPlayerGame(player), this);
-        }
+
     }
 
     @EventHandler
@@ -59,16 +54,10 @@ public class FreezeArrow extends PassivePerk implements Listener {
                     assert game != null;
                     if (!game.handlePlayerHit(p, target)) {
                         if(player.getArrowsShot() >= 10) {
-                            WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
-                            wbpTarget.setFreezed(true);
+                            arrow.setKnockbackStrength(3);
                             player.removeWool(preis);
                             player.setArrowsShot(0);
-
-                            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
-                                wbpTarget.setFreezed(false);
-                            }, 60L);
                         }
-
                     }
                 }
             }

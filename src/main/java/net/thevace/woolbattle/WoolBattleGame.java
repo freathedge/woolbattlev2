@@ -35,12 +35,10 @@ public class WoolBattleGame {
 
     private WoolBattleGameListener listener;
 
-
     private List<Location> playerBlocks = new ArrayList<>();
 
     private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, -20.5, 0, 0);
     private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, 7.5, -180, 0);
-
 
 
     public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2) {
@@ -58,56 +56,83 @@ public class WoolBattleGame {
         for (WoolBattlePlayer wbp : team1) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
-            setPlayerInventory(wbp);
-            setGameScoreboard(wbp);
             p.teleport(team1Spawn);
         }
         for (WoolBattlePlayer wbp : team2) {
             Player p = wbp.getPlayer();
             p.sendMessage("Woolbattle game started!");
-            setPlayerInventory(wbp);
-            setGameScoreboard(wbp);
             p.teleport(team2Spawn);
         }
 
         allPlayers.addAll(team1);
         allPlayers.addAll(team2);
 
-        for(WoolBattlePlayer wbp : allPlayers) {
+        for (WoolBattlePlayer wbp : allPlayers) {
             Player p = wbp.getPlayer();
             p.setAllowFlight(true);
+            setPlayerInventory(wbp);
+            setGameScoreboard(wbp);
+
+            PerkListenerManager.registerPerkListener(this, wbp.getActivePerk1Listener());
+            PerkListenerManager.registerPerkListener(this, wbp.getActivePerk2Listener());
+            if (wbp.getPassivePerkListener() != null) {
+                PerkListenerManager.registerPerkListener(this, wbp.getPassivePerkListener());
+            }
+            wbp.getPassivePerk().applyEffect();
+            PerkListenerManager.registerPerkListener(this, wbp.getEnderperleListener());
         }
     }
 
     public void endGame() {
-        HandlerList.unregisterAll(listener);
-
         String message;
 
-        if(team1.size() > team2.size()) {
+        if (team1.size() > team2.size()) {
             message = "Woolbattle game ended! Team 1 has won!";
         } else {
             message = "Woolbattle game ended! Team 2 has won!";
         }
 
-        for (WoolBattlePlayer wbp : team1) {
-            wbp.getPlayer().sendMessage(message);
-            WoolBattlePlayerManager.removePlayer(wbp.getPlayer());
-        }
-        for (WoolBattlePlayer wbp : team2) {
+        for (WoolBattlePlayer wbp : allPlayers) {
             wbp.getPlayer().sendMessage(message);
             WoolBattlePlayerManager.removePlayer(wbp.getPlayer());
         }
 
-        for(Location loc : playerBlocks) {
+        for (Location loc : playerBlocks) {
             loc.getBlock().setType(Material.AIR);
         }
 
         HandlerList.unregisterAll(listener);
+        PerkListenerManager.unregisterListeners(this);
+
         GameManager.removeGame(this);
     }
 
+    public void checkGameEnd() {
+        if (team1.isEmpty() || team2.isEmpty()) {
+            endGame();
+        }
+    }
+
     public void handlePlayerDeath(WoolBattlePlayer player) {
+        if (team1.contains(player)) {
+            player.getPlayer().teleport(team1Spawn);
+            if (team1Health <= 0) {
+                team1.remove(player);
+                setSpectator(player);
+                checkGameEnd();
+                return;
+            }
+
+        } else if (team2.contains(player)) {
+            player.getPlayer().teleport(team2Spawn);
+            if (team2Health <= 0) {
+                team2.remove(player);
+                setSpectator(player);
+                checkGameEnd();
+                return;
+            }
+        }
+
 
         player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
 
@@ -115,49 +140,22 @@ public class WoolBattleGame {
             player.getPlayer().setNoDamageTicks(0);
         }, 100L);
 
-        if(player.getLastHit() != null) {
-            if(Duration.between(player.getLastHit().toInstant(), Instant.now()).getSeconds() < 10) {
-                if(team1.contains(player)) {
+        if (player.getLastHit() != null) {
+            if (Duration.between(player.getLastHit().toInstant(), Instant.now()).getSeconds() < 10) {
+                if (team1.contains(player)) {
                     team1Health--;
-                } else if(team2.contains(player)) {
+                } else if (team2.contains(player)) {
                     team2Health--;
                 }
             }
         }
 
-        if(team1.contains(player)) {
-            if(team1Health == 0) {
-                team1.remove(player);
-                setSpectator(player);
-            } else {
-                player.getPlayer().teleport(team1Spawn);
-            }
-
-        } else if(team2.contains(player)) {
-            if(team2Health == 0) {
-                team2.remove(player);
-                setSpectator(player);
-            } else {
-                player.getPlayer().teleport(team2Spawn);
-            }
-        }
-
         player.setFreezed(false);
 
-        if(team1.size() == 0 && team2.size() == 0) {
-            endGame();
-        }
 
-        for (WoolBattlePlayer wbp : team1) {
+        for (WoolBattlePlayer wbp : allPlayers) {
             setGameScoreboard(wbp);
         }
-        for (WoolBattlePlayer wbp : team2) {
-            setGameScoreboard(wbp);
-        }
-
-        //player.setActivePerk1LastUsed(0);
-        //player.setActivePerk2LastUsed(0);
-
     }
 
     public void handleWoolPlace(WoolBattlePlayer player, Block block) {
@@ -168,11 +166,10 @@ public class WoolBattleGame {
     public void handleWoolBreak(Player p, Block block) {
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
 
-        if(player.getWool() < 192) {
-            player.addWool(1);
-        }
 
-        if(playerBlocks.contains(block.getLocation())) {
+        player.addWool(player.getWoolBreakMultiplier());
+
+        if (playerBlocks.contains(block.getLocation())) {
             block.getLocation().getBlock().setType(Material.AIR);
             playerBlocks.remove(block.getLocation());
         }
@@ -182,7 +179,7 @@ public class WoolBattleGame {
         WoolBattlePlayer wbpDamager = WoolBattlePlayerManager.getWoolBattlePlayer(damager);
         WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
 
-        if(team1.contains(wbpDamager) && team1.contains(wbpTarget) || team2.contains(wbpDamager) && team2.contains(wbpTarget)) {
+        if (team1.contains(wbpDamager) && team1.contains(wbpTarget) || team2.contains(wbpDamager) && team2.contains(wbpTarget)) {
             return true;
         } else {
             return false;
@@ -198,15 +195,18 @@ public class WoolBattleGame {
         bow.addEnchantment(Enchantment.PUNCH, 2);
         bow.addEnchantment(Enchantment.INFINITY, 1);
         bow.addEnchantment(Enchantment.UNBREAKING, 1);
+        bow.addUnsafeEnchantment(Enchantment.KNOCKBACK, 3);
 
         ItemMeta bowMeta = bow.getItemMeta();
         bowMeta.setDisplayName(ChatColor.GOLD + "Bow");
         bowMeta.setUnbreakable(true);
         bow.setItemMeta(bowMeta);
 
+
         ItemStack shears = new ItemStack(Material.SHEARS);
         shears.addEnchantment(Enchantment.EFFICIENCY, 5);
         shears.addEnchantment(Enchantment.UNBREAKING, 1);
+        shears.addUnsafeEnchantment(Enchantment.KNOCKBACK, 3);
 
         ItemMeta shearsMeta = shears.getItemMeta();
         shearsMeta.setDisplayName(ChatColor.GOLD + "Shears");
@@ -217,8 +217,10 @@ public class WoolBattleGame {
         playerInv.setItem(1, shears);
         playerInv.setItem(2, player.getActivePerk1().addEnchantment(player.getActivePerk1().getItem()));
         playerInv.setItem(3, player.getActivePerk2().addEnchantment(player.getActivePerk2().getItem()));
-        playerInv.setItem(4, player.getEnderperle().getItem());
+        playerInv.setItem(4, player.getEnderperle().addEnchantment(player.getEnderperle().getItem()));
 
+        playerInv.setItem(8, player.getPassivePerk().getItem());
+        player.getPassivePerk().applyEffect();
 
 
         playerInv.setItem(17, new ItemStack(Material.ARROW, 1));
@@ -240,7 +242,7 @@ public class WoolBattleGame {
     }
 
     public boolean isPlayerInGame(WoolBattlePlayer player) {
-        if(team1.contains(player) || team2.contains(player)) {
+        if (team1.contains(player) || team2.contains(player)) {
             return true;
         } else {
             return false;
@@ -249,7 +251,7 @@ public class WoolBattleGame {
 
     public boolean isPlayerInGame(Player p) {
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
-        if(team1.contains(player) || team2.contains(player)) {
+        if (team1.contains(player) || team2.contains(player)) {
             return true;
         } else {
             return false;
@@ -265,6 +267,6 @@ public class WoolBattleGame {
     }
 
     public void setSpectator(WoolBattlePlayer player) {
-
+        System.out.println("set " + player.getPlayer().getName() + " spectator");
     }
 }

@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
@@ -13,9 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class Schutzschild extends ActivePerk implements Listener {
     public Schutzschild(WoolBattlePlayer p) {
         super(15, 32, p, ChatColor.GOLD + "Schutzschild", Material.BEACON, "Macht dich für kurze Zeit immun gegen Pfeiltreffer");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

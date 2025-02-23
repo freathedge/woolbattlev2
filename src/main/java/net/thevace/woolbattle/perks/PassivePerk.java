@@ -30,6 +30,6 @@ public abstract class PassivePerk extends Perk {
         super(0, 0, p, itemName, item, description);
     }
 
-    protected abstract void applyEffect();
+    public abstract void applyEffect();
 
 }

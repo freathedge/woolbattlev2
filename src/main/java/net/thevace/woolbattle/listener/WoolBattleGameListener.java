@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -40,14 +41,8 @@ public class WoolBattleGameListener implements Listener {
         if(block.getType() != Material.AIR) {
             player.setLastBlockLocation(block.getLocation());
         }
-
-
         if (player.isFreezed()) {
-            if (event.getFrom().getX() != event.getTo().getX() ||
-                    event.getFrom().getZ() != event.getTo().getZ() ||
-                    event.getFrom().getY() < event.getTo().getY()) {
-                event.setTo(event.getFrom());
-            }
+            p.setWalkSpeed(0);
         }
         if (event.getTo().getY() < 0) {
             game.handlePlayerDeath(player);
@@ -129,6 +124,7 @@ public class WoolBattleGameListener implements Listener {
             if (projectile.getShooter() instanceof Player) {
                 damager = (Player) projectile.getShooter();
             }
+            projectile.remove();
         }
 
         if (event.getEntity() instanceof Player) {
@@ -142,7 +138,11 @@ public class WoolBattleGameListener implements Listener {
             return;
         }
 
-       WoolBattlePlayerManager.getWoolBattlePlayer(target).setLastHit(Timestamp.valueOf(LocalDateTime.now()));
+        if(event.getDamager() instanceof Arrow arrow) {
+            arrow.remove();
+        }
+
+        WoolBattlePlayerManager.getWoolBattlePlayer(target).setLastHit(Timestamp.valueOf(LocalDateTime.now()));
 
         event.setDamage(0.000001);
     }
@@ -157,11 +157,7 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
-
-        System.out.println("Flight toggled");
-
         Player p = event.getPlayer();
-
         if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
@@ -178,5 +174,10 @@ public class WoolBattleGameListener implements Listener {
             p.setVelocity(direction);
         }
 
+    }
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        event.setCancelled(true);
     }
 }

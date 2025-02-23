@@ -1,6 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
 import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -13,9 +14,6 @@ public class Tuermchenbauer extends ActivePerk implements Listener {
 
     public Tuermchenbauer(WoolBattlePlayer p) {
         super(15, 20, p, ChatColor.GOLD + "Türmchenbauer", Material.LADDER, "Erschafft einen Vertikalen Turm unter dir");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override

@@ -1,24 +1,29 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class Pfeilbombe extends ActivePerk implements Listener {
 
     public Pfeilbombe(WoolBattlePlayer p) {
         super(15, 10, p, ChatColor.GOLD + "Pfeilbombe", Material.FIREWORK_STAR, "Schießt Pfeile in jede Richtung und kann Feind als auch Freund treffen");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override
@@ -69,6 +74,7 @@ public class Pfeilbombe extends ActivePerk implements Listener {
                     arrow.setShooter(player.getPlayer());
                     Vector direction = new Vector(xDirection, yDirection, zDirection).normalize().multiply(1);
                     arrow.setVelocity(direction);
+
                 }
             }
         }

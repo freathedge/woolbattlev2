@@ -1,5 +1,7 @@
 package net.thevace.woolbattle.perks.activeperks;
 
+import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.Bukkit;
@@ -14,9 +16,6 @@ import org.bukkit.util.Vector;
 public class Uhr extends ActivePerk implements Listener {
     public Uhr(WoolBattlePlayer p) {
         super(20, 30, p, ChatColor.GOLD + "Uhr", Material.CLOCK, "Teleportiere dich zu dem letzten Block auf dem du gestanden bist");
-        if(p != null) {
-            Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugin("WoolBattle"));
-        }
     }
 
     @Override
