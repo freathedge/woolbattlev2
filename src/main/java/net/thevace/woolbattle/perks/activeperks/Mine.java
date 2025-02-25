@@ -48,6 +48,7 @@ public class Mine extends ActivePerk implements Listener {
         if (event.getAction() == Action.PHYSICAL) {
             Block block = event.getClickedBlock();
             if (block != null && block.getType() == Material.STONE_PRESSURE_PLATE) {
+                block.setType(Material.AIR);
                 Location loc = block.getLocation();
                 for (Player player : loc.getWorld().getPlayers()) {
                     Location playerLoc = player.getLocation();
@@ -67,7 +68,6 @@ public class Mine extends ActivePerk implements Listener {
                     player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f);
                 }
 
-                event.getClickedBlock().setType(Material.AIR);
             }
         }
     }
