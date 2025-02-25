@@ -38,7 +38,7 @@ public class WoolBattlePlayer {
     private int woolBreakMultiplier = 1;
 
     private double doubleJumpVerticalPower = 1.0;
-    private double doubleJumpHorizontalPower = 1.0;
+    private double doubleJumpHorizontalPower = 0.0;
 
     private int arrowsShot = 0;
 

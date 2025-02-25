@@ -44,13 +44,7 @@ public class PlayerInteraction implements Listener {
                 viewFrame.open(Voting.class, player);
                 event.setCancelled(true);
             }
-
-
-
         }
-
-
-
     }
 
 }

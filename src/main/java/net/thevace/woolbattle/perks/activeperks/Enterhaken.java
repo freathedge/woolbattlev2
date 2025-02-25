@@ -19,16 +19,11 @@ import java.sql.Timestamp;
 
 public class Enterhaken extends ActivePerk implements Listener {
 
-    Block targetBlock;
 
-    PlayerFishEvent event;
+    private PlayerFishEvent event;
 
     public Enterhaken(WoolBattlePlayer p) {
         super(12, 10, p, ChatColor.GOLD + "Enterhaken", Material.FISHING_ROD, "Ziehe dich dorthin wo die Angel trifft");
-    }
-
-    public void setEvent(PlayerFishEvent event) {
-        this.event = event;
     }
 
     @Override
@@ -44,7 +39,7 @@ public class Enterhaken extends ActivePerk implements Listener {
     @EventHandler
     public void onFish(PlayerFishEvent event) {
 
-        setEvent(event);
+        this.event = event;
 
         Player p = event.getPlayer();
         ItemStack fishingItem = p.getInventory().getItemInMainHand();

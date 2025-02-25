@@ -67,7 +67,9 @@ public abstract class ActivePerk extends Perk {
 
 
     protected void withdrawWool() {
-        player.removeWool(preis);
+        if(preis > 0) {
+            player.removeWool(preis);
+        }
     }
 
     public void cancelEvent() {
