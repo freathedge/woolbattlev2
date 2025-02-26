@@ -3,6 +3,7 @@ package net.thevace.woolbattle.perks.activeperks;
 import net.thevace.woolbattle.*;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,8 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+
+import java.util.Objects;
 
 public class Freeze extends ActivePerk implements Listener {
 
@@ -61,20 +64,20 @@ public class Freeze extends ActivePerk implements Listener {
 
                 if (!"freeze".equals(perkType)) return;
 
-
                 Player player = (Player) snowball.getShooter();
                 Player target = (Player) event.getHitEntity();
                 WoolBattleGame game = GameManager.getPlayerGame(player);
 
                 if (player != null && target != null) {
                     if (!game.handlePlayerHit(player, target)) {
-
-                        WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
-                        wbpTarget.setFreezed(true);
-
+                        target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0);
+                        target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
+                        target.setAllowFlight(false);
                         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
-                            wbpTarget.setFreezed(false);
-                        }, 200L);
+                            target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
+                            target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.42);
+                            target.setAllowFlight(true);
+                        }, 100L);
                     }
                 }
             }

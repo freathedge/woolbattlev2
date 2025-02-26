@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -37,8 +38,8 @@ public class WoolBattleGame {
 
     private List<Location> playerBlocks = new ArrayList<>();
 
-    private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, -20.5, 0, 0);
-    private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), 10.5, 21, 7.5, -180, 0);
+    private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 26.5, 95, 0.5, 90, 0);
+    private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), -25.5, 95, 0.5, -90, 0);
 
 
     public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2) {
@@ -150,7 +151,9 @@ public class WoolBattleGame {
             }
         }
 
-        player.setFreezed(false);
+        player.getPlayer().getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
+        player.getPlayer().getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.42);
+        player.getPlayer().setAllowFlight(true);
 
 
         for (WoolBattlePlayer wbp : allPlayers) {

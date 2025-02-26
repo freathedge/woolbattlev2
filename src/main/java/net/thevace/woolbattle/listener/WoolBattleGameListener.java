@@ -5,6 +5,7 @@ import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.activeperks.*;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
@@ -41,9 +42,7 @@ public class WoolBattleGameListener implements Listener {
         if(block.getType() != Material.AIR) {
             player.setLastBlockLocation(block.getLocation());
         }
-        if (player.isFreezed()) {
-            p.setWalkSpeed(0);
-        }
+
         if (event.getTo().getY() < 0) {
             game.handlePlayerDeath(player);
         }
@@ -176,8 +175,6 @@ public class WoolBattleGameListener implements Listener {
             } else {
                 direction = new Vector(0, player.getDoubleJumpVerticalPower(), 0);
             }
-
-
 
             p.setVelocity(direction);
         }

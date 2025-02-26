@@ -18,7 +18,6 @@ public class WoolBattlePlayer {
 
     private Player player;
     private boolean isProtected = false;
-    private boolean isFreezed = false;
     private Location lastBlockLocation;
     private Timestamp lastHit;
 
@@ -194,14 +193,6 @@ public class WoolBattlePlayer {
 
     public void setProtected(boolean isProtected) {
         this.isProtected = isProtected;
-    }
-
-    public boolean isFreezed() {
-        return isFreezed;
-    }
-
-    public void setFreezed(boolean isFreezed) {
-        this.isFreezed = isFreezed;
     }
 
     // Location-Management

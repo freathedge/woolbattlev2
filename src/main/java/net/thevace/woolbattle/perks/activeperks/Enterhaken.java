@@ -41,21 +41,24 @@ public class Enterhaken extends ActivePerk implements Listener {
 
         this.event = event;
 
+
         Player p = event.getPlayer();
-        ItemStack fishingItem = p.getInventory().getItemInMainHand();
-        if(fishingItem.getItemMeta().getDisplayName().equals(itemName)) {
-            if(event.getState().equals(PlayerFishEvent.State.FISHING)) {
-                Timestamp lastUsed = null;
-                if(player.getActivePerk1().equals(this)) {
-                    lastUsed = player.getActivePerk1LastUsed();
-                } else if(player.getActivePerk2().equals(this)) {
-                    lastUsed = player.getActivePerk2LastUsed();
+        if(p.equals(player.getPlayer())) {
+            ItemStack fishingItem = p.getInventory().getItemInMainHand();
+            if(fishingItem.getItemMeta().getDisplayName().equals(itemName)) {
+                if(event.getState().equals(PlayerFishEvent.State.FISHING)) {
+                    Timestamp lastUsed = null;
+                    if(player.getActivePerk1().equals(this)) {
+                        lastUsed = player.getActivePerk1LastUsed();
+                    } else if(player.getActivePerk2().equals(this)) {
+                        lastUsed = player.getActivePerk2LastUsed();
+                    }
+                    if(!canUsePerk(lastUsed) || !hasEnoughMoney()) {
+                        event.setCancelled(true);
+                    }
+                } else if(event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND )) {
+                    activate();
                 }
-                if(!canUsePerk(lastUsed) || !hasEnoughMoney()) {
-                    event.setCancelled(true);
-                }
-            } else if(event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND )) {
-                activate();
             }
         }
     }
