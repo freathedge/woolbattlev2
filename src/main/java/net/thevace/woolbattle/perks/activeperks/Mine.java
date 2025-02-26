@@ -28,17 +28,21 @@ public class Mine extends ActivePerk implements Listener {
 
     @Override
     protected void applyEffect() {
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
+            plateLocation.getBlock().setType(Material.STONE_PRESSURE_PLATE);
+        }, 1L);
     }
+
 
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (event.getBlockPlaced().getType() == Material.STONE_PRESSURE_PLATE) {
-
             Player p = event.getPlayer();
             if(p.equals(player.getPlayer())) {
                 plateLocation = event.getBlockPlaced().getLocation();
                 activate();
+                event.setCancelled(true);
             }
         }
     }
@@ -48,7 +52,9 @@ public class Mine extends ActivePerk implements Listener {
         if (event.getAction() == Action.PHYSICAL) {
             Block block = event.getClickedBlock();
             if (block != null && block.getType() == Material.STONE_PRESSURE_PLATE) {
-                block.setType(Material.AIR);
+                Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
+                    block.setType(Material.AIR);
+                }, 1L);
                 Location loc = block.getLocation();
                 for (Player player : loc.getWorld().getPlayers()) {
                     Location playerLoc = player.getLocation();
