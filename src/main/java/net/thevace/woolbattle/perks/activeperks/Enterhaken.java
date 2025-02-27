@@ -56,7 +56,10 @@ public class Enterhaken extends ActivePerk implements Listener {
                     if(!canUsePerk(lastUsed) || !hasEnoughMoney()) {
                         event.setCancelled(true);
                     }
-                } else if(event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND )) {
+                } else if (event.getState().equals(PlayerFishEvent.State.CAUGHT_FISH) || event.getState().equals(PlayerFishEvent.State.CAUGHT_ENTITY )) {
+                    event.setCancelled(true);
+                    event.getHook().remove();
+                } else if (event.getState().equals(PlayerFishEvent.State.REEL_IN) || event.getState().equals(PlayerFishEvent.State.IN_GROUND)) {
                     activate();
                 }
             }

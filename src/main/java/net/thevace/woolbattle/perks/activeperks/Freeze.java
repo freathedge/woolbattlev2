@@ -36,10 +36,6 @@ public class Freeze extends ActivePerk implements Listener {
     }
 
 
-    public void setTarget(WoolBattlePlayer target) {
-        this.target = target;
-    }
-
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {

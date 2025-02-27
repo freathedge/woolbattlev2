@@ -57,7 +57,7 @@ public class WoolBattleGameListener implements Listener {
         Block block = event.getBlock();
         Player p = event.getPlayer();
 
-        if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
+        if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL || block.getType() == Material.GRAY_WOOL || block.getType() == Material.GREEN_WOOL) {
             game.handleWoolBreak(p, block);
             p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1.0f, 1.0f);
         }
@@ -97,6 +97,16 @@ public class WoolBattleGameListener implements Listener {
             }
 
             event.getEntity().remove();
+        } else if (event.getEntity() instanceof EnderPearl enderPearl) {
+            if (event.getHitEntity() instanceof Player) {
+                Player damager = (Player) enderPearl.getShooter();
+                Player target = (Player) event.getHitEntity();
+                if(target != null && damager != null) {
+                    damager.teleport(target.getLocation());
+                    damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
+                }
+
+            }
         }
     }
 
