@@ -38,7 +38,8 @@ public class PerkManager {
             Pfeilregen.class,
             RueckstossPfeil.class,
             FastArrow.class,
-            Reflektor.class
+            Reflektor.class,
+            TNTPfeil.class
     );
 
 

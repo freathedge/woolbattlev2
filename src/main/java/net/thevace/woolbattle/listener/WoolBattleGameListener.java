@@ -14,10 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -70,22 +67,20 @@ public class WoolBattleGameListener implements Listener {
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
         if (event.getEntity() instanceof Arrow arrow) {
+            arrow.remove();
             if (event.getHitEntity() instanceof Player) {
                 Player damager = (Player) arrow.getShooter();
                 Player target = (Player) event.getHitEntity();
                 if(target != null && damager != null) {
                     if(target == damager) {
                         event.setCancelled(true);
-                        event.getEntity().remove();
                     }
                     if(!game.handlePlayerHit(damager, target)){
                         if (WoolBattlePlayerManager.getWoolBattlePlayer(target).isProtected()) {
                             event.setCancelled(true);
-                            event.getEntity().remove();
                         }
                     }
                 }
-
             }
             if (event.getHitBlock() != null) {
                 Block block = event.getHitBlock();
@@ -95,8 +90,6 @@ public class WoolBattleGameListener implements Listener {
                     }
                 }
             }
-
-            event.getEntity().remove();
         } else if (event.getEntity() instanceof EnderPearl enderPearl) {
             if (event.getHitEntity() instanceof Player) {
                 Player damager = (Player) enderPearl.getShooter();
