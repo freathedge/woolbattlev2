@@ -7,6 +7,7 @@ import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.PassivePerk;
 import net.thevace.woolbattle.perks.Perk;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -36,15 +37,15 @@ public class Reflektor extends PassivePerk implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Player)) return;
-
         Player defender = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
 
-        if(!attacker.equals(player.getPlayer())) return;
+        if(!defender.equals(player.getPlayer())) return;
+        if(GameManager.getPlayerGame(defender).handlePlayerHit(defender, attacker)) return;
 
         if(attacker != player.getPlayer()) {
-            if (random.nextInt(100) < 5) {
+            if (random.nextInt(100) < 100) {
+                Bukkit.broadcastMessage("knockback reversed");
                 Vector reverseDirection = attacker.getLocation().toVector().subtract(defender.getLocation().toVector()).normalize();
 
                 ItemStack weapon = attacker.getInventory().getItemInMainHand();

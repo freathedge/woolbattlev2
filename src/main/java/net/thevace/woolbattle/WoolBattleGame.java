@@ -314,6 +314,6 @@ public class WoolBattleGame {
                     p.sendActionBar(message);
                 }
             }
-        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 10L);
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 5L);
     }
 }

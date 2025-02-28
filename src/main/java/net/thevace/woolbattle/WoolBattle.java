@@ -6,14 +6,14 @@ import net.thevace.woolbattle.commands.tabcompleter.QueueTabCompleter;
 import net.thevace.woolbattle.inventorys.*;
 import net.thevace.woolbattle.listener.PlayerInteraction;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class WoolBattle extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-
 
         WoolBattlePlayerManager playerManager = new WoolBattlePlayerManager();
         PerkManager perkManager = new PerkManager();
@@ -43,6 +43,14 @@ public final class WoolBattle extends JavaPlugin {
         this.getCommand("joinQueue").setTabCompleter(new QueueTabCompleter(queueManager));
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteraction(viewFrame, queueManager), this);
+
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+            world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+            world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+            world.setGameRule(GameRule.DISABLE_RAIDS, true);
+            world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        }
 
 
     }

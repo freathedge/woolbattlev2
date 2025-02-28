@@ -3,6 +3,7 @@ package net.thevace.woolbattle.perks;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +49,7 @@ public abstract class ActivePerk extends Perk {
     protected boolean canUsePerk(Timestamp lastUsed) {
         if (lastUsed == null) return true;
         if (Duration.between(lastUsed.toInstant(), Instant.now()).getSeconds() < cooldown) {
-            player.getPlayer().sendMessage("§cDieses Perk ist noch im Cooldown!");
+            player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
             return false;
         }
         return true;
@@ -60,7 +61,8 @@ public abstract class ActivePerk extends Perk {
 
     protected boolean hasEnoughMoney() {
         if (player.getWool() < preis) {
-            player.getPlayer().sendMessage("§cDu hast nicht genug Geld für diesen Perk!");
+            player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+
         }
         return player.getWool() >= preis;
     }

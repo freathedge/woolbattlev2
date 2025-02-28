@@ -34,6 +34,8 @@ public class WoolBattleGameListener implements Listener {
     public void onMove(PlayerMoveEvent event) {
         Player p = event.getPlayer();
 
+        if(!WoolBattlePlayerManager.isRegistered(p) || !game.isPlayerInGame(p)) return;
+
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
         Block block = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
@@ -45,9 +47,15 @@ public class WoolBattleGameListener implements Listener {
             game.handlePlayerDeath(player);
         }
 
+        player.setInDoubleJump(false);
+        if(player.getWool() < 5 ) {
+            p.setAllowFlight(false);
+            return;
+        }
+
         if(((Entity) p).isOnGround()) {
             p.setAllowFlight(true);
-            player.setInDoubleJump(false);
+
         }
 
     }
@@ -56,6 +64,9 @@ public class WoolBattleGameListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         Player p = event.getPlayer();
+
+        if(!WoolBattlePlayerManager.isRegistered(p) || !game.isPlayerInGame(p)) return;
+
 
         if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL || block.getType() == Material.GRAY_WOOL || block.getType() == Material.GREEN_WOOL) {
             game.handleWoolBreak(p, block);
@@ -69,7 +80,11 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
-        WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer((Player) event.getEntity().getShooter());
+        Player pl = (Player) event.getEntity().getShooter();
+
+        if(!WoolBattlePlayerManager.isRegistered(pl) || !game.isPlayerInGame(pl)) return;
+
+        WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(pl);
         if (event.getEntity() instanceof Arrow arrow) {
             arrow.remove();
             if (event.getHitEntity() instanceof Player p) {
@@ -116,6 +131,10 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
+        Player p = event.getPlayer();
+        if(!WoolBattlePlayerManager.isRegistered(p) || !game.isPlayerInGame(p)) return;
+
+
         if(event.getBlock().getType() == Material.RED_WOOL || event.getBlock().getType() == Material.BLUE_WOOL) {
             WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(event.getPlayer());
             game.handleWoolPlace(player, event.getBlock());
@@ -124,14 +143,16 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
+        Player p = (Player) event.getEntity();
+        if(!WoolBattlePlayerManager.isRegistered(p) || !game.isPlayerInGame(p)) return;
+
+
         Player damager = null;
         Player target = null;
 
         if (event.getDamager() instanceof Player) {
             damager = (Player) event.getDamager();
-        }
-
-        if (event.getDamager() instanceof Projectile) {
+        }else if (event.getDamager() instanceof Projectile) {
             Projectile projectile = (Projectile) event.getDamager();
             if (projectile.getShooter() instanceof Player) {
                 damager = (Player) projectile.getShooter();
@@ -145,7 +166,7 @@ public class WoolBattleGameListener implements Listener {
 
         if (damager == null || target == null) return;
 
-        if(!damager.equals(target) && damager instanceof Player) {
+        if(!damager.equals(target)) {
             WoolBattlePlayerManager.getWoolBattlePlayer(target).setLastHitter(damager);
         }
 
@@ -174,16 +195,20 @@ public class WoolBattleGameListener implements Listener {
     @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         Player p = event.getPlayer();
-        if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
+        if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR ||!WoolBattlePlayerManager.isRegistered(p) || !game.isPlayerInGame(p)) {
             return;
         }
 
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
 
-        if(!player.canDoubleJump()) {
+
+        if(player.getWool() < 5 ||!player.canDoubleJump()) {
             event.setCancelled(true);
             return;
+        } else {
+            player.removeWool(5);
         }
+
 
         if (!p.isFlying()) {
             event.setCancelled(true);
@@ -200,12 +225,49 @@ public class WoolBattleGameListener implements Listener {
 
             p.setVelocity(direction);
             player.setInDoubleJump(true);
+            startDJCooldown(player);
         }
+    }
 
+    public void startDJCooldown(WoolBattlePlayer player) {
+        player.setCanDoubleJump(false);
+        player.getPlayer().setFoodLevel(6);
+
+        new BukkitRunnable() {
+            int currentFoodLevel = 6;
+
+            @Override
+            public void run() {
+                if(currentFoodLevel < 20) {
+                    currentFoodLevel += 1;
+                    player.getPlayer().setFoodLevel(currentFoodLevel);
+                } else {
+                    cancel();
+                    player.setCanDoubleJump(true);
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 1L, 5L);
     }
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
-        event.setCancelled(true);
+        if (event.getItemDrop().getItemStack().getType() != Material.RED_WOOL || event.getItemDrop().getItemStack().getType() != Material.BLUE_WOOL) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBowShoot(EntityShootBowEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player shooter = (Player) event.getEntity();
+            WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(shooter);
+
+            if(player.getWool() >= 1) {
+                player.removeWool(1);
+            } else {
+                player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
+            }
+
+        }
     }
 }
