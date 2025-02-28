@@ -2,7 +2,6 @@ package net.thevace.woolbattle;
 
 import net.thevace.woolbattle.perks.*;
 import net.thevace.woolbattle.perks.activeperks.*;
-import net.thevace.woolbattle.perks.activeperks.Enterhaken;
 import net.thevace.woolbattle.perks.passiveperks.*;
 
 import java.util.List;
@@ -39,7 +38,9 @@ public class PerkManager {
             RueckstossPfeil.class,
             FastArrow.class,
             Reflektor.class,
-            TNTPfeil.class
+            TNTPfeil.class,
+            Bohrpfeil.class,
+            Stampfer.class
     );
 
 

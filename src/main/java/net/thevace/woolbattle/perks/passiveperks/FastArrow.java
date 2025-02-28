@@ -20,22 +20,17 @@ public class FastArrow extends PassivePerk implements Listener {
         super(3, p, ChatColor.GOLD + "Fast-Arrow", Material.ARROW, "Geschossene Pfeile fliegen um 20% schneller");
     }
 
-    @Override
-    public void applyEffect() {
-
-    }
-
     @EventHandler
     public void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             Player shooter = (Player) event.getEntity();
             Projectile projectile = (Projectile) event.getProjectile();
 
-            if(shooter.equals(player.getPlayer())) {
-                if (projectile instanceof Arrow) {
-                    Arrow arrow = (Arrow) projectile;
-                    arrow.setVelocity(arrow.getVelocity().multiply(1.2));
-                }
+            if(!shooter.equals(player.getPlayer())) return;
+
+            if (projectile instanceof Arrow) {
+                Arrow arrow = (Arrow) projectile;
+                arrow.setVelocity(arrow.getVelocity().multiply(1.2));
             }
 
         }

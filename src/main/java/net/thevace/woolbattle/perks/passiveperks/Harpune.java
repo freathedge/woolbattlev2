@@ -10,9 +10,4 @@ public class Harpune extends PassivePerk {
     public Harpune(WoolBattlePlayer p) {
         super(15, 4, p, ChatColor.GOLD + "Harpune", Material.SPECTRAL_ARROW, "Zieht den getroffenen Spieler zum Spieler, welcher geschossen hat");
     }
-
-    @Override
-    public void applyEffect() {
-
-    }
 }

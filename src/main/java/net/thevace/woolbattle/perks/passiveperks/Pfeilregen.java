@@ -23,9 +23,7 @@ public class Pfeilregen extends PassivePerk implements Listener {
         super(5, p, ChatColor.GOLD + "Pfeilregen", Material.ARROW, "Schieße alle 10 Pfeile 5 Pfeile auf einmal");
     }
 
-    @Override
-    public void applyEffect() {
-    }
+
 
     @EventHandler
     public void onBowShoot(EntityShootBowEvent event) {
@@ -33,27 +31,26 @@ public class Pfeilregen extends PassivePerk implements Listener {
             Player shooter = (Player) event.getEntity();
             Projectile projectile = (Projectile) event.getProjectile();
 
-            if(shooter.equals(player.getPlayer())) {
-                if (projectile instanceof Arrow) {
-                    player.setArrowsShot(player.getArrowsShot() + 1);
-                    if(player.getArrowsShot() >= 10) {
-                        for (int i = 0; i < 4; i++) {
-                            Arrow newArrow = shooter.launchProjectile(Arrow.class);
-                            Vector direction = projectile.getVelocity().clone();
-                            double spread = 0.3;
-                            direction.setX(direction.getX() + (Math.random() - 0.5) * spread);
-                            direction.setY(direction.getY() + (Math.random() - 0.5) * spread);
-                            direction.setZ(direction.getZ() + (Math.random() - 0.5) * spread);
+            if(!shooter.equals(player.getPlayer())) return;
 
-                            newArrow.setVelocity(direction);
-                            newArrow.setShooter(shooter);
-                            newArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                        }
-                        player.setArrowsShot(0);
+            if (projectile instanceof Arrow) {
+                player.setArrowsShot(player.getArrowsShot() + 1);
+                if(player.getArrowsShot() >= 10) {
+                    for (int i = 0; i < 4; i++) {
+                        Arrow newArrow = shooter.launchProjectile(Arrow.class);
+                        Vector direction = projectile.getVelocity().clone();
+                        double spread = 0.3;
+                        direction.setX(direction.getX() + (Math.random() - 0.5) * spread);
+                        direction.setY(direction.getY() + (Math.random() - 0.5) * spread);
+                        direction.setZ(direction.getZ() + (Math.random() - 0.5) * spread);
+
+                        newArrow.setVelocity(direction);
+                        newArrow.setShooter(shooter);
+                        newArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
                     }
+                    player.setArrowsShot(0);
                 }
             }
-
         }
     }
 

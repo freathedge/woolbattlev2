@@ -30,6 +30,11 @@ public abstract class PassivePerk extends Perk {
         super(0, 0, p, itemName, item, description);
     }
 
-    public abstract void applyEffect();
+    public void applyEffect() {
+    }
+
+    protected boolean hasEnoughMoney() {
+        return player.getWool() >= preis;
+    }
 
 }

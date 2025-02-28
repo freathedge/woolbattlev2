@@ -5,8 +5,8 @@ import me.devnatan.inventoryframework.ViewConfigBuilder;
 import me.devnatan.inventoryframework.context.RenderContext;
 
 import net.thevace.woolbattle.PerkManager;
-import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
+import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,8 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ActivePerk1Selector extends View {
 
     PerkManager perkManager;
-
-
 
     public ActivePerk1Selector(PerkManager perkManager) {
         this.perkManager = perkManager;

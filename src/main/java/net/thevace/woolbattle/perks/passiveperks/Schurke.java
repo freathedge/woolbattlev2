@@ -25,13 +25,11 @@ public class Schurke extends PassivePerk implements Listener {
         super(p, ChatColor.GOLD + "Schurke", Material.GOLD_INGOT, "Beim Treffen eines Gegners gibt es eine fünf Prozentige Chance, zwischen 4 und 16 Wolle aus dem Inventar des Gegners zu klauen");
     }
 
-    @Override
-    public void applyEffect() {
-
-    }
-
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
+
+        if(!event.getDamager().equals(player.getPlayer())) return;
+
         Player damager = null;
         Player target = null;
 

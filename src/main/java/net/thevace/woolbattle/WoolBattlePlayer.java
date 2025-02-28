@@ -41,6 +41,12 @@ public class WoolBattlePlayer {
 
     private int arrowsShot = 0;
 
+    private boolean canDoubleJump = true;
+
+    private int woolDamage = 1;
+
+    private boolean isInDoubleJump = false;
+
     public WoolBattlePlayer(Player player) {
         this.player = player;
     }
@@ -96,6 +102,14 @@ public class WoolBattlePlayer {
 
     public void setWoolBreakMultiplier(int woolBreakMultiplier) {
         this.woolBreakMultiplier = woolBreakMultiplier;
+    }
+
+    public int getWoolDamage() {
+        return woolDamage;
+    }
+
+    public void setWoolDamage(int woolDamage) {
+        this.woolDamage = woolDamage;
     }
 
     // Perk-Zugriff
@@ -219,6 +233,22 @@ public class WoolBattlePlayer {
 
     public void setDoubleJumpHorizontalPower(double doubleJumpHorizontalPower) {
         this.doubleJumpHorizontalPower = doubleJumpHorizontalPower;
+    }
+
+    public boolean canDoubleJump() {
+        return canDoubleJump;
+    }
+
+    public void setCanDoubleJump(boolean canDoubleJump) {
+        this.canDoubleJump = canDoubleJump;
+    }
+
+    public boolean isInDoubleJump() {
+        return isInDoubleJump;
+    }
+
+    public void setInDoubleJump(boolean inDoubleJump) {
+        isInDoubleJump = inDoubleJump;
     }
 
     // Pfeil-Statistik

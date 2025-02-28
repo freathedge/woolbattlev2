@@ -46,6 +46,7 @@ public class WoolBattleGameListener implements Listener {
 
         if(((Entity) p).isOnGround()) {
             p.setAllowFlight(true);
+            player.setInDoubleJump(false);
         }
     }
 
@@ -66,6 +67,7 @@ public class WoolBattleGameListener implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
+        WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer((Player) event.getEntity().getShooter());
         if (event.getEntity() instanceof Arrow arrow) {
             arrow.remove();
             if (event.getHitEntity() instanceof Player) {
@@ -86,7 +88,12 @@ public class WoolBattleGameListener implements Listener {
                 Block block = event.getHitBlock();
                 if (block.getType() == Material.RED_WOOL || block.getType() == Material.BLUE_WOOL) {
                     if(game.getPlayerBlocks().contains(block.getLocation())) {
-                        block.setType(Material.AIR);
+                        game.addBlockHit(block.getLocation(), player.getWoolDamage());
+                        if(game.getBlockHit(block.getLocation()) >= 3)  {
+                            block.setType(Material.AIR);
+                            game.getPlayerBlocks().remove(block.getLocation());
+                        }
+
                     }
                 }
             }
@@ -166,6 +173,11 @@ public class WoolBattleGameListener implements Listener {
 
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
 
+        if(!player.canDoubleJump()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (!p.isFlying()) {
             event.setCancelled(true);
             p.setAllowFlight(false);
@@ -180,6 +192,7 @@ public class WoolBattleGameListener implements Listener {
             }
 
             p.setVelocity(direction);
+            player.setInDoubleJump(true);
         }
 
     }

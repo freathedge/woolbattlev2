@@ -68,11 +68,11 @@ public class Freeze extends ActivePerk implements Listener {
                     if (!game.handlePlayerHit(player, target)) {
                         target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0);
                         target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
-                        target.setAllowFlight(false);
+                        WoolBattlePlayerManager.getWoolBattlePlayer(target).setCanDoubleJump(false);
                         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
                             target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
                             target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.42);
-                            target.setAllowFlight(true);
+                            WoolBattlePlayerManager.getWoolBattlePlayer(target).setCanDoubleJump(true);
                         }, 100L);
                     }
                 }

@@ -25,19 +25,16 @@ public class FreezeArrow extends PassivePerk implements Listener {
         super(4, p, ChatColor.GOLD + "Freeze-Arrow", Material.BLUE_ICE, "Schießt alle 10 Pfeile einen Eis Pfeil, welcher den Spieler temporär einfrieren lässt");
     }
 
-    @Override
-    public void applyEffect() {
-    }
 
     @EventHandler
     public void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player shooter) {
+
             Projectile projectile = (Projectile) event.getProjectile();
 
-            if(shooter.equals(player.getPlayer())) {
-                if (projectile instanceof Arrow) {
-                    player.setArrowsShot(player.getArrowsShot() + 1);
-                }
+            if(!shooter.equals(player.getPlayer())) return;
+            if (projectile instanceof Arrow) {
+                player.setArrowsShot(player.getArrowsShot() + 1);
             }
 
         }
@@ -61,11 +58,11 @@ public class FreezeArrow extends PassivePerk implements Listener {
 
                             target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0);
                             target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
-                            target.setAllowFlight(false);
+                            WoolBattlePlayerManager.getWoolBattlePlayer(target).setCanDoubleJump(false);
                             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
                                 target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
                                 target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0.42);
-                                target.setAllowFlight(true);
+                                WoolBattlePlayerManager.getWoolBattlePlayer(target).setCanDoubleJump(true);
                             }, 100L);
                         }
 

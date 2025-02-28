@@ -21,6 +21,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +42,7 @@ public class WoolBattleGame {
     private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 26.5, 95, 0.5, 90, 0);
     private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), -25.5, 95, 0.5, -90, 0);
 
+    private HashMap<Location, Integer> hitBlocks = new HashMap<>();
 
     public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2) {
         this.listener = new WoolBattleGameListener(this);
@@ -271,5 +273,13 @@ public class WoolBattleGame {
 
     public void setSpectator(WoolBattlePlayer player) {
         System.out.println("set " + player.getPlayer().getName() + " spectator");
+    }
+
+    public void addBlockHit(Location loc, int count) {
+        hitBlocks.put(loc, hitBlocks.getOrDefault(loc, 0) + count);
+    }
+
+    public int getBlockHit(Location loc) {
+        return hitBlocks.get(loc);
     }
 }

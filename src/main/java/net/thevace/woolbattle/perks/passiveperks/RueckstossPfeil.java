@@ -20,11 +20,6 @@ public class RueckstossPfeil extends PassivePerk implements Listener {
         super(3, p, ChatColor.GOLD + "Rückstoß-Pfeil", Material.ARROW, "Alle 10 Pfeile wird ein Pfeil geschossen, welcher 15% mehr Rückstoß erteilt");
     }
 
-    @Override
-    public void applyEffect() {
-
-    }
-
     @EventHandler
     public void onBowShoot(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {

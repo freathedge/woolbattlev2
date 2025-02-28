@@ -33,11 +33,6 @@ public class Reflektor extends PassivePerk implements Listener {
         super(8, p, ChatColor.GOLD + "Reflektor", Material.SLIME_BALL, "Wenn du getroffen wirst, gibt es eine 5 Prozentige Chance, dass statt dir der Gegner Rückstoß erhält");
     }
 
-    @Override
-    public void applyEffect() {
-
-    }
-
 
     @EventHandler
     public void onEntityDamage(EntityDamageByEntityEvent event) {
@@ -45,6 +40,8 @@ public class Reflektor extends PassivePerk implements Listener {
 
         Player defender = (Player) event.getEntity();
         Player attacker = (Player) event.getDamager();
+
+        if(!attacker.equals(player.getPlayer())) return;
 
         if(attacker != player.getPlayer()) {
             if (random.nextInt(100) < 5) {

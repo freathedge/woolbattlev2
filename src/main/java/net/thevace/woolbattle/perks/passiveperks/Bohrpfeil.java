@@ -13,6 +13,6 @@ public class Bohrpfeil extends PassivePerk {
 
     @Override
     public void applyEffect() {
-
+        player.setWoolDamage(3);
     }
 }
