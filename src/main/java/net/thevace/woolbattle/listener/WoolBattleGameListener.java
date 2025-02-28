@@ -115,7 +115,8 @@ public class WoolBattleGameListener implements Listener {
                     }
                 }
             }
-        } else if (event.getEntity() instanceof EnderPearl enderPearl) {
+        }
+        else if (event.getEntity() instanceof EnderPearl enderPearl) {
             if (event.getHitEntity() instanceof Player) {
                 Player damager = (Player) enderPearl.getShooter();
                 Player target = (Player) event.getHitEntity();
@@ -265,6 +266,7 @@ public class WoolBattleGameListener implements Listener {
             if(player.getWool() >= 1) {
                 player.removeWool(1);
             } else {
+                event.setCancelled(true);
                 player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
             }
 

@@ -19,25 +19,34 @@ import java.time.LocalDateTime;
 public abstract class ActivePerk extends Perk {
 
 
+    private long lastActivationTime = 0;
+
     public ActivePerk(long cooldown, int preis, WoolBattlePlayer p, String itemName, Material material, String description) {
         super(cooldown, preis, p, itemName, material, description);
 
     }
 
     public boolean activate() {
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime - lastActivationTime < 100) {
+            System.out.println("⚠️ Doppelaktivierung blockiert!");
+            return false;
+        }
+        lastActivationTime = currentTime;
+
+
         if (player.getActivePerk1() == this) {
             if (!canUsePerk(player.getActivePerk1LastUsed())) return false;
             if (!hasEnoughMoney()) return false;
-            player.setActivePerk1LastUsed(Timestamp.valueOf(LocalDateTime.now()));
+            player.setActivePerk1LastUsed(Timestamp.from(Instant.now()));
         } else if (player.getActivePerk2() == this) {
-            System.out.println("Active perk 2 used");
             if (!canUsePerk(player.getActivePerk2LastUsed())) return false;
             if (!hasEnoughMoney()) return false;
-            player.setActivePerk2LastUsed(Timestamp.valueOf(LocalDateTime.now()));
+            player.setActivePerk2LastUsed(Timestamp.from(Instant.now()));
         } else if (player.getEnderperle() == this) {
-            System.out.println("enderpearl used");
             if(!canUsePerk(player.getEnderpearlLastUsed())) return false;
-            player.setEnderpearlLastUsed(Timestamp.valueOf(LocalDateTime.now()));
+            player.setEnderpearlLastUsed(Timestamp.from(Instant.now()));
         }
 
         withdrawWool();
@@ -48,12 +57,18 @@ public abstract class ActivePerk extends Perk {
 
     protected boolean canUsePerk(Timestamp lastUsed) {
         if (lastUsed == null) return true;
-        if (Duration.between(lastUsed.toInstant(), Instant.now()).getSeconds() < cooldown) {
+
+        long secondsSinceLastUse = Duration.between(lastUsed.toInstant(), Instant.now()).getSeconds();
+        System.out.println("Cooldown Check: " + secondsSinceLastUse + " / " + cooldown);
+
+        if (secondsSinceLastUse < cooldown) {
+            System.out.println("Perk ist noch im Cooldown!");
             player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
             return false;
         }
         return true;
     }
+
 
 
     protected abstract void applyEffect();

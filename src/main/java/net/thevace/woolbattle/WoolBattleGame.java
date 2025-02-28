@@ -2,10 +2,7 @@ package net.thevace.woolbattle;
 
 import net.kyori.adventure.text.Component;
 import net.thevace.woolbattle.listener.WoolBattleGameListener;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -76,6 +74,7 @@ public class WoolBattleGame {
             Player p = wbp.getPlayer();
             p.setAllowFlight(true);
             setPlayerInventory(wbp);
+            setPlayerArmor(wbp);
             setGameScoreboard(wbp);
 
             PerkListenerManager.registerPerkListener(this, wbp.getActivePerk1Listener());
@@ -139,7 +138,6 @@ public class WoolBattleGame {
                 return;
             }
         }
-
 
 
         //player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
@@ -210,6 +208,39 @@ public class WoolBattleGame {
         }
     }
 
+    public void setPlayerArmor(WoolBattlePlayer player) {
+        Player p = player.getPlayer();
+
+
+        System.out.println("Setting armor for " + p.getName());
+
+        if(player.getWoolMaterial().equals(Material.RED_WOOL)) {
+            System.out.println("Setting red armor");
+            p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.RED));
+            p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.RED));
+            p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.RED));
+            p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.RED));
+        } else if (player.getWoolMaterial().equals(Material.BLUE_WOOL)) {
+            System.out.println("setting blue armor");
+            p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.BLUE));
+            p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.BLUE));
+            p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.BLUE));
+            p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.BLUE));
+        }
+
+
+    }
+
+    private static ItemStack createColoredArmor(Material material, Color color) {
+        ItemStack item = new ItemStack(material);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        if (meta != null) {
+            meta.setColor(color);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
     public void setPlayerInventory(WoolBattlePlayer player) {
 
         Inventory playerInv = player.getPlayer().getInventory();
@@ -219,7 +250,7 @@ public class WoolBattleGame {
         bow.addEnchantment(Enchantment.PUNCH, 2);
         bow.addEnchantment(Enchantment.INFINITY, 1);
         bow.addEnchantment(Enchantment.UNBREAKING, 1);
-        bow.addUnsafeEnchantment(Enchantment.KNOCKBACK, 3);
+        bow.addUnsafeEnchantment(Enchantment.KNOCKBACK, 5);
 
         ItemMeta bowMeta = bow.getItemMeta();
         bowMeta.setDisplayName(ChatColor.GOLD + "Bow");
@@ -230,7 +261,7 @@ public class WoolBattleGame {
         ItemStack shears = new ItemStack(Material.SHEARS);
         shears.addEnchantment(Enchantment.EFFICIENCY, 5);
         shears.addEnchantment(Enchantment.UNBREAKING, 1);
-        shears.addUnsafeEnchantment(Enchantment.KNOCKBACK, 3);
+        shears.addUnsafeEnchantment(Enchantment.KNOCKBACK, 5);
 
         ItemMeta shearsMeta = shears.getItemMeta();
         shearsMeta.setDisplayName(ChatColor.GOLD + "Shears");
@@ -256,10 +287,10 @@ public class WoolBattleGame {
         Objective titel = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
         titel.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score team1score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "«" + ChatColor.RED + " RED");
+        Score team1score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "« " + ChatColor.RED + " RED");
         team1score.setScore(1);
 
-        Score team2score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "«" + ChatColor.BLUE + " RED");
+        Score team2score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team2Health + "❤" + ChatColor.GOLD + "« " + ChatColor.BLUE + " BLUE");
         team2score.setScore(0);
 
         player.getPlayer().setScoreboard(board);
