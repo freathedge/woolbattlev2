@@ -20,6 +20,7 @@ public class WoolBattlePlayer {
     private boolean isProtected = false;
     private Location lastBlockLocation;
     private Timestamp lastHit;
+    private Player lastHitter;
 
     ActivePerk enderperle = new Enderperle(this);
     ActivePerk activePerk1 = new Pod(this);
@@ -40,11 +41,8 @@ public class WoolBattlePlayer {
     private double doubleJumpHorizontalPower = 0.0;
 
     private int arrowsShot = 0;
-
     private boolean canDoubleJump = true;
-
     private int woolDamage = 1;
-
     private boolean isInDoubleJump = false;
 
     public WoolBattlePlayer(Player player) {
@@ -272,5 +270,13 @@ public class WoolBattlePlayer {
 
     public void setLastHit(Timestamp lastHit) {
         this.lastHit = lastHit;
+    }
+
+    public Player getLastHitter() {
+        return lastHitter;
+    }
+
+    public void setLastHitter(Player lastHitter) {
+        this.lastHitter = lastHitter;
     }
 }

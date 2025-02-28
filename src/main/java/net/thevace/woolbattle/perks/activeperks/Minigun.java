@@ -3,15 +3,18 @@ package net.thevace.woolbattle.perks.activeperks;
 import net.thevace.woolbattle.GameManager;
 import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
+import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.ActivePerk;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -30,7 +33,7 @@ public class Minigun extends ActivePerk implements Listener {
 
             @Override
             public void run() {
-                if (ticks >= 20) {
+                if (ticks >= 10) {
                     cancel();
                     return;
                 }
@@ -46,6 +49,9 @@ public class Minigun extends ActivePerk implements Listener {
                     Arrow arrow = player.getPlayer().getWorld().spawnArrow(player.getPlayer().getEyeLocation(), direction, 2.0f, 10.0f);
                     arrow.setShooter(player.getPlayer());
                     player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0f, 1.0f);
+
+                    NamespacedKey key = new NamespacedKey("woolbattle", "perktype");
+                    arrow.getPersistentDataContainer().set(key, PersistentDataType.STRING, "minigunarrow");
                 }
 
                 ticks++;
@@ -61,5 +67,19 @@ public class Minigun extends ActivePerk implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if(event.getEntity() instanceof Arrow arrow) {
+            NamespacedKey key = new NamespacedKey("woolbattle", "perktype");
+            String perkType = arrow.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+            if ("minigunarrow".equals(perkType)) {
+                arrow.remove();
+            }
+
+        }
+
+
     }
 }

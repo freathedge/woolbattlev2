@@ -1,5 +1,6 @@
 package net.thevace.woolbattle;
 
+import net.kyori.adventure.text.Component;
 import net.thevace.woolbattle.listener.WoolBattleGameListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,6 +14,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -84,6 +86,7 @@ public class WoolBattleGame {
             wbp.getPassivePerk().applyEffect();
             PerkListenerManager.registerPerkListener(this, wbp.getEnderperleListener());
         }
+        showActionBar();
     }
 
     public void endGame() {
@@ -117,6 +120,7 @@ public class WoolBattleGame {
     }
 
     public void handlePlayerDeath(WoolBattlePlayer player) {
+
         if (team1.contains(player)) {
             player.getPlayer().teleport(team1Spawn);
             if (team1Health <= 0) {
@@ -137,19 +141,34 @@ public class WoolBattleGame {
         }
 
 
-        player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
+
+        //player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
+        player.setProtected(true);
 
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
-            player.getPlayer().setNoDamageTicks(0);
-        }, 100L);
+            //player.getPlayer().setNoDamageTicks(0);
+            player.setProtected(false);
+        }, 60L);
 
-        if (player.getLastHit() != null) {
+        if (player.getLastHit() != null && player.getLastHitter() != null) {
             if (Duration.between(player.getLastHit().toInstant(), Instant.now()).getSeconds() < 10) {
+                String message = "Der Spieler ";
                 if (team1.contains(player)) {
                     team1Health--;
+                    message += ChatColor.RED + player.getPlayer().getName();
                 } else if (team2.contains(player)) {
                     team2Health--;
+                    message += ChatColor.BLUE + player.getPlayer().getName();
                 }
+                message += ChatColor.RESET + " wurde von ";
+                WoolBattlePlayer lastHitter = WoolBattlePlayerManager.getWoolBattlePlayer(player.getLastHitter());
+                if(team1.contains(lastHitter)) {
+                    message += ChatColor.RED + lastHitter.getPlayer().getName();
+                } else if (team2.contains(lastHitter)) {
+                    message += ChatColor.BLUE + lastHitter.getPlayer().getName();
+                }
+                message += ChatColor.RESET + " getötet.";
+                Bukkit.broadcastMessage(message);
             }
         }
 
@@ -237,10 +256,10 @@ public class WoolBattleGame {
         Objective titel = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
         titel.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score team1score = titel.getScore(ChatColor.RED + "Rotes Team leben: " + ChatColor.RESET + team1Health);
-        team1score.setScore(2);
+        Score team1score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "«" + ChatColor.RED + " RED");
+        team1score.setScore(1);
 
-        Score team2score = titel.getScore(ChatColor.BLUE + "Blaues Team leben: " + ChatColor.RESET + team2Health);
+        Score team2score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "«" + ChatColor.BLUE + " RED");
         team2score.setScore(0);
 
         player.getPlayer().setScoreboard(board);
@@ -281,5 +300,20 @@ public class WoolBattleGame {
 
     public int getBlockHit(Location loc) {
         return hitBlocks.get(loc);
+    }
+
+
+    public void showActionBar() {
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (WoolBattlePlayer wbp : allPlayers) {
+                    Player p = wbp.getPlayer();
+                    Component message = Component.text(ChatColor.DARK_GRAY + "» " + ChatColor.GOLD + (int) p.getLocation().getY() + ChatColor.DARK_GRAY + " «");
+                    p.sendActionBar(message);
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 10L);
     }
 }

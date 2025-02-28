@@ -1,5 +1,6 @@
 package net.thevace.woolbattle.listener;
 
+import net.kyori.adventure.text.Component;
 import net.thevace.woolbattle.WoolBattleGame;
 import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
@@ -48,6 +49,7 @@ public class WoolBattleGameListener implements Listener {
             p.setAllowFlight(true);
             player.setInDoubleJump(false);
         }
+
     }
 
     @EventHandler
@@ -70,15 +72,16 @@ public class WoolBattleGameListener implements Listener {
         WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer((Player) event.getEntity().getShooter());
         if (event.getEntity() instanceof Arrow arrow) {
             arrow.remove();
-            if (event.getHitEntity() instanceof Player) {
+            if (event.getHitEntity() instanceof Player p) {
+                p.setArrowsInBody(0);
                 Player damager = (Player) arrow.getShooter();
-                Player target = (Player) event.getHitEntity();
-                if(target != null && damager != null) {
-                    if(target == damager) {
+
+                if(damager != null) {
+                    if(p == damager) {
                         event.setCancelled(true);
                     }
-                    if(!game.handlePlayerHit(damager, target)){
-                        if (WoolBattlePlayerManager.getWoolBattlePlayer(target).isProtected()) {
+                    if(!game.handlePlayerHit(damager, p)){
+                        if (WoolBattlePlayerManager.getWoolBattlePlayer(p).isProtected()) {
                             event.setCancelled(true);
                         }
                     }
@@ -141,6 +144,10 @@ public class WoolBattleGameListener implements Listener {
         }
 
         if (damager == null || target == null) return;
+
+        if(!damager.equals(target) && damager instanceof Player) {
+            WoolBattlePlayerManager.getWoolBattlePlayer(target).setLastHitter(damager);
+        }
 
         if(game.handlePlayerHit(damager, target)) {
             event.setCancelled(true);
