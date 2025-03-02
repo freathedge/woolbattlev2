@@ -67,6 +67,7 @@ public class ListenerProjectileHit implements Listener {
         if (event.getHitEntity() instanceof Player target) {
             damager.teleport(target.getLocation());
             damager.playSound(damager.getLocation(), Sound.ENTITY_PLAYER_TELEPORT, 1.0f, 1.0f);
+            enderPearl.remove();
             event.setCancelled(true);
         }
     }

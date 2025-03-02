@@ -33,8 +33,6 @@ public class ListenerEntityDamageByEntity implements Listener {
         Player damager = getDamager(event);
         if (damager == null || damager.equals(target)) return;
 
-
-
         if (targetPlayer.isProtected()) {
             event.setCancelled(true);
             return;
@@ -55,7 +53,6 @@ public class ListenerEntityDamageByEntity implements Listener {
         if (event.getDamager() instanceof Player player) {
             return player;
         } else if (event.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Player player) {
-            projectile.remove();
             return player;
         }
         return null;

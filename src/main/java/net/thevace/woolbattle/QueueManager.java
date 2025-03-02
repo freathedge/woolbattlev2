@@ -86,14 +86,12 @@ public class QueueManager {
         }
     }
 
-    public void createQueue(Player p, int teamSize) {
-        WoolBattleQueue newQueue = new WoolBattleQueue(teamSize, this);
+    public void createQueue(Player p, int teams) {
+        WoolBattleQueue newQueue = new WoolBattleQueue(2,this);
         allQueues.add(newQueue);
         p.sendMessage(ChatColor.GREEN + "Neue Queue erstellt: " + newQueue.getId());
 
     }
-
-
 
     public void removeQueue(WoolBattleQueue queue) {
         allQueues.remove(queue);

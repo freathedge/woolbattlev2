@@ -25,13 +25,14 @@ public class joinQueue implements CommandExecutor  {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         Player p = (Player) commandSender;
+
         WoolBattlePlayer player;
 
-        if(playerManager.isRegistered(p)) {
-            player = playerManager.getWoolBattlePlayer(p);
+        if(WoolBattlePlayerManager.isRegistered(p)) {
+            player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
         } else {
-            playerManager.registerPlayer(p);
-            player = playerManager.getWoolBattlePlayer(p);
+            WoolBattlePlayerManager.registerPlayer(p);
+            player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
         }
 
         if (args.length == 0) {

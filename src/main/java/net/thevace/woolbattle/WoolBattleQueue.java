@@ -1,7 +1,9 @@
 package net.thevace.woolbattle;
 
+import net.thevace.woolbattle.maps.Blocks_2x1;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -18,46 +20,60 @@ public class WoolBattleQueue {
 
     private String id;
 
-    private List<WoolBattlePlayer> queue = new ArrayList<WoolBattlePlayer>();
+    private List<WoolBattlePlayer> queue = new ArrayList<>();
 
-    private List<WoolBattlePlayer> team1 = new ArrayList<WoolBattlePlayer>();
-    private List<WoolBattlePlayer> team2 = new ArrayList<WoolBattlePlayer>();
+    private List<WoolBattleTeam> teams = new ArrayList<>();
 
     private int teamSize;
     private QueueManager queueManager;
 
     private Map<WoolBattlePlayer, Integer> lifeVoting = new HashMap<>();
 
-    public WoolBattleQueue(int teamSize, QueueManager queueManager) {
-        this.teamSize = teamSize;
+    private static final List<ChatColor> teamColors = Arrays.asList(
+            ChatColor.RED, ChatColor.BLUE, ChatColor.GREEN, ChatColor.YELLOW,
+            ChatColor.GOLD, ChatColor.LIGHT_PURPLE, ChatColor.DARK_PURPLE, ChatColor.AQUA
+    );
+
+    private static final List<Material> teamMaterials = Arrays.asList(
+            Material.RED_WOOL, Material.BLUE_WOOL, Material.GREEN_WOOL, Material.YELLOW_WOOL,
+            Material.ORANGE_WOOL, Material.PINK_WOOL, Material.PURPLE_WOOL, Material.LIGHT_BLUE_WOOL
+    );
+
+    private static final List<String> teamColorNames = Arrays.asList(
+            "Red", "Blue", "Green", "Yellow",
+            "Gold", "Pink", "Purple", "Aqua"
+    );
+
+    private static final List<Color> teamRGBColors = Arrays.asList(
+            Color.fromRGB(252, 84, 84),
+            Color.fromRGB(84, 134, 252),
+            Color.fromRGB(84, 252, 84),
+            Color.fromRGB(252, 252, 84),
+            Color.fromRGB(252, 168, 0),
+            Color.fromRGB(252, 84, 252),
+            Color.fromRGB(126, 34, 206),
+            Color.fromRGB(84, 218, 252)
+    );
+
+    public WoolBattleQueue(int teams, QueueManager queueManager) {
         this.queueManager = queueManager;
         this.id = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 5);
+
+        for (int i = 0; i < teams; i++) {
+            this.teams.add(new WoolBattleTeam(teamColorNames.get(i), teamColors.get(i), teamMaterials.get(i), teamRGBColors.get(i)));
+        }
     }
 
     public void joinQueue(WoolBattlePlayer player) {
         queue.add(player);
         player.getPlayer().sendMessage("Du bist der Queue " + ChatColor.GOLD + id + ChatColor.RESET + " beigetreten");
 
-        if(team1.size() < team2.size()) {
-            addPlayerToTeam(team1, player);
-
-        } else if(team2.size() < team1.size()) {
-            addPlayerToTeam(team2, player);
-
-        } else {
-            addPlayerToTeam(team1, player);
+        for (WoolBattleTeam team : teams) {
+            List<WoolBattlePlayer> teamList = team.getPlayers();
+            if (teamList.size() < teamSize) {
+                teamList.add(player);
+            }
         }
-
-        for(WoolBattlePlayer p : team1) {
-            setQueueScoreboard(p);
-        }
-        for(WoolBattlePlayer p : team2) {
-            setQueueScoreboard(p);
-        }
-
-//        if(team1.size() == teamSize && team2.size() == teamSize) {
-//            startGame();
-//        }
 
         player.getPlayer().getInventory().clear();
 
@@ -68,18 +84,19 @@ public class WoolBattleQueue {
 
     public void leaveQueue(WoolBattlePlayer player) {
         queue.remove(player);
-        player.getPlayer().sendMessage("Du wurdest von der Queue" + ChatColor.GOLD + id + ChatColor.RESET + " entfernt");
+        player.getPlayer().sendMessage("Du wurdest von der Queue " + ChatColor.GOLD + id + ChatColor.RESET + " entfernt");
         player.getPlayer().getInventory().clear();
 
-        team1.remove(player);
-        team2.remove(player);
+        for (WoolBattleTeam team : teams) {
+            List<WoolBattlePlayer> teamList = team.getPlayers();
+            teamList.remove(player);
+        }
 
         WoolBattlePlayerManager.removePlayer(player.getPlayer());
         player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
     }
 
     public void startGame() {
-
         Map<Integer, Integer> voteCount = new HashMap<>();
 
         for (int lifes : lifeVoting.values()) {
@@ -96,25 +113,17 @@ public class WoolBattleQueue {
             }
         }
 
-        if(mostVotedLives == -1) {
+        if (mostVotedLives == -1) {
             mostVotedLives = 10;
         }
 
-        WoolBattleGame game = new WoolBattleGame(mostVotedLives, team1, team2);
+        WoolBattleGame game = new WoolBattleGame(new Blocks_2x1(), teams, mostVotedLives);
         WoolBattleGameManager.addGame(game);
         game.startGame();
 
         queueManager.removeQueue(this);
     }
 
-
-    public List<WoolBattlePlayer> getTeam1() {
-        return team1;
-    }
-
-    public List<WoolBattlePlayer> getTeam2() {
-        return team2;
-    }
 
     public List<WoolBattlePlayer> getQueue() {
         return queue;
@@ -124,22 +133,9 @@ public class WoolBattleQueue {
         queue = queue;
     }
 
-    public void setTeam1(List<WoolBattlePlayer> team1) {
-        this.team1 = team1;
-    }
-
-    public void setTeam2(List<WoolBattlePlayer> team2) {
-        this.team2 = team2;
-    }
-
     public int getTeamSize() {
         return teamSize;
     }
-
-    public int getTotalPlayers() {
-        return team1.size() + team2.size();
-    }
-
 
     public void addItems(Player player) {
 
@@ -204,26 +200,15 @@ public class WoolBattleQueue {
         return lifeVoting;
     }
 
-    public void addPlayerToTeam(List<WoolBattlePlayer> team, WoolBattlePlayer player) {
-        if(!team.contains(player)) {
-            if(team.equals(team1)) {
-                team2.remove(player);
-                team1.add(player);
-                player.setWoolMaterial(Material.RED_WOOL);
-            } else if(team.equals(team2)) {
-                team1.remove(player);
-                team2.add(player);
-                player.setWoolMaterial(Material.BLUE_WOOL);
-            }
-
-        }
-    }
-
     public String getId() {
         return id;
     }
 
     public boolean isInQueue(WoolBattlePlayer player) {
         return queue.contains(player);
+    }
+
+    public List<WoolBattleTeam> getTeams() {
+        return teams;
     }
 }

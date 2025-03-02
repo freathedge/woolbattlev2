@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -35,7 +36,7 @@ public class Greifer extends ActivePerk implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getItem() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {
+        if (event.getItem() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer()) && event.getAction() == Action.RIGHT_CLICK_AIR) {
             if (event.getItem().getItemMeta().getDisplayName().equals(itemName)) {
                 activate();
                 event.setCancelled(true);

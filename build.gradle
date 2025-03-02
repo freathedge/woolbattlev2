@@ -15,9 +15,7 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
-
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-
 }
 
 dependencies {
@@ -25,7 +23,7 @@ dependencies {
     implementation 'me.devnatan:inventory-framework-platform-bukkit:3.2.0'
 }
 
-def targetJavaVersion = 21
+def targetJavaVersion = 23
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -35,12 +33,21 @@ java {
     }
 }
 
+// Aktivieren von Preview-Features für Kompilierung und Tests
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+
+    // Hier fügen wir --enable-preview hinzu
+    options.compilerArgs += '--enable-preview'
 
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks.withType(Test).configureEach {
+    // Sicherstellen, dass auch Tests mit --enable-preview ausgeführt werden
+    jvmArgs '--enable-preview'
 }
 
 processResources {

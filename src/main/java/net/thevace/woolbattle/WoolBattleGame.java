@@ -19,53 +19,47 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class WoolBattleGame {
 
-    private List<WoolBattlePlayer> team1;
-    private List<WoolBattlePlayer> team2;
+    private WoolBattleMap map;
+
+    private Map<Integer, WoolBattleTeam> teams = new HashMap<>();
 
     private List<WoolBattlePlayer> allPlayers = new ArrayList<>();
 
-    private int team1Health;
-    private int team2Health;
-
+    private Map<Integer, Integer> teamLives = new HashMap<>();
 
     private List<Location> playerBlocks = new ArrayList<>();
 
-    private final Location team1Spawn = new Location(Bukkit.getWorlds().getFirst(), 26.5, 95, 0.5, 90, 0);
-    private final Location team2Spawn = new Location(Bukkit.getWorlds().getFirst(), -25.5, 95, 0.5, -90, 0);
-
     private HashMap<Location, Integer> hitBlocks = new HashMap<>();
 
-    public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2) {
+    public WoolBattleGame(WoolBattleMap map, List<WoolBattleTeam> teams, int teamHealth) {
+        this.map = map;
 
-        this.team1Health = teamHealth;
-        this.team2Health = teamHealth;
-        this.team1 = Team1;
-        this.team2 = Team2;
+        for (int i = 0; i < teams.size(); i++) {
+            this.teams.put(i, teams.get(i));
+        }
+
+        for (WoolBattleTeam team : teams) {
+            team.setLives(teamHealth);
+        }
     }
 
     public void startGame() {
         registerListener();
 
-        for (WoolBattlePlayer wbp : team1) {
-            Player p = wbp.getPlayer();
-            p.sendMessage("Woolbattle game started!");
-            p.teleport(team1Spawn);
+        for(Integer team : teams.keySet()) {
+            List<WoolBattlePlayer> players = teams.get(team).getPlayers();
+            Map<Integer, Location> teamSpawns = map.getTeamSpawns();
+            for(WoolBattlePlayer wbp : players) {
+                allPlayers.add(wbp);
+                Player p = wbp.getPlayer();
+                p.sendMessage("Woolbattle game started!");
+                p.teleport(teamSpawns.get(team));
+            }
         }
-        for (WoolBattlePlayer wbp : team2) {
-            Player p = wbp.getPlayer();
-            p.sendMessage("Woolbattle game started!");
-            p.teleport(team2Spawn);
-        }
-
-        allPlayers.addAll(team1);
-        allPlayers.addAll(team2);
 
         for (WoolBattlePlayer wbp : allPlayers) {
             setPlayerInventory(wbp);
@@ -98,19 +92,19 @@ public class WoolBattleGame {
         Bukkit.getPluginManager().registerEvents(new ListenerItemPickup(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
     }
 
-    public void endGame() {
+    public void endGame(WoolBattleTeam winningTeam) {
         String message;
 
-        if (team1.size() > team2.size()) {
-            message = "Woolbattle game ended! Team 1 has won!";
-        } else {
-            message = "Woolbattle game ended! Team 2 has won!";
-        }
-
-        for (WoolBattlePlayer wbp : allPlayers) {
-            wbp.getPlayer().sendMessage(message);
-            WoolBattlePlayerManager.removePlayer(wbp.getPlayer());
-        }
+//        if (team1.size() > team2.size()) {
+//            message = "Woolbattle game ended! Team 1 has won!";
+//        } else {
+//            message = "Woolbattle game ended! Team 2 has won!";
+//        }
+//
+//        for (WoolBattlePlayer wbp : allPlayers) {
+//            wbp.getPlayer().sendMessage(message);
+//            WoolBattlePlayerManager.removePlayer(wbp.getPlayer());
+//        }
 
         for (Location loc : playerBlocks) {
             loc.getBlock().setType(Material.AIR);
@@ -123,57 +117,57 @@ public class WoolBattleGame {
     }
 
     public void checkGameEnd() {
-        if (team1.isEmpty() || team2.isEmpty()) {
-            endGame();
+        WoolBattleTeam winningTeam = null;
+
+        for (WoolBattleTeam team : teams.values()) {
+            if (!team.getPlayers().isEmpty()) {
+                if (winningTeam != null) {
+                    return;
+                }
+                winningTeam = team;
+                endGame(winningTeam);
+            }
         }
     }
 
     public void handlePlayerDeath(WoolBattlePlayer player) {
+        for(Integer team : teams.keySet()) {
+            List<WoolBattlePlayer> players = teams.get(team).getPlayers();
+            if(players.contains(player)) {
+                player.getPlayer().teleport(map.getTeamSpawns().get(team));
+                if(teamLives.get(team) <= 0) {
+                    players.remove(player);
+                    setSpectator(player);
+                    checkGameEnd();
+                    return;
+                }
 
-        if (team1.contains(player)) {
-            player.getPlayer().teleport(team1Spawn);
-            if (team1Health <= 0) {
-                team1.remove(player);
-                setSpectator(player);
-                checkGameEnd();
-                return;
-            }
-
-        } else if (team2.contains(player)) {
-            player.getPlayer().teleport(team2Spawn);
-            if (team2Health <= 0) {
-                team2.remove(player);
-                setSpectator(player);
-                checkGameEnd();
-                return;
             }
         }
-
-
-        //player.getPlayer().setNoDamageTicks(Integer.MAX_VALUE);
         player.setProtected(true);
 
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("WoolBattle"), () -> {
-            //player.getPlayer().setNoDamageTicks(0);
             player.setProtected(false);
         }, 60L);
 
         if (player.getLastHit() != null && player.getLastHitter() != null) {
             if (Duration.between(player.getLastHit().toInstant(), Instant.now()).getSeconds() < 10) {
                 String message = "Der Spieler ";
-                if (team1.contains(player)) {
-                    team1Health--;
-                    message += ChatColor.RED + player.getPlayer().getName();
-                } else if (team2.contains(player)) {
-                    team2Health--;
-                    message += ChatColor.BLUE + player.getPlayer().getName();
+                for(Integer team : teams.keySet()) {
+                    List<WoolBattlePlayer> players = teams.get(team).getPlayers();
+                    if(players.contains(player)) {
+                        teams.get(team).removeLive();
+                        message += teams.get(team).getChatColor() + player.getPlayer().getName();
+                    }
                 }
                 message += ChatColor.RESET + " wurde von ";
-                WoolBattlePlayer lastHitter = WoolBattlePlayerManager.getWoolBattlePlayer(player.getLastHitter());
-                if(team1.contains(lastHitter)) {
-                    message += ChatColor.RED + lastHitter.getPlayer().getName();
-                } else if (team2.contains(lastHitter)) {
-                    message += ChatColor.BLUE + lastHitter.getPlayer().getName();
+
+                for(Integer team : teams.keySet()) {
+                    List<WoolBattlePlayer> players = teams.get(team).getPlayers();
+                    if(players.contains(player)) {
+                        teams.get(team).removeLive();
+                        message += teams.get(team).getChatColor() + player.getLastHitter().getName();
+                    }
                 }
                 message += ChatColor.RESET + " getötet.";
                 Bukkit.broadcastMessage(message);
@@ -210,26 +204,24 @@ public class WoolBattleGame {
     public boolean checkPlayerHit(Player damager, Player target) {
         WoolBattlePlayer wbpDamager = WoolBattlePlayerManager.getWoolBattlePlayer(damager);
         WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
-
-        if (team1.contains(wbpDamager) && team1.contains(wbpTarget) || team2.contains(wbpDamager) && team2.contains(wbpTarget)) {
-            return true;
-        } else {
-            return false;
+        for(Integer team : teams.keySet()) {
+            List<WoolBattlePlayer> players = teams.get(team).getPlayers();
+            if(players.contains(wbpDamager) && players.contains(wbpTarget)) {
+                return true;
+            }
         }
+        return false;
     }
 
     public void setPlayerArmor(WoolBattlePlayer player) {
         Player p = player.getPlayer();
-        if(player.getWoolMaterial().equals(Material.RED_WOOL)) {
-            p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.RED));
-            p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.RED));
-            p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.RED));
-            p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.RED));
-        } else if (player.getWoolMaterial().equals(Material.BLUE_WOOL)) {
-            p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.BLUE));
-            p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.BLUE));
-            p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.BLUE));
-            p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.BLUE));
+        for(WoolBattleTeam team : teams.values()) {
+            if(team.getPlayers().contains(player)) {
+                p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, team.getArmorColor()));
+                p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, team.getArmorColor()));
+                p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, team.getArmorColor()));
+                p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, team.getArmorColor()));
+            }
         }
     }
 
@@ -289,30 +281,39 @@ public class WoolBattleGame {
         Objective titel = board.registerNewObjective("woolbattle", "dummy", ChatColor.GOLD + "WoolBattle");
         titel.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        Score team1score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team1Health + "❤" + ChatColor.GOLD + "« " + ChatColor.RED + " RED");
-        team1score.setScore(1);
+        int score = 0;
+        for (Map.Entry<Integer, WoolBattleTeam> entry : teams.entrySet()) {
+            WoolBattleTeam team = entry.getValue();
+            String teamColor = team.getChatColor().toString();
+            int teamLives = team.getLives();
 
-        Score team2score = titel.getScore(ChatColor.GOLD + "» " + ChatColor.RED + "❤" + team2Health + "❤" + ChatColor.GOLD + "« " + ChatColor.BLUE + " BLUE");
-        team2score.setScore(0);
+            String teamLabel = ChatColor.GOLD + "» " + teamColor + "❤" + teamLives + "❤" + ChatColor.GOLD + "« " + teamColor + " " + team.getChatColor().name();
+            Score teamScore = titel.getScore(teamLabel);
+            teamScore.setScore(score);
+
+            score++;
+        }
 
         player.getPlayer().setScoreboard(board);
     }
 
+
     public boolean isPlayerInGame(WoolBattlePlayer player) {
-        if (team1.contains(player) || team2.contains(player)) {
-            return true;
-        } else {
-            return false;
+        for(WoolBattleTeam team : teams.values()) {
+            if(team.getPlayers().contains(player)) {
+                return true;
+            }
         }
+        return false;
     }
 
-    public boolean isPlayerInGame(Player p) {
-        WoolBattlePlayer player = WoolBattlePlayerManager.getWoolBattlePlayer(p);
-        if (team1.contains(player) || team2.contains(player)) {
-            return true;
-        } else {
-            return false;
+    public boolean isPlayerInGame(Player player) {
+        for(WoolBattleTeam team : teams.values()) {
+            if(team.getPlayers().contains(WoolBattlePlayerManager.getWoolBattlePlayer(player))) {
+                return true;
+            }
         }
+        return false;
     }
 
     public void addToPlayerBlocks(Location loc) {

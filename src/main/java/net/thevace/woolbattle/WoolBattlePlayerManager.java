@@ -10,7 +10,7 @@ import java.util.UUID;
 public class WoolBattlePlayerManager {
     private static final Map<UUID, WoolBattlePlayer> playerMap = new HashMap<>();
 
-    public void registerPlayer(Player player) {
+    public static void registerPlayer(Player player) {
         playerMap.put(player.getUniqueId(), new WoolBattlePlayer(player));
     }
 
