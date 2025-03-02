@@ -1,7 +1,6 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
+import net.thevace.woolbattle.WoolBattleGameManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -85,7 +84,7 @@ public class Rettungsplattform extends ActivePerk implements Listener {
                 // Überprüfen, ob der Block Luft ist
                 if (location.getBlock().getType() == Material.AIR) {
                     location.getBlock().setType(material);
-                    GameManager.getPlayerGame(player).addToPlayerBlocks(location);
+                    WoolBattleGameManager.getPlayerGame(player).addToPlayerBlocks(location);
                     p.playSound(p.getLocation(), Sound.ENTITY_SNOWBALL_THROW, 1.0f, 1.0f);
                 }
 

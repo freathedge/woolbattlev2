@@ -30,7 +30,6 @@ public abstract class ActivePerk extends Perk {
         long currentTime = System.currentTimeMillis();
 
         if (currentTime - lastActivationTime < 100) {
-            System.out.println("⚠️ Doppelaktivierung blockiert!");
             return false;
         }
         lastActivationTime = currentTime;
@@ -59,10 +58,8 @@ public abstract class ActivePerk extends Perk {
         if (lastUsed == null) return true;
 
         long secondsSinceLastUse = Duration.between(lastUsed.toInstant(), Instant.now()).getSeconds();
-        System.out.println("Cooldown Check: " + secondsSinceLastUse + " / " + cooldown);
 
         if (secondsSinceLastUse < cooldown) {
-            System.out.println("Perk ist noch im Cooldown!");
             player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
             return false;
         }

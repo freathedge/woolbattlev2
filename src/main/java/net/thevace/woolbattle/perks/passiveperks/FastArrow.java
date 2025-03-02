@@ -1,10 +1,7 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.PassivePerk;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;

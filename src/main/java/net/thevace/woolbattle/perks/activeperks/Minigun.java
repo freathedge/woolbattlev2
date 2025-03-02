@@ -1,15 +1,9 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
-import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EnderPearl;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;

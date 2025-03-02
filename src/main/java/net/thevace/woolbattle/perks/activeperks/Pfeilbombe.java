@@ -1,23 +1,15 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class Pfeilbombe extends ActivePerk implements Listener {

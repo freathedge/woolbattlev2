@@ -1,7 +1,6 @@
 package net.thevace.woolbattle;
 
-import net.kyori.adventure.text.Component;
-import net.thevace.woolbattle.listener.WoolBattleGameListener;
+import net.thevace.woolbattle.listener.*;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -35,7 +34,6 @@ public class WoolBattleGame {
     private int team1Health;
     private int team2Health;
 
-    private WoolBattleGameListener listener;
 
     private List<Location> playerBlocks = new ArrayList<>();
 
@@ -45,7 +43,6 @@ public class WoolBattleGame {
     private HashMap<Location, Integer> hitBlocks = new HashMap<>();
 
     public WoolBattleGame(int teamHealth, List<WoolBattlePlayer> Team1, List<WoolBattlePlayer> Team2) {
-        this.listener = new WoolBattleGameListener(this);
 
         this.team1Health = teamHealth;
         this.team2Health = teamHealth;
@@ -54,7 +51,7 @@ public class WoolBattleGame {
     }
 
     public void startGame() {
-        Bukkit.getPluginManager().registerEvents(listener, Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        registerListener();
 
         for (WoolBattlePlayer wbp : team1) {
             Player p = wbp.getPlayer();
@@ -71,11 +68,10 @@ public class WoolBattleGame {
         allPlayers.addAll(team2);
 
         for (WoolBattlePlayer wbp : allPlayers) {
-            Player p = wbp.getPlayer();
-            p.setAllowFlight(true);
             setPlayerInventory(wbp);
             setPlayerArmor(wbp);
             setGameScoreboard(wbp);
+            startSpawnProtection(wbp);
 
             PerkListenerManager.registerPerkListener(this, wbp.getActivePerk1Listener());
             PerkListenerManager.registerPerkListener(this, wbp.getActivePerk2Listener());
@@ -85,7 +81,21 @@ public class WoolBattleGame {
             wbp.getPassivePerk().applyEffect();
             PerkListenerManager.registerPerkListener(this, wbp.getEnderperleListener());
         }
+
         showActionBar();
+    }
+
+    public void registerListener() {
+        Bukkit.getPluginManager().registerEvents(new ListenerBlockBreak(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerBlockPlace(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerFallDamageEvent(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerEntityDamageByEntity(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerEntityShootBowEvent(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerItemDrop(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerPlayerMove(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerPlayerToggleFlight(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerProjectileHit(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
+        Bukkit.getPluginManager().registerEvents(new ListenerItemPickup(), Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("WoolBattle")));
     }
 
     public void endGame() {
@@ -106,10 +116,10 @@ public class WoolBattleGame {
             loc.getBlock().setType(Material.AIR);
         }
 
-        HandlerList.unregisterAll(listener);
+        HandlerList.unregisterAll();
         PerkListenerManager.unregisterListeners(this);
 
-        GameManager.removeGame(this);
+        WoolBattleGameManager.removeGame(this);
     }
 
     public void checkGameEnd() {
@@ -197,7 +207,7 @@ public class WoolBattleGame {
         }
     }
 
-    public boolean handlePlayerHit(Player damager, Player target) {
+    public boolean checkPlayerHit(Player damager, Player target) {
         WoolBattlePlayer wbpDamager = WoolBattlePlayerManager.getWoolBattlePlayer(damager);
         WoolBattlePlayer wbpTarget = WoolBattlePlayerManager.getWoolBattlePlayer(target);
 
@@ -210,25 +220,17 @@ public class WoolBattleGame {
 
     public void setPlayerArmor(WoolBattlePlayer player) {
         Player p = player.getPlayer();
-
-
-        System.out.println("Setting armor for " + p.getName());
-
         if(player.getWoolMaterial().equals(Material.RED_WOOL)) {
-            System.out.println("Setting red armor");
             p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.RED));
             p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.RED));
             p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.RED));
             p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.RED));
         } else if (player.getWoolMaterial().equals(Material.BLUE_WOOL)) {
-            System.out.println("setting blue armor");
             p.getInventory().setHelmet(createColoredArmor(Material.LEATHER_HELMET, Color.BLUE));
             p.getInventory().setChestplate(createColoredArmor(Material.LEATHER_CHESTPLATE, Color.BLUE));
             p.getInventory().setLeggings(createColoredArmor(Material.LEATHER_LEGGINGS, Color.BLUE));
             p.getInventory().setBoots(createColoredArmor(Material.LEATHER_BOOTS, Color.BLUE));
         }
-
-
     }
 
     private static ItemStack createColoredArmor(Material material, Color color) {
@@ -236,13 +238,13 @@ public class WoolBattleGame {
         LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
         if (meta != null) {
             meta.setColor(color);
+            meta.setUnbreakable(true);
             item.setItemMeta(meta);
         }
         return item;
     }
 
     public void setPlayerInventory(WoolBattlePlayer player) {
-
         Inventory playerInv = player.getPlayer().getInventory();
         playerInv.clear();
 
@@ -333,7 +335,6 @@ public class WoolBattleGame {
         return hitBlocks.get(loc);
     }
 
-
     public void showActionBar() {
 
         new BukkitRunnable() {
@@ -341,10 +342,53 @@ public class WoolBattleGame {
             public void run() {
                 for (WoolBattlePlayer wbp : allPlayers) {
                     Player p = wbp.getPlayer();
-                    Component message = Component.text(ChatColor.DARK_GRAY + "» " + ChatColor.GOLD + (int) p.getLocation().getY() + ChatColor.DARK_GRAY + " «");
-                    p.sendActionBar(message);
+                    p.sendActionBar(ChatColor.DARK_GRAY + "» " + ChatColor.GOLD + (int) p.getLocation().getY() + ChatColor.DARK_GRAY + " «");
                 }
             }
-        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 5L);
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
+    }
+
+    public void startSpawnProtection(WoolBattlePlayer player) {
+        int totalTicks = 10 * 20;
+        player.setProtected(true);
+
+        new BukkitRunnable() {
+            int ticksLeft = totalTicks;
+
+            @Override
+            public void run() {
+                if (ticksLeft <= 0) {
+                    player.getPlayer().setExp(0f);
+                    player.setProtected(false);
+                    this.cancel();
+                    return;
+                }
+
+                float progress = (float) ticksLeft / totalTicks;
+                player.getPlayer().setExp(progress);
+
+                ticksLeft--;
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 0L, 1L);
+    }
+
+    public void startDJCooldown(WoolBattlePlayer player) {
+        player.setCanDoubleJump(false);
+        player.getPlayer().setFoodLevel(6);
+
+        new BukkitRunnable() {
+            int currentFoodLevel = 6;
+
+            @Override
+            public void run() {
+                if(currentFoodLevel < 20) {
+                    currentFoodLevel += 1;
+                    player.getPlayer().setFoodLevel(currentFoodLevel);
+                } else {
+                    cancel();
+                    player.setCanDoubleJump(true);
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("WoolBattle"), 1L, 5L);
     }
 }

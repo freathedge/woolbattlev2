@@ -1,7 +1,5 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;

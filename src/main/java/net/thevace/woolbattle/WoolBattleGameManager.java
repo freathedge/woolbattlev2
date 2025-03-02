@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GameManager {
+public class WoolBattleGameManager {
     private static final Set<WoolBattleGame> activeGames = new HashSet<>();
 
     public static void addGame(WoolBattleGame game) {

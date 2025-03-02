@@ -101,7 +101,7 @@ public class WoolBattleQueue {
         }
 
         WoolBattleGame game = new WoolBattleGame(mostVotedLives, team1, team2);
-        GameManager.addGame(game);
+        WoolBattleGameManager.addGame(game);
         game.startGame();
 
         queueManager.removeQueue(this);

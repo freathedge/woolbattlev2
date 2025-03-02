@@ -28,8 +28,6 @@ public class Enderperle extends ActivePerk implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getItem() != null && event.getItem().getItemMeta() != null && event.getItem().hasItemMeta() && event.getPlayer().equals(player.getPlayer())) {
             if (event.getItem().getItemMeta().getDisplayName().equals(itemName)) {
-
-
                 activate();
                 event.setCancelled(true);
             }

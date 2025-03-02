@@ -62,10 +62,10 @@ public class Tauscher extends ActivePerk implements Listener {
 
                 Player player = (Player) snowball.getShooter();
                 Player target = (Player) event.getHitEntity();
-                WoolBattleGame game = GameManager.getPlayerGame(player);
+                WoolBattleGame game = WoolBattleGameManager.getPlayerGame(player);
 
                 if (player != null && target != null) {
-                    if (!game.handlePlayerHit(player, target)) {
+                    if (!game.checkPlayerHit(player, target)) {
 
                         Location playerLocation = player.getLocation();
                         Location targetLocation = target.getLocation();

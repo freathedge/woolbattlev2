@@ -1,14 +1,10 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

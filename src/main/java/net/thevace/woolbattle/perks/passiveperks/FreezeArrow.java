@@ -5,19 +5,14 @@ import net.thevace.woolbattle.perks.PassivePerk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Objects;
 
 public class FreezeArrow extends PassivePerk implements Listener {
 
@@ -45,13 +40,13 @@ public class FreezeArrow extends PassivePerk implements Listener {
         if (event.getEntity() instanceof Arrow arrow) {
             if (arrow.getShooter() instanceof Player p) {
                 Player target = (Player) event.getHitEntity();
-                WoolBattleGame game = GameManager.getPlayerGame(player);
+                WoolBattleGame game = WoolBattleGameManager.getPlayerGame(player);
 
                 if(!p.equals(player.getPlayer())) return;
 
                 if (target != null) {
                     assert game != null;
-                    if (!game.handlePlayerHit(p, target)) {
+                    if (!game.checkPlayerHit(p, target)) {
                         if(player.getArrowsShot() >= 10) {
                             player.removeWool(preis);
                             player.setArrowsShot(0);

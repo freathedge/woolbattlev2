@@ -2,11 +2,9 @@ package net.thevace.woolbattle.perks.passiveperks;
 
 import net.thevace.woolbattle.*;
 import net.thevace.woolbattle.perks.PassivePerk;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -41,13 +39,13 @@ public class RueckstossPfeil extends PassivePerk implements Listener {
         if (event.getEntity() instanceof Arrow arrow) {
             if (arrow.getShooter() instanceof Player p) {
                 Player target = (Player) event.getHitEntity();
-                WoolBattleGame game = GameManager.getPlayerGame(player);
+                WoolBattleGame game = WoolBattleGameManager.getPlayerGame(player);
 
                 if(!p.equals(player.getPlayer())) return;
 
                 if (target != null) {
                     assert game != null;
-                    if (!game.handlePlayerHit(p, target)) {
+                    if (!game.checkPlayerHit(p, target)) {
                         if(player.getArrowsShot() >= 10) {
                             arrow.setKnockbackStrength(3);
                             player.removeWool(preis);

@@ -1,23 +1,17 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
-import com.destroystokyo.paper.event.entity.EntityKnockbackByEntityEvent;
-import io.papermc.paper.event.entity.EntityKnockbackEvent;
-import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.WoolBattleGameManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.PassivePerk;
-import net.thevace.woolbattle.perks.Perk;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -41,7 +35,7 @@ public class Reflektor extends PassivePerk implements Listener {
         Player attacker = (Player) event.getDamager();
 
         if(!defender.equals(player.getPlayer())) return;
-        if(GameManager.getPlayerGame(defender).handlePlayerHit(defender, attacker)) return;
+        if(WoolBattleGameManager.getPlayerGame(defender).checkPlayerHit(defender, attacker)) return;
 
         if(attacker != player.getPlayer()) {
             if (random.nextInt(100) < 100) {

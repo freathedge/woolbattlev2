@@ -1,7 +1,6 @@
 package net.thevace.woolbattle.perks.activeperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
+import net.thevace.woolbattle.WoolBattleGameManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.ActivePerk;
 import org.bukkit.*;
@@ -29,7 +28,7 @@ public class Tuermchenbauer extends ActivePerk implements Listener {
             }
 
             block.setType(player.getWoolMaterial());
-            GameManager.getPlayerGame(player).addToPlayerBlocks(block.getLocation());
+            WoolBattleGameManager.getPlayerGame(player).addToPlayerBlocks(block.getLocation());
 
             location.add(0, -1, 0);
         }

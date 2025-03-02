@@ -1,12 +1,8 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
-import net.thevace.woolbattle.WoolBattleGame;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.PassivePerk;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 public class TNTPfeil extends PassivePerk implements Listener {

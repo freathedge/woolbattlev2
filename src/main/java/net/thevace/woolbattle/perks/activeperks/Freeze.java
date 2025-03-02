@@ -13,8 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
-import java.util.Objects;
-
 public class Freeze extends ActivePerk implements Listener {
 
     WoolBattlePlayer target = null;
@@ -62,10 +60,10 @@ public class Freeze extends ActivePerk implements Listener {
 
                 Player player = (Player) snowball.getShooter();
                 Player target = (Player) event.getHitEntity();
-                WoolBattleGame game = GameManager.getPlayerGame(player);
+                WoolBattleGame game = WoolBattleGameManager.getPlayerGame(player);
 
                 if (player != null && target != null) {
-                    if (!game.handlePlayerHit(player, target)) {
+                    if (!game.checkPlayerHit(player, target)) {
                         target.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0);
                         target.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(0);
                         WoolBattlePlayerManager.getWoolBattlePlayer(target).setCanDoubleJump(false);

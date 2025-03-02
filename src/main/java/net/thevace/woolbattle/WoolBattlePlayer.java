@@ -68,9 +68,28 @@ public class WoolBattlePlayer {
         }
     }
 
+    public void addWool(int wool, boolean add) {
+        if (this.wool < maxWool) {
+            if (add) {
+                this.wool += wool;
+                player.getInventory().addItem(new ItemStack(woolMaterial, wool));
+            } else
+                this.wool += wool;
+        }
+    }
+
     public void removeWool(int wool) {
         this.wool -= wool;
         player.getInventory().removeItem(new ItemStack(woolMaterial, wool));
+    }
+
+    public void removeWool(int wool, boolean remove) {
+        if(!remove) {
+            this.wool -= wool;
+        } else {
+            this.wool -= wool;
+            player.getInventory().removeItem(new ItemStack(woolMaterial, wool));
+        }
     }
 
     public void updatePlayerWool() {

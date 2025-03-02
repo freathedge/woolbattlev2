@@ -6,6 +6,7 @@ import net.thevace.woolbattle.commands.tabcompleter.QueueTabCompleter;
 import net.thevace.woolbattle.inventorys.*;
 import net.thevace.woolbattle.listener.PlayerInteraction;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,6 +51,7 @@ public final class WoolBattle extends JavaPlugin {
             world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
             world.setGameRule(GameRule.DISABLE_RAIDS, true);
             world.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+            world.setDifficulty(Difficulty.PEACEFUL);
         }
 
 

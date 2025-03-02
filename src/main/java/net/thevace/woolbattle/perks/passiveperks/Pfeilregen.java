@@ -1,11 +1,7 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
-import net.thevace.woolbattle.GameManager;
-import net.thevace.woolbattle.PerkListenerManager;
-import net.thevace.woolbattle.WoolBattleGame;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.perks.PassivePerk;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
@@ -15,7 +11,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 
 public class Pfeilregen extends PassivePerk implements Listener {

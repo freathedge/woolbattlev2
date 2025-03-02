@@ -1,10 +1,9 @@
 package net.thevace.woolbattle.perks.passiveperks;
 
-import net.thevace.woolbattle.GameManager;
+import net.thevace.woolbattle.WoolBattleGameManager;
 import net.thevace.woolbattle.WoolBattlePlayer;
 import net.thevace.woolbattle.WoolBattlePlayerManager;
 import net.thevace.woolbattle.perks.PassivePerk;
-import net.thevace.woolbattle.perks.Perk;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,8 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Random;
 
 public class Schurke extends PassivePerk implements Listener {
@@ -49,7 +46,7 @@ public class Schurke extends PassivePerk implements Listener {
         }
 
         if (damager != null && target != null) {
-            if(GameManager.getPlayerGame(player).handlePlayerHit(damager, target)) {
+            if(WoolBattleGameManager.getPlayerGame(player).checkPlayerHit(damager, target)) {
                 event.setCancelled(true);
             } else {
                 if (random.nextInt(100) < 5) {
